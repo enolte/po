@@ -1,36 +1,57 @@
-# Prerequisites
-*.d
-
 # Compiled Object files
 *.slo
 *.lo
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
-
-# Transient artifacts
+# Transitional source files
 *.oc*
+*.!oc*
 *.ex*
+*.!ex*
+*__oc*
+*__ex*
+*.ox*
+*.cp
+*ocex*
+
+# transient binary artifacts
+*.stackdump
+
+# auto-backups
+*.bak
+*.!bak
+*.cur
+*.!cur
+
+# code fragmants
+*.frag
+
+# diff files
+*.diff
+
+# test programs
+test*.exe
+
+# Default binary program suffix for linux linker outputs
+*.out
+
+# test source files
+#test*.cpp
+#**/test*
+
+# text files (test support)
+*.txt*
+
+# archives
+*.zip
+*.tar
+*.gz
