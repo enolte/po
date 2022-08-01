@@ -153,6 +153,7 @@ For specific test cases:
 #include "test_instantiate_level_1.h"
 #include "test_instantiate_level_2.h"
 #include "test_instantiate_level_3.h"
+#include "test_instantiate_level_4.h"
 
 #if 0
 // TODO
@@ -248,6 +249,7 @@ void test_instantiate()
   test_instantiate_level_1();
   test_instantiate_level_2();
   test_instantiate_level_3();
+  test_instantiate_level_4();
 
   PO_LINE;
 }

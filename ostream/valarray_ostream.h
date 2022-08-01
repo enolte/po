@@ -1,16 +1,15 @@
 #ifndef PO_VALARRAY_OSTREAM_H
 #define PO_VALARRAY_OSTREAM_H
 
-#include <vector>
+#include "write.h"
 
-template<typename ostream, typename T>
-ostream& operator<<(ostream& o, std::valarray<T> t)
+namespace po
 {
-  auto i{std::cbegin(t)};
-  for(; std::next(i) != std::cend(t); ++i)
-    o << *i << ", ";
-  o << *i;
-  return o;
+  template<typename ostream, typename T>
+  ostream& operator<<(ostream& o, std::valarray<T> t)
+  {
+    return po::write(o, std::cbegin(t), std::cend(t));
+  }
 }
 
 #endif

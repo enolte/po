@@ -5,14 +5,7 @@ void test_mult_eq_polynomial()
   {
     po::polynomial p{{2, {1, 1, 1, 1}}};
 
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
-
-    p *= {{3, {2, 1, 4, 2}}};
+    p *= po::polynomial{{3, {2, 1, 4, 2}}};
 
     PO_ASSERT(unordered_equal(
       p.terms,
@@ -24,36 +17,7 @@ void test_mult_eq_polynomial()
 
   {
     po::polynomial p{{2, {1, 1, 1, 1}}};
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
-
-    p *= {{3, {2, 1, 4, 2}}, {6, {2, 2, 3, 2}}};
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        {6 , {3, 2, 5, 3}},
-        {12, {3, 3, 4, 3}}
-      }),
-      p);
-  }
-
-  {
-    po::polynomial p{{2, {1, 1, 1, 1}}};
     po::polynomial q{{3, {2, 1, 4, 2}}};
-
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
 
     p *= std::move(q);
 
@@ -64,7 +28,7 @@ void test_mult_eq_polynomial()
       }),
       p);
 
-    // A move has no effect on a polynomial in a *= expression
+    // TODO A move has no effect on a polynomial in a *= expression
     PO_ASSERT(unordered_equal(
       q.terms,
       {
@@ -76,14 +40,6 @@ void test_mult_eq_polynomial()
   {
     po::polynomial p{{2, {1, 1, 1, 1}}};
     po::polynomial q{{3, {2, 1, 4, 2}}};
-
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
 
     p *= q;
 
@@ -98,14 +54,6 @@ void test_mult_eq_polynomial()
   {
     po::polynomial p{{2, {1, 1, 1, 1}}, {3, {0, 4, 2, 0}}};
     po::polynomial q{{3, {2, 1, 4, 2}}};
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 3, {0, 4, 2, 0}},
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
 
     p *= q;
 
@@ -131,14 +79,6 @@ void test_mult_eq_polynomial()
 
 sum: {6, {3, 2, 5, 3}}, {9, {2, 5, 6, 2}}, {2, {2, 1, 1, 1}}, {3, {1, 4, 2, 0}}
 */
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 3, {0, 4, 2, 0}},
-        { 2, {1, 1, 1, 1}}
-      }),
-      p);
 
     p *= q;
 
@@ -167,14 +107,6 @@ sum: {6, {3, 2, 5, 3}}, {9, {2, 5, 6, 2}}, {2, {2, 1, 1, 1}}, {3, {1, 4, 2, 0}}
 sum= 9   3 5 7 3     +     9   4 6 12 4     +     2   2 4 2 2
    = {9, {3, 2, 7, 3}}, {9, {4, 6, 12, 4}}, {2, {2, 4, 2, 2}}
 */
-
-    PO_ASSERT(unordered_equal(
-      p.terms,
-      {
-        { 3, {2, 5, 7, 2}},
-        { 2, {1, 4, 2, 1}}
-      }),
-      p);
 
     p *= q;
 

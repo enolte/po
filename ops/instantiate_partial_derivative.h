@@ -1,5 +1,5 @@
-#ifndef PO_INSTANTIATE_UNARY_PARTIAL_DERIVATIVE_H
-#define PO_INSTANTIATE_UNARY_PARTIAL_DERIVATIVE_H
+#ifndef PO_INSTANTIATE_PARTIAL_DERIVATIVE_H
+#define PO_INSTANTIATE_PARTIAL_DERIVATIVE_H
 
 #include "expr_partial_derivative.h"
 
@@ -10,7 +10,14 @@ namespace po
   {
     instantiate(p, expr.expr1, Rank{});
 
-    for(auto t : p.terms)
+    if(expr.place > p.rank())
+    {
+      p.zero();
+      p += 0;
+      return p;
+    }
+
+    for(auto& t : p.terms)
     {
       t.coefficient *= t.exponents[expr.place];
       if(t.exponents[expr.place] > 0)
@@ -19,8 +26,9 @@ namespace po
 
     return p;
   }
-
 }
 
 
 #endif
+
+

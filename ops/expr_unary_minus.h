@@ -1,13 +1,16 @@
 #ifndef PO_EXPR_UNARY_MINUS_H
 #define PO_EXPR_UNARY_MINUS_H
 
+#include "expr_field_type.h"
+
 namespace po
 {
   template<typename E1>
   struct expr_unary_minus
   {
-    // TODO const lvalue refs for lvalue args
-    const E1 expr1;
+    using _E1 = E1;
+    using F1 = expr_field_type<E1>;
+    F1 expr1;
 
     template<typename ...X>
     scalar_type operator()(X... x) const
@@ -17,9 +20,9 @@ namespace po
   };
 
   template<typename E>
-  constexpr expr_unary_minus<E> operator-(const E& expr)
+  constexpr expr_unary_minus<E> operator-(E&& expr)
   {
-    return {expr};
+    return {std::move(expr)};
   }
 
 }

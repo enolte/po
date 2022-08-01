@@ -60,8 +60,8 @@ namespace po_test
 
     static_assert(!po::is_binary_expression<X>);
     static_assert(!po::is_binary_expression<Y>);
-    static_assert(!po::is_binary_expression<Z>);
-    static_assert(!po::is_binary_expression<Z2>);
+    static_assert(po::is_binary_expression<Z>);
+    static_assert(po::is_binary_expression<Z2>);
     static_assert(po::is_binary_expression<Z3>);
     static_assert(!po::is_binary_expression<Z4>);
     // static_assert(po::is_binary_expression<α>);

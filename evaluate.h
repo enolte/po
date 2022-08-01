@@ -2,7 +2,7 @@
 #define PO_EVALUATE_H
 
 #include "evaluate/evaluate_naive.h"
-#include "evaluate/evaluate_gdC.h"
+#include "evaluate/evaluate_gH.h"
 
 #endif
 

@@ -61,5 +61,17 @@ void test_ctor_constant_term_initialization()
     assert(moved.constant() == 49.2);
   }
 
+  {
+    po::polynomial p
+    {
+      { 1., {3, 0, 0}},
+      {-4 , {1, 1, 0}},
+      {-3 , {0, 0, 0}},
+      {2.5, {1, 0, 0}}
+    };
+
+    assert(p.constant() == -3.);
+  }
+
   PO_LINE;
 }

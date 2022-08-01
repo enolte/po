@@ -5,6 +5,28 @@
 void test_instantiate_c_mult_p()
 {
   {
+    po::polynomial r{po::rank<3>{}};
+    po::polynomial p = po::instantiate(2*r, po::rank<3>{});
+
+    PO_ASSERT(unordered_equal(
+      p.terms,
+      {}),
+      p.terms);
+  }
+
+  {
+    po::polynomial r{0., po::rank<3>{}};
+    po::polynomial p = po::instantiate(2*r, po::rank<3>{});
+
+    PO_ASSERT(unordered_equal(
+      p.terms,
+      {
+        {0., {0, 0, 0}}
+      }),
+      p.terms);
+  }
+
+  {
     po::polynomial p{{6, {0}}};
     po::polynomial r = po::instantiate(4 * p, po::rank<1>{});
 

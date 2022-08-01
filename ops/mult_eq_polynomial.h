@@ -15,10 +15,15 @@ namespace po
   void mult_eq(std::vector<monomial>& p, const std::vector<monomial>& q)
   {
     if(q.size() == 0)
+    {
+      p.clear();
       return;
+    }
 
     if(p.size() == 0)
+    {
       return;
+    }
 
     std::vector<monomial> acc;
 

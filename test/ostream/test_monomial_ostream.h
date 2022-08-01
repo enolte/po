@@ -31,7 +31,7 @@ void test_monomial_ostream()
     po::monomial m{1.5, {4, 3, 6, 6, 1, 3}};
 
     std::stringstream ss;
-    ::operator<<(ss, m);
+    po::operator<<(ss, m);
 
     std::cout << ss.str() << std::endl;
   }

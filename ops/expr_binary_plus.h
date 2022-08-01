@@ -1,18 +1,24 @@
 #ifndef PO_EXPR_BINARY_PLUS_H
 #define PO_EXPR_BINARY_PLUS_H
 
-#include "../field.h"
-
+#include "is_scalar.h"
 #include "is_expression.h"
 #include "expr_constant.h"
+#include "expr_field_type.h"
 
 namespace po
 {
-  template<typename E1, typename E2>
+  template<expression E1, expression E2>
   struct expr_binary_plus
   {
-    E1 expr1;
-    E2 expr2;
+    using _E1 = E1;
+    using _E2 = E2;
+
+    using F1 = expr_field_type<E1>;
+    using F2 = expr_field_type<E2>;
+
+    F1 expr1;
+    F2 expr2;
 
     template<typename ...X>
     scalar_type operator()(X... x) const
@@ -21,18 +27,17 @@ namespace po
     }
   };
 
-  template<typename E1, typename E2>
-    requires is_expression<E1> && is_expression<E2>
-  constexpr auto operator+(const E1& expr1, const E2& expr2)
-  {
-    if constexpr(supported_scalar_type<E2>)
-      return expr_binary_plus<const E1&, const expr_constant>{expr1, expr_constant{expr2}};
-    else if constexpr(supported_scalar_type<E1>)
-      return expr_binary_plus<const expr_constant, const E2&>{expr_constant{expr1}, expr2};
-    else
-      return expr_binary_plus<const E1&, const E2&>{expr1, expr2};
-  }
 
+  template<expression E1, expression E2>
+  constexpr auto operator+(E1&& expr1, E2&& expr2)
+  {
+    if constexpr(is_scalar<E2>)
+      return expr_binary_plus<E1, expr_constant>{std::move(expr1), expr_constant{expr2}};
+    else if constexpr(is_scalar<E1>)
+      return expr_binary_plus<expr_constant, E2>{expr_constant{expr1}, std::move(expr2)};
+    else
+      return expr_binary_plus<E1, E2>{std::move(expr1), std::move(expr2)};
+  }
 }
 
 #endif

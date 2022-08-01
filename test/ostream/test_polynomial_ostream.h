@@ -31,7 +31,7 @@ void test_polynomial_ostream()
     po::polynomial p{{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}};
 
     std::stringstream ss;
-    ::operator<<(ss, p);
+    po::operator<<(ss, p);
 
     std::cout << ss.str() << std::endl;
   }

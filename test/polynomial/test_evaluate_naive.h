@@ -41,9 +41,6 @@ void test_evaluate_naive()
     });
 
     PO_ASSERT(p(3,2,1) == 0., p(3, 2, 1));
-
-    // const double x[3] = {3, 2, 1};
-    // assert(p(x) == 0.);
   }
 
   {
@@ -56,9 +53,6 @@ void test_evaluate_naive()
     });
 
     PO_ASSERT(p(3,2,1) == 7.5, p(3,2,1));
-
-    // const double x[3] = {3, 2, 1};
-    // assert(p(x) == 7.5);
   }
 
   {
@@ -70,7 +64,7 @@ void test_evaluate_naive()
     });
 
     PO_ASSERT(
-      p(1.5,  1,  2,  1,   2.5,     2,  3,    2) ==
+      p(  1.5,    1,  2,  1,   2.5,     2,  3,    2) ==
       1 * 3.375 * 1 * 1 * 1 * 39.0625 * 2 * 3 * 128   +
      -4 * 1.5   * 1 * 1 * 1 * 39.0625 * 2 * 1 *   1   +
      -3 * 1     * 1 * 1 * 1 *  1      * 8 * 1 *   1,
@@ -94,9 +88,6 @@ void test_evaluate_naive()
      -3   *  1 * 1 * 1   +
       2.5 *  3 * 1 * 1,
       p);
-
-    // const po::point<3, double> x = {3, 2, 1};
-    // assert(p(x) == 7.5 + 3.);
   }
 
   {

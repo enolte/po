@@ -83,11 +83,11 @@ namespace po_test
 
     static_assert(!po::is_expression<W>);
     static_assert(!po::is_expression<X1>);
-    static_assert(!po::is_expression<X2>);
+    static_assert(po::is_expression<X2>);
     static_assert(po::is_expression<X3>);
     static_assert(!po::is_expression<X4>);
-    static_assert(!po::is_expression<X5>);
-    static_assert(!po::is_expression<Y>);
+    static_assert(po::is_expression<X5>);
+    static_assert(po::is_expression<Y>);
     static_assert(po::is_expression<Y2>);
     static_assert(po::is_expression<Z>);
     static_assert(po::is_expression<Z2>);

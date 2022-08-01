@@ -12,8 +12,6 @@ namespace po
     {
       e.expr1;
       e.expr2;
-
-      e();
     };
 }
 

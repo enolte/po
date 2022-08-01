@@ -3,13 +3,16 @@
 
 #include "valarray_ostream.h"
 
-template<typename ostream>
-ostream& operator<<(ostream& o, const po::monomial& m)
+namespace po
 {
-  // (g++ 11.2.0) This causes a diagnostic re invalid initialization
-  // return o << m.coefficient << '[' << m.exponents << ']';
-  o << m.coefficient << '[' << m.exponents << ']';
-  return o;
+  template<typename ostream>
+  ostream& operator<<(ostream& o, const po::monomial& m)
+  {
+    // (g++ 11.2.0) This causes a diagnostic re invalid initialization
+    // return o << m.coefficient << '[' << m.exponents << ']';
+    o << m.coefficient << '[' << m.exponents << ']';
+    return o;
+  }
 }
 
 #endif

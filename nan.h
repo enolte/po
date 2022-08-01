@@ -2,12 +2,12 @@
 #define PO_NAN_H
 
 #include <limits>
-#include "default_types.h"
+#include "field.h"
 
 namespace po
 {
-  template<typename T = default_numeric_type>
-  constexpr T nan = std::numeric_limits<T>::quiet_NaN();
+  static constexpr scalar_type nan = std::numeric_limits<scalar_type>::quiet_NaN();
+
 }
 
 #endif

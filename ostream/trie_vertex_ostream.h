@@ -1,10 +1,17 @@
+#ifndef PO_TRIE_VERTEX_OSTREAM_H
+#define PO_TRIE_VERTEX_OSTREAM_H
+
 #include "vector_ostream.h"
 #include "../trie/trie_vertex.h"
 
-template<typename ostream>
-ostream& operator<<(ostream& o, const po::trie_vertex& v)
+namespace po
 {
-  o << '[' << v.value << " : " << v.children << ']';
-  return o;
+  template<typename ostream>
+  ostream& operator<<(ostream& o, const po::trie_vertex& v)
+  {
+    o << '[' << v.value << " : " << v.children << ']';
+    return o;
+  }
 }
 
+#endif

@@ -2,8 +2,6 @@
 #define PO_EXPONENTS_H
 
 #include <valarray>
-#include <compare>
-#include <algorithm>
 
 #include "default_types.h"
 

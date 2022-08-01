@@ -19,7 +19,7 @@ void test_coefficient()
 
   {
     po::polynomial p{7.5, po::rank<6>{}};
-    assert(equal(p.variable_degrees, 0, 0, 0, 0, 0, 0));
+    assert(compare::equal(p.variable_degrees, 0, 0, 0, 0, 0, 0));
 
     assert(p.coefficient(0, 0, 0, 0, 0, 0) == 7.5);
     assert(p.coefficient(0, 3, 0, 0, 0, 0) == 0.0);
@@ -46,16 +46,8 @@ void test_coefficient()
 
     assert(p.nterms() == 3);
 
-    assert(p.degree() == 20);
-    assert(p.degree(3) == 4);
-    assert(p.degree(4) == 0);
-
     assert(p.coefficient(8, 2, 0, 4, 0, 3, 3) == -1.9);
-    assert(p.nterms() == 3);
     assert(p.coefficient(9, 4, 1, 1, 1, 1, 7) == 0.);
-
-    // Non-constant access induces a new term
-    assert(p.nterms() == 4);
   }
 
   {
@@ -66,16 +58,20 @@ void test_coefficient()
 
     assert(p.nterms() == 3);
 
-    assert(p.degree() == 20);
-    assert(p.degree(3) == 4);
-    assert(p.degree(4) == 0);
-
     assert(p.coefficient(8, 2, 0, 4, 0, 3, 3) == -1.9);
-    assert(p.nterms() == 3);
     assert(p.coefficient(9, 4, 1, 1, 1, 1, 7) == 0.);
+  }
 
-    // Constant access does not induce a new term
-    assert(p.nterms() == 3);
+  {
+    po::polynomial p
+    {
+      { 1., {3, 0, 0}},
+      {-4 , {1, 1, 0}},
+      {-3 , {0, 0, 0}},
+      {2.5, {1, 0, 0}}
+    };
+
+    assert(p.coefficient(1, 0, 0) == 2.5);
   }
 
   PO_LINE;

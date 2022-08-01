@@ -25,6 +25,7 @@
 #include "ops/expr_unary_minus.h"
 #include "ops/expr_binary_plus.h"
 #include "ops/expr_binary_minus.h"
+#include "ops/expr_binary_mult.h"
 
 #include <vector>
 #include <valarray>
@@ -51,8 +52,6 @@ namespace po
     std::valarray<degree_type> variable_degrees;
 
     rank_type this_rank;
-
-  public:
 
     /*
      * Construct a constant polynomial of rank R.
@@ -82,6 +81,22 @@ namespace po
       add_constant(std::move(c));
     }
 
+    // TODO
+    /*
+     * Construct a zero polynomial of rank R from a raw `rank_type`.
+     * N.B.: This ctor is used only to evaluate partial derivative expressions. It should not be
+     * directly used to construct a polynomial object. This ctor will be removed if/when the polynomial
+     * type is converted to a type template with a rank parameter.
+     *
+     * polynomial p{15};
+     */
+    explicit polynomial(rank_type rank):
+      terms{},
+      constant_term{0},
+      total_degree{0},
+      variable_degrees(index_data_type{0}, rank),
+      this_rank{rank}
+    {}
 
     /*
      * Construct a zero polynomial of rank R.
@@ -159,7 +174,7 @@ namespace po
      * polynomial{7.7, 3, 4, 5};
      */
     template<typename Scalar, typename ...Exponents>
-      requires supported_scalar_type<Scalar> && (sizeof ...(Exponents) > 0) && (std::integral<Exponents> && ...)
+      requires is_scalar<Scalar> && (sizeof ...(Exponents) > 0) && (std::integral<Exponents> && ...)
     polynomial(Scalar&& _coefficient, Exponents&&... _exponents)
     : terms{{std::move(scalar_type(_coefficient)), {exponent_type(_exponents)...}}},
       variable_degrees{exponent_type(_exponents)...},
@@ -176,6 +191,14 @@ namespace po
     polynomial& operator=(const polynomial&) = default;
     polynomial& operator=(polynomial&&) = default;
 
+    polynomial& operator=(scalar_type c)
+    {
+      zero();
+      add_constant(c);
+      return *this;
+    }
+
+
     /*
      * Get the maximum degree value of the ith variable which occurs in any monomial term.
      * This implies no consideration for coefficient values.
@@ -185,7 +208,10 @@ namespace po
      */
     std::size_t degree(std::size_t i) const
     {
-      return variable_degrees[i];
+      if(rank() > i)
+        return variable_degrees[i];
+      else
+        return 0;
     }
 
     /*
@@ -237,8 +263,8 @@ namespace po
     scalar_type operator()(X&&... x) const
     {
       using S = std::common_type_t<scalar_type, X&&...>;
-      return evaluate_naive(*this, S(x)...);
-      // return evaluate_gdC(*this, S(x)...);
+      // return evaluate_naive(*this, S(x)...);
+      return evaluate_gH(*this, S(x)...);
     }
 
     /*
@@ -247,7 +273,30 @@ namespace po
      */
     scalar_type coefficient(std::size_t i) const
     {
-      return terms[i].coefficient;
+      if(nterms() == 0)
+        return scalar_type{0};
+      else
+        return terms[i].coefficient;
+    }
+
+    /*
+     * Get the coefficient of the term with the given exponents.
+     */
+    scalar_type coefficient(const po::exponents& exponents) const
+    {
+      using namespace std::ranges;
+      if(const auto found = find_if(
+        terms,
+        std::bind(equal, std::placeholders::_1, exponents),
+        &monomial::exponents);
+        found != std::cend(terms))
+      {
+        return found->coefficient;
+      }
+      else
+      {
+        return scalar_type{0};
+      }
     }
 
     /*
@@ -279,6 +328,7 @@ namespace po
       requires (std::integral<MI> && ...)
     constexpr void add(scalar_type c, MI&&... mi)
     {
+      // TODO
       // if constexpr(((mi == exponent_type(0)) && ...))
       if (((mi == exponent_type(0)) && ...))
         constant_term += c;
@@ -386,6 +436,7 @@ namespace po
 
     /*
      * Add an init-list of monomial terms.
+     *
      * p += {5, {3, 4, 2, 0, 4, 5}};
      * p += {{5, {3, 4, 2, 0, 4, 5}}, {2.4, {0, 0, 2, 3, 4, 5}}};
      */
@@ -559,8 +610,8 @@ namespace po
     /*
      * Subtract an init-list of monomial terms.
      *
-     * p -= {5, {3, 4, 2, 0, 4, 5}}
-     * p -= {{5, {3, 4, 2, 0, 4, 5}}, {2.4, {0, 0, 2, 3, 4, 5}}}
+     * p -= {5, {3, 4, 2, 0, 4, 5}};
+     * p -= {{5, {3, 4, 2, 0, 4, 5}}, {2.4, {0, 0, 2, 3, 4, 5}}};
      */
     constexpr polynomial& operator-=(std::initializer_list<monomial>&& t)
     {
@@ -571,6 +622,7 @@ namespace po
     /*
      * p.multiply({1, {2, 3, 1}, {4.3, {0, 0, 4}}});
      */
+    // TODO test
     void multiply(std::initializer_list<monomial>&& q)
     {
       mult_eq(terms, q);
@@ -597,18 +649,25 @@ namespace po
     {
       mult_eq(terms, q.terms);
 
-      constant_term = scalar_type(0);
-      total_degree = 0;
-
-      for(const auto& t : terms)
+      if(terms.size() == 0)
       {
-        if(t.degree() == 0)
-          constant_term += t.coefficient;
+        zero();
+      }
+      else
+      {
+        constant_term = scalar_type(0);
+        total_degree = 0;
 
-        total_degree = std::max(total_degree, t.degree());
+        for(const auto& t : terms)
+        {
+          if(t.degree() == 0)
+            constant_term += t.coefficient;
 
-        for(auto i{0zu}; i < t.rank(); ++i)
-          variable_degrees[i] = std::max(variable_degrees[i], t.exponents[i]);
+          total_degree = std::max(total_degree, t.degree());
+
+          for(auto i{0zu}; i < t.rank(); ++i)
+            variable_degrees[i] = std::max(variable_degrees[i], t.exponents[i]);
+        }
       }
     }
 
@@ -619,18 +678,25 @@ namespace po
     {
       mult_eq(terms, q.terms);
 
-      constant_term = scalar_type(0);
-      total_degree = 0;
-
-      for(const auto& t : terms)
+      if(terms.size() == 0)
       {
-        if(t.degree() == 0)
-          constant_term += t.coefficient;
+        zero();
+      }
+      else
+      {
+        constant_term = scalar_type(0);
+        total_degree = 0;
 
-        total_degree = std::max(total_degree, t.degree());
+        for(const auto& t : terms)
+        {
+          if(t.degree() == 0)
+            constant_term += t.coefficient;
 
-        for(auto i{0zu}; i < t.rank(); ++i)
-          variable_degrees[i] = std::max(variable_degrees[i], t.exponents[i]);
+          total_degree = std::max(total_degree, t.degree());
+
+          for(auto i{0zu}; i < t.rank(); ++i)
+            variable_degrees[i] = std::max(variable_degrees[i], t.exponents[i]);
+        }
       }
     }
 
@@ -640,11 +706,19 @@ namespace po
     void multiply(scalar_type c, po::exponents&& exponents)
     {
       mult_eq(terms, c, exponents);
-      variable_degrees += exponents;
-      if(std::ranges::all_of(exponents, [](const exponent_type& x){ return x == 0; }))
-        constant_term += c;
+
+      if(terms.size() == 0)
+      {
+        zero();
+      }
       else
-        constant_term = scalar_type(0);
+      {
+        variable_degrees += exponents;
+        if(std::ranges::all_of(exponents, [](const exponent_type& x){ return x == 0; }))
+          constant_term += c;
+        else
+          constant_term = scalar_type(0);
+      }
     }
 
     /*
@@ -653,11 +727,31 @@ namespace po
     void multiply(scalar_type c, const po::exponents& exponents)
     {
       mult_eq(terms, c, exponents);
-      variable_degrees += exponents;
-      if(std::ranges::all_of(exponents, [](const exponent_type& x){ return x == 0; }))
-        constant_term += c;
+
+      if(terms.size() == 0)
+      {
+        zero();
+      }
       else
-        constant_term = scalar_type(0);
+      {
+        variable_degrees += exponents;
+        if(std::ranges::all_of(exponents, [](const exponent_type& x){ return x == 0; }))
+          constant_term += c;
+        else
+          constant_term = scalar_type(0);
+      }
+    }
+
+    /*
+     * Set this polynomial to be the zero polynomial.
+     * This does not change this object's rank.
+     */
+    void zero()
+    {
+      terms.clear();
+      constant_term = 0;
+      total_degree = 0;
+      variable_degrees = 0;
     }
 
     /*
@@ -756,5 +850,6 @@ namespace po
 
 #endif
 
+#include "ops/expr_partial_derivative.h"
 
 #include "ops/instantiate.h"

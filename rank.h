@@ -7,10 +7,10 @@ namespace po
 {
   using rank_type = std::size_t;
 
-  template<std::size_t R>
+  template<rank_type R>
   struct rank
   {
-    operator rank_type() && { return R; }
+    constexpr operator rank_type() && { return R; }
   };
 }
 

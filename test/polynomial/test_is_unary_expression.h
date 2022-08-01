@@ -30,6 +30,11 @@ namespace po_test
       void operator()(...);
     };
 
+    struct W5
+    {
+      using expr1 = void;
+    };
+
     template<typename T>
     struct V
     {
@@ -60,8 +65,9 @@ namespace po_test
 
     static_assert(!po::is_unary_expression<W>);
     static_assert(!po::is_unary_expression<W2>);
-    static_assert(!po::is_unary_expression<W3>);
+    static_assert(po::is_unary_expression<W3>);
     static_assert(po::is_unary_expression<W4>);
+    static_assert(!po::is_unary_expression<W5>);
     static_assert(!po::is_unary_expression<V<int>>);
     static_assert(!po::is_unary_expression<V2<int>>);
     static_assert(!po::is_unary_expression<V<V<int>>>);

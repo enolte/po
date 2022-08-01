@@ -16,7 +16,7 @@ void test_mult_eq_scalar()
 
     assert(p.constant() == 3.);
     assert(p.coefficient(1, 1, 0) == -4.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
 
     p *= 0.5;
     PO_ASSERT(unordered_equal(
@@ -31,7 +31,7 @@ void test_mult_eq_scalar()
       p);
 
     assert(p.coefficient(1, 1, 0) == -2.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
     assert(p.constant() == 1.5);
   }
 
@@ -47,7 +47,7 @@ void test_mult_eq_scalar()
 
     assert(p.constant() == 3.);
     assert(p.coefficient(1, 1, 0) == -4.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
 
     p *= std::move(0.5);
     PO_ASSERT(unordered_equal(
@@ -62,7 +62,7 @@ void test_mult_eq_scalar()
       p);
 
     assert(p.coefficient(1, 1, 0) == -2.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
     assert(p.constant() == 1.5);
   }
 
@@ -78,7 +78,7 @@ void test_mult_eq_scalar()
 
     assert(p.constant() == 3.);
     assert(p.coefficient(1, 1, 0) == -4.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
 
     p *= {0.5};
     PO_ASSERT(unordered_equal(
@@ -93,7 +93,7 @@ void test_mult_eq_scalar()
       p);
 
     assert(p.coefficient(1, 1, 0) == -2.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
     assert(p.constant() == 1.5);
   }
 
@@ -109,7 +109,7 @@ void test_mult_eq_scalar()
 
     assert(p.constant() == 3.);
     assert(p.coefficient(1, 1, 0) == -4.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
 
     const auto c = 0.5;
     p *= c;
@@ -125,7 +125,7 @@ void test_mult_eq_scalar()
       p);
 
     assert(p.coefficient(1, 1, 0) == -2.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
     assert(p.constant() == 1.5);
   }
 
@@ -141,7 +141,7 @@ void test_mult_eq_scalar()
 
     assert(p.constant() == 3.);
     assert(p.coefficient(1, 1, 0) == -4.0);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
 
     p *= 0.;
     PO_ASSERT(unordered_equal(
@@ -156,7 +156,7 @@ void test_mult_eq_scalar()
       p);
 
     assert(p.coefficient(1, 1, 0) == 0.);
-    assert(equal(p.variable_degrees, 3, 1, 0, 7));
+    assert(compare::equal(p.variable_degrees, 3, 1, 0, 7));
     assert(p.constant() == 0.);
   }
 
