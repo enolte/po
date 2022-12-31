@@ -6,51 +6,51 @@
 
 namespace po
 {
-
-  // Generalized dense Horner evaluation, dense implementation.
-  // TODO (12 July 2022) Sparse generalized Horner evaluation. Requires term tree
-  //      instead of a sequence of terms.
-  template<typename P, typename X0, typename ...X>
-  constexpr static double evaluate_gH(po::exponents& m, const P& p, X0& x0, X&... x)
+  namespace detail
   {
-    constexpr std::size_t nargs = 1 + sizeof ...(X);
-    const std::size_t cur_n = p.rank() - nargs;
-
-    if constexpr(sizeof ...(X) == 0)
+    // Generalized Horner evaluation, dense implementation.
+    template<typename P, typename X0, typename ...X>
+    constexpr static double evaluate_gH(po::exponents& m, const P& p, X0& x0, X&... x)
     {
-      double acc = 0.;
-      for(std::size_t d = p.degree(cur_n); d != ~0zu; --d)
-      {
-        m[cur_n] = d;
-        const double coeff = p.coefficient(m);
-        acc = coeff + x0*acc;
-      }
+      constexpr std::size_t nargs = 1 + sizeof ...(X);
+      const std::size_t cur_n = p.rank() - nargs;
 
-      return acc;
-    }
-    else
-    {
-      double acc = 0.;
-      for(std::size_t d = p.degree(cur_n); d != ~0zu; --d)
+      if constexpr(sizeof ...(X) == 0)
       {
-        m[cur_n] = d;
-        const double s = evaluate_gH(m, p, x...);
-        acc = s + x0*acc;
-      }
+        double acc = 0.;
+        for(std::size_t d = p.degree(cur_n); d != ~0zu; --d)
+        {
+          m[cur_n] = d;
+          const double coeff = p.coefficient(m);
+          acc = coeff + x0*acc;
+        }
 
-      return acc;
+        return acc;
+      }
+      else
+      {
+        double acc = 0.;
+        for(std::size_t d = p.degree(cur_n); d != ~0zu; --d)
+        {
+          m[cur_n] = d;
+          const double s = evaluate_gH(m, p, x...);
+          acc = s + x0*acc;
+        }
+
+        return acc;
+      }
     }
   }
 
-  template<typename P, typename X0, typename ...X>
-  constexpr static double evaluate_gH(const P& p, X0&& x0, X&&... x)
+  template<typename P, typename ...X>
+  constexpr static double evaluate_gH(const P& p, X&&... x)
   {
     if(p.rank() == 0)
       return p.constant();
     else
     {
-      po::exponents m(0zu, 1 + sizeof ...(X)); // exponent sequence
-      return evaluate_gH(m, p, x0, x...);
+      po::exponents m(0zu, sizeof ...(X)); // exponent sequence
+      return detail::evaluate_gH(m, p, x...);
     }
   }
 

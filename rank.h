@@ -11,6 +11,9 @@ namespace po
   struct rank
   {
     constexpr operator rank_type() && { return R; }
+
+    // static constexpr rank<R-1> minus_one() { return {}; }
+    // static constexpr rank<R+1> plus_one()  { return {}; }
   };
 }
 

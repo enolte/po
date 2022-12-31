@@ -9,6 +9,8 @@
 #include "../../ostream/monomial_ostream.h"
 #include "../../ostream/polynomial_ostream.h"
 
+using po::operator<<;
+
 #include "test_scalar_field.h"
 #include "test_ctor_exprs.h"
 #include "test_assignment.h"
@@ -25,6 +27,7 @@
 #include "test_add_eq_init_list.h"
 #include "test_sub_eq_monomial.h"
 #include "test_sub_eq_init_list.h"
+#include "test_add_eq_polynomial.h"
 #include "test_mult_eq_monomial.h"
 #include "test_mult_eq_scalar.h"
 #include "test_mult_eq_init_list.h"
@@ -48,6 +51,7 @@
 #include "test_expr_binary_minus.h"
 #include "test_expr_binary_mult.h"
 #include "test_expr_partial_derivative.h"
+#include "test_expr_integral.h"
 
 #include "test_instantiate.h"
 
@@ -81,6 +85,7 @@ void test()
   test_add_eq_init_list();
   test_sub_eq_monomial();
   test_sub_eq_init_list();
+  test_add_eq_polynomial();
   test_mult_eq_scalar();
   test_mult_eq_monomial();
   test_mult_eq_init_list();
@@ -101,7 +106,10 @@ void test()
   test_expr_binary_minus();
   test_expr_binary_mult();
   test_expr_partial_derivative();
+  test_expr_integral();
+
   test_instantiate();
+
 }
 
 

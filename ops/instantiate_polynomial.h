@@ -5,8 +5,7 @@
 
 namespace po
 {
-  template<typename Rank>
-  polynomial& instantiate(polynomial& p, const polynomial& expr, Rank&&)
+  polynomial& instantiate(polynomial& p, const polynomial& expr, rank_type)
   {
     p = expr;
     return p;

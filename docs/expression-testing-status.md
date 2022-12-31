@@ -1,6 +1,8 @@
 # Expression Testing
 
-Current status tables. Tests are implemented per-expression, where expressions are partially [sorted into levels by number of operators](./expression-testing-by-num-operators.md). Verification is generally limited to levels 0 - 2, with some additional expressions with more than 2 operators already verified. Expressions at level > 2 will be systematically unit-tested as time available.
+Current status tables are below.
+
+Tests are implemented per-expression, where expressions are partially [sorted into levels by number of operators](./expression-testing-by-num-operators.md). Verification is generally limited to levels 0 - 2, with some additional expressions with more than 2 operators already verified. Expressions at level > 2 will be systematically unit-tested as time available.
 
 The following tables summarize expressions at level 2 which have been systematically tested and verified. Compiler front-end limitations prevent translation of a single translation unit with all level 2 expressions.
 
@@ -11,20 +13,20 @@ The following tables summarize expressions at level 2 which have been systematic
 
 ### Complete
 
-| status     |scalar   |polynomial|unary expr|binary expr|monomial (*ext*)|
-|:-----------|:-------:|:--------:|:--------:|:---------:|:--------------:|
-| complete   | `+ - D` | `+ - D`  |          |           |                |
-| incomplete |         |          | `+ - D`  | `+ - D`   | `+ - D`        |
+| status     |scalar       |polynomial   |unary expr   |binary expr  |monomial (*ext*)|
+|:-----------|:-----------:|:-----------:|:-----------:|:-----------:|:--------------:|
+| complete   | `+ - D   I` | `+ - D   I` |             |             |                |
+| incomplete | `      A `  | `      A  ` | `+ - D A I` | `+ - D A I` | `+ - D A I`    |
 
 Unary and binary exprs need further testing.
 
 
 ## Binary assignment
 
-| status     |                  |polynomial    |scalar        |unary expr    |binary expr   |monomial      |init-list (*ext*)|
-|:-----------|-----------------:|:------------:|:------------:|:------------:|:------------:|:------------:|:---------------:|
-| complete   | **polynomial**   |`= +=  -=  *=`|`= +=  -=  *=`|              |              |`  +=  -=  *=`|`= +=  -=  *=`   |
-| incomplete | **polynomial**   |              |              |`= +=  -=  *=`|`= +=  -=  *=`|`=`           |                 |
+| status     |                  |polynomial  |scalar      |unary expr  |binary expr |monomial    |init-list (*ext*)|
+|:-----------|-----------------:|:----------:|:----------:|:----------:|:----------:|:----------:|:---------------:|
+| complete   | **polynomial**   |`= += -= *=`|`= += -= *=`|            |            |`  += -= *=`|`= += -= *=`     |
+| incomplete | **polynomial**   |            |            |`= += -= *=`|`= += -= *=`|`=         `|                 |
 
 
 

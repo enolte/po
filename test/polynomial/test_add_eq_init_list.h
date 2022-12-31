@@ -15,19 +15,19 @@ void test_add_eq_init_list()
 
     assert(p.nterms() == 4);
     assert(p.coefficient(1, 0, 0) == 2.5);
-    assert(compare::equal(p.variable_degrees, 3, 1, 0));
+    assert(compare::equal(p.degrees(), 3, 1, 0));
 
     p += {{2.5, {1, 0, 0}}};
 
     assert(p.nterms() == 4);
     assert(p.coefficient(1, 0, 0) == 5);
-    assert(compare::equal(p.variable_degrees, 3, 1, 0));
+    assert(compare::equal(p.degrees(), 3, 1, 0));
 
     p += {{2.5, {1, 7, 0}}};
 
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 7, 0) == 2.5);
-    assert(compare::equal(p.variable_degrees, 3, 7, 0));
+    assert(compare::equal(p.degrees(), 3, 7, 0));
   }
 
   {

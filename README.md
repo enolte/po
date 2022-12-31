@@ -4,50 +4,58 @@ Elementary computations in the real polynomial ring R[x<sub>1</sub>, ..., x<sub>
 
 C++23 hobby project.
 
-## Contents
+# Contents
 * [Status](#status)
 * [Terminology](#terminology)
 * [Design Limitations](#design-limitations)
 * [Running Unit Tests](#running-unit-tests)
 * [Demo/Example](#example)
-* [Plan](#plan)
-  * [IO streams adaptation](#io-streams-adaption)
+* [Plan Phase I](#plan-phase-i)
+  * [IO streams adaptation](#io-streams-adaptation)
   * [Evaluation](#evaluation)
+  * [Operators I](#operators-i)
+  * [Expression template instantiation](#expression-template-instantiation)
+  * [Ring operations](#ring-operations)
+* [Progress Index Phase I](#progress-index-phase-i)
+* [Plan Phase II](#plan-phase-ii)
+  * [Binding operators](#binding-operators)
+  * [Storage II](#storage-ii)
+  * [Operators II](#operators-ii)
+  * [Evaluation II](#evaluation-ii)
   * [Induction](#induction)
   * [Quadrature](#quadrature)
-  * [Operators](#operators)
-  * [Expression template instantiation](#expression-template-instantiation)
-  * [Binding operators](#binding-operators)
-  * [Storage](#storage)
-  * [Ring operations](#ring-operations)
-* [Progress Index](#progress-index)
+  * [Elementary Operator Algebra](#elementary-operator-algebra)
+  * [IO streams adaptation II](#io-streams-adaptation-ii)
 
 
 
 
+# Status
 
-## Status
+(*06 February 2023*) Moved some things to Phase II, including the completion of the prefix tree storage model. The trie is implemented. The interface for the polynomial type is partially implemented.
 
-(*06 September 2022*) Having just start my new job, this project is in hibernation for now. Progress continues as time available, with reduced time available.
+Progress continues as time available.
+
+<details>
+<summary>Previous</summary>
+
+(*06 September 2022*) Having just started my new job, this project is in hibernation for now. Progress continues as time available, with reduced time available.
 
 (*18 July 2022*) This code in this repo is ~9 days old, as is this documentation.
 
-* The code is incomplete. (See [Plan](#plan).)
+* The code is incomplete. (See [Plan](#plan-phase-i).)
 * This documentation is incomplete.
-* Test coverage and verification is incomplete. (See [Plan](#plan).)
+* Test coverage and verification is incomplete. (See [Plan](#plan-phase-i).)
 * The code is not optimized.
 * It uses simple program entry points for unit tests (instead of GoogleTest/gunit, or others).
 * There is no build system (a la cmake. etc.).
 * There is no CI/CD pipeline.
 * There is no installable package.
 
-Progress continues as time available.
+</details>
 
 
-
-
-
-## Terminology
+# Terminology
 
 This repo uses the following terminology.
 
@@ -60,18 +68,29 @@ This repo uses the following terminology.
 
 
 
-## Design Limitations
+# Design Limitations
 
-### Representation
+This list is not exhaustive.
 
-`po::polynomial` is a value type: it stores all of its own multiindices and coefficients. This is bad if many polynomials are instantiated with overlapping lifetimes, as it requires redundant data storage. A better approach with a flat storage model is to pre-generate multiindices to be used, to reference from individual monomial terms. A few [storage](#storage) models are planned for experimentation.
+## Representation
 
-### Expressions
+`po::polynomial` is a value type: it stores all of its own multiindices and coefficients. This is bad if many polynomials are instantiated with overlapping lifetimes, as it requires redundant data storage. A better approach with a flat storage model is to pre-generate and [pool](#pooled-exponents) multiindices to be used, to reference from individual monomial terms. A few [storage](#storage-ii) models are planned for experimentation.
+
+The currently implemented storage is a flat model, consisting of a sequence of independently stored monomials.
+
+## Expressions
 
 An rvalue subexpression is copied into its parent expression instance. This happens because there is no implemented mechanism for rvalue-referencing an rvalue constructed by a subexpression type instance.
 
 This implies that an rvalue polynomial is copied into every superior expression type instance. This is a to-do.
 
+## Operators
+
+For Phase I, arithmetic operators and assignment operators are implemented only for polynomials of the same rank. E.g., if
+  * p(x, y, z) = 3xz - 2y
+  * q(x, y) = 15y<sup>2</sup>
+
+then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined.
 
 
 
@@ -87,7 +106,7 @@ g++ --std=c++23 test/polynomial/polynomial.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 138 unit test sets, many of which include multiple specific test cases.
 
 
 
@@ -97,8 +116,9 @@ The resulting program implements every polynomial UT, which includes the express
 
 The following program file ...
 
-```
+```c++
 #include "../../polynomial.h"
+#include "../../ostream/polynomial_ostream.h"
 #include <iostream>
 
 int main()
@@ -118,8 +138,8 @@ int main()
 ...computes the error in the evaluation of `q*q` from the above expression, without computing any temporary polynomials. On my host, the resulting program emits
 ```
 $ ./a
-p = 2.3[4, 2] + -3.07[5, 3] + 1.023[5, 9]
-q = 1[0, 1] + 22.4[3, 1] + -5.1[7, 1]
+p = 2.3[4,2]+-3.07[5,3]+1.023[5,9]
+q = 1[0,1]+22.4[3,1]+-5.1[7,1]
 error = 0x1.ecp-15
 ```
 
@@ -132,14 +152,14 @@ The file [demos/00/demo.cpp](./demos/00/demo.cpp) contains the above program sou
 
 
 
-# Plan
+# Plan Phase I
 
-In progress. See [Progress Index](#Progress-Index) for current status.
+In progress. See [Progress Index](#progress-index-phase-i) for current status.
 
 
-## IO streams adaption
+## IO streams adaptation
 
-###  basic `std::basic_ostream<char>` support
+### Basic `std::basic_ostream<char>` support
 
 E.g.,
 
@@ -159,14 +179,13 @@ p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup
 
 for named variables *x, y, z, w*.
 
-### basic `std::basic_istream<char>` support
+### Basic `std::basic_istream<char>` support
 
 E.g.,
 
 ```
-std::string source = "1.4[2, 3, 2, 1] + 0.5[4, 1, 4, 1]";
-po::polynomial p;
-std::stringstream ss;
+std::stringstream ss{"1.4[2, 3, 2, 1] + 0.5[4, 1, 4, 1]"};
+po::polynomial p{};
 ss >> p;
 ```
 
@@ -176,25 +195,16 @@ p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup
 
 for named variables *x, y, z, w*.
 
-### Extension
-
-Maybe these too.
-
-* A simple I|O interchange format (such as JSON)  may also be valuable for testing.
-* Also, compositional form, at least for validation.
-* Source code string format. This may or may not be useful.
-
-
 
 ## Evaluation
 
 There are two evaluation algorithms implemented. Given a polynomial and parameter values such that each intermediate computational result value can be exactly represented in the scalar field numeric type, the two algorithms below produce identical outputs.
 
-### naïve
+### Naïve
 
 For the usual additive form. Does what you think it does. Iterates each additive term, computing the value of that term using a custom implementation, `po::pow`. `po::pow` runs in ~%60 of the time that `std::pow` does for identical actual parameter values.
 
-### generalized Horner
+### Generalized Horner (dense)
 
 A generalization of Horner to `rank` many variables.
 
@@ -208,15 +218,313 @@ where d = deg(x, p). Each of polynomials q<sub>k</sub> has a compositional form,
 
 Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary `rank` p(x<sub>1</sub>, ..., x<sub>r</sub>).
 
-* dense Horner. Recursively iterate every exponent sequence. This does not require storing temporary polynomials, nor does it use `std::bind`. Very slow on the typical case of term-wise-sparse polynomials. Dynamic programming can optimize this, but a prefix tree is probably the same approach.
-
-* sparse Horner. Probably requires a prefix tree. The tree is implemented. The algorithm is not.
-
-### multivariate de Casteljau
-
-TODO details here
+Evaluation recursively iterates every exponent sequence. This does not require storing temporary polynomials, nor does it use `std::bind`. This can be very slow on the typical case of term-wise-sparse polynomials.
 
 
+
+
+## Operators I
+
+### Binary operators
+
+#### Assignment
+
+The type of the resulting expression is `polynomial&`.
+
+Supported operators are `=, +=, -=, *=`. Right-side types are
+
+* polynomial
+* scalar
+* expr
+* monomial
+
+#### Arithmetic
+
+The type of the resulting expression is a supported expression type.
+
+Supported operators are `+, -, *`. Right-side and left-side types are
+
+* polynomial
+* scalar
+* expr
+* monomial
+
+### Unary operators
+
+The type of the resulting expression is a supported expression type.
+
+Supported operators are `+, -, D, A, I`.
+
+* `D` represents partial differentiation
+* `A` represents antidifferentiation
+* `I` represents integration
+
+See [Ring operations](#ring-operations). Each of these is treated as a unary operator for test classification.
+
+Support subexpression types are
+
+* polynomial
+* scalar
+* expr
+* monomial
+
+
+
+## Expression template instantiation
+
+The basic implementation supports instantiation of polynomial expressions.
+E.g., for polynomials q, r, of 4 variables,
+
+```
+po::polynomial p = po::instantiate(2*(r-3)*r*r - 3.2*q, po::rank<5>{});
+```
+
+or, equivalently,
+
+```
+po::polynomial p = 2*(r-3)*r*r - 3.2*q;
+```
+
+
+
+
+
+
+## Ring operations
+
+Elementary rational field computations
+
+### Integrals
+
+Given a rank 2 polynomial, p(x, y) = 2x<sup>2</sup>y - 4xy<sup>3</sup>, then integration over both *x* and *y* in [-1,1] x [-1, 1] is zero, a numerical value. The intent is to support this with
+
+```
+double v = integral(p, {-1, 1}, {-1, 1});
+```
+
+For a rank 2 polynomial, `p`, integration over only one of its variables results in a polynomial in one variable. The intent is to support this with
+
+```
+integral-expr x = integral(p, 1, {-1, 1});
+```
+or maybe
+```
+integral-expr x = integral(p, {1, {-1, 1}});
+```
+to support positional specification and variadic signatures in a "natural" way, for multiple integrals.
+
+
+Either of the above yields an instantiable `integral-expr` type instance for a polynomial of one variable.
+
+Logically,
+
+```
+integral(p, {-1, 1}, {-1, 1})
+```
+is equivalent to either of
+
+```
+integral(integral(p, 1, {-1, 1}), 0, {-1, 1})
+integral(integral(p, 0, {-1, 1}), 0, {-1, 1})
+```
+
+or, alternatively,
+
+```
+integral(integral(p, {1, {-1, 1}}), {0, {-1, 1}})
+integral(integral(p, {0, {-1, 1}}), {0, {-1, 1}})
+```
+
+
+When applied to a general expression, the result of instantiating an integral is a polynomial of either the same rank as the input expression,
+or one less than the input rank. That polynomial is "the integral" of the input expression with respect to the given positional argument and interval end points.
+
+
+
+### Partial derivatives
+
+Given any supported expression `x`, of any rank >= 0, `D(x, 2)` should do the right thing when evaluated or instantiated. The type of `D(x, 2)` is a supported expression type. E.g., if
+
+* p(x, y, z) = xz<sup>4</sup> - 6y<sup>3</sup> + 3x<sup>8</sup>yz,
+
+then `D(3*p, 2)` yields
+
+* p<sub>2</sub>(x, y, z) = 12xz<sup>3</sup> + 9x<sup>8</sup>y
+
+when instantiated.
+
+
+### Antiderivatives
+
+TODO. This section is incomplete.
+
+Only integral primitives are supported ("zero gauge").
+
+Given a polynomial (or other expression) `p`, the intent is to support expressions such as `antiderivative(p, 1)`. The type of such an expression is an antiderivative expression type.
+
+The result is an expression which, when instantiated, is a unique rank R+1 polynomial if p has rank R.
+
+
+
+
+
+
+
+
+
+# Progress Index Phase I
+
+## Done
+
+(This implies unit test coverage and verification, obviously.)
+
+  * [IO streams adaptation](#io-streams-adaption)
+  * [Evaluation](#evaluation)
+  * [Operators](#operators-i) (See [expression-testing](./docs/expression-testing-status.md) for current status.)
+    |scalar       |polynomial   |unary expr   |binary expr  |
+    |:-----------:|:-----------:|:-----------:|:-----------:|
+    | `+ - D   I` | `+ - D   I` |             |             |
+
+  * [Expression template instantiation](#expression-template-instantiation)
+  * [Ring operations](#ring-operations)
+    * Partial derivatives
+    * Integrals
+
+
+## In progress
+  * [Operators](#operators-i) (Needs further testing and verification. See [expression-testing](./docs/expression-testing-status.md) for current status.)
+    |scalar       |polynomial   |unary expr   |binary expr  |
+    |:-----------:|:-----------:|:-----------:|:-----------:|
+    | `         ` | `         ` | `+ - D   I` | `+ - D   I` |
+
+
+
+## Not started
+  * [Operators](#operators-i)
+    |scalar       |polynomial   |unary expr   |binary expr  |
+    |:-----------:|:-----------:|:-----------:|:-----------:|
+    | `      A  ` | `      A  ` | `      A  ` | `      A  ` |
+
+  * [Ring operations](#ring-operations)
+    * Antiderivatives
+
+
+# Plan Phase II
+
+
+
+## Binding operators
+
+To multiply two polynomials of different rank, a parameter map must be specified. E.g., for named variables *x*,*y*,*z*, an expression which is evaluation-equivalent to p(x, y, z) * q(y) may look like
+
+```
+p * po::bind(q, 2);
+```
+
+or for p(x, y, z) * r(x, z),
+
+```
+p * po::bind(r, 1, 3);
+```
+
+with the result of `po::bind` imputed by the rank of the polynomial `p`.
+
+This also is the implementing mechanism for [partial evaluation](#partial-evaluation).
+
+Why not `std::bind`? For basic evaluation, the result of `std::bind` does the right thing (a la `q = std::bind(p, 2, 0.5, _1, _2)`), but using only `std::bind` has two problems.
+
+* It requires that the expression grammar depend upon implementation details of `std::bind`.
+* It requires that instantiation of the resulting bind-expression be implemented in terms of `std::bind`.
+
+
+To facilitate instantiation, a better approach is to define a custom bind operation, something like
+
+```
+expr_bind bind(Expr&& expr, X&&... x)
+```
+
+When paired with
+
+```
+polynomial instantiate(expr_bind&&)
+```
+
+a partial evaluation may be instantiated, with expression grammar support.
+
+
+
+
+## Storage II
+
+A few polynomial storage models may be undertaken.
+
+### Flat
+
+Stores each monomial separately, as a seqence of independent monomial terms.
+
+This is the currently implemented model.
+
+### Trie
+
+Stores a prefix tree of exponent sequences, with coefficients as leaf data. This is asymptotically more space-efficient, but some algorithms may have greater asymptotic time than with a flat model.
+
+The trie is implemented. The goal is to implement an evaluation algorithm which this repo calls "sparse [generalized Horner](#generalized-horner)". This algorithm may be faster than a naïve evaluation on a flat storage model.
+
+A prefix tree representation can not benefit from pre-generated multiindices.
+
+This storage model is amenable to evaluation of homogeneous polynomials, which may provide a substitute for a flat or trie model.
+
+This also has some advantages for look-up, but is probably slower than flat for numerical evaluation. Unclear as yet.
+
+### Pooled exponents
+
+Each monomial stores a coefficient and an offset / key to its own exponents. The exponents themselves are stored in a singleton data structure. Exponent storage is either sparse (smaller) or dense (faster).
+
+If sparse storage with a good hash function, then lookup may be amortized Θ(1). If dense, it is constant.
+
+This is probably slower to evaluate than a value-intrinsic flat implementation, with any evaluation algorithm. Unclear as yet. Will be investigated as time available.
+
+### Tensor (maybe)
+
+Stores polynomial terms by degree, with equal-degree terms stored in a tensor of the implied tensor rank.
+If the resulting tensors are totally symmetric, memory requirements per tensor object are substantially reduced, even with a componentwise-sparse tensor implementation.
+
+### Polynomial forms
+
+A few polynomial forms can be naturally realized among these storage models
+
+* Euclidean
+* Homogeneous
+* Compositional (maybe)
+
+
+
+
+## Operators II
+
+### Binary operators
+
+#### Assignment
+
+Operators `=, +=, -=, *=` extended to a right-side type of `initializer_list` as *braced-init-list*.
+
+Additional overloads for a left-side type of `polynomial&&` may be implemented later.
+
+#### Arithmetic
+
+The type of the resulting expression is a supported expression type.
+
+Operators `+, -, *` extended to `initializer_list` as *braced-init-list*, for either right-side or left-side but not both.
+
+With these extensions, source code expressions such as
+
+```
+po::polynomial p = 2*(r-3)*r*r - {{4, {3, 0, 3, 2, 1}}, {5.4, {3, 6, 4, 1, 2}}} * 3.2*q;
+```
+
+without insantiating temporary monomial objects for the *braced-init-list* entries.
+
+This extension is not currently implemented, and it may not be.
 
 
 
@@ -248,161 +556,50 @@ For the inner product of a polynomial operator and any suitable function : R<sup
 
 
 
+## Evaluation II
 
-## Operators
+### Generalized Horner (sparse)
 
-"*ext*" denotes a possible extension which may or may not be implemented later.
+A generalization of Horner to `rank` many variables.
 
-### Binary operators
+Compositional form: Given p(x, y) in two variables, there are polynomials q<sub>k</sub> s.t.
 
-#### Assignment
+* p = q<sub>0</sub>(y) + xq<sub>1</sub>(y) + ∙∙∙ + x<sup>d</sup>q<sub>d</sub>(y),
 
-The type of the resulting expression is `polynomial&`.
+where d = deg(x, p). Each of polynomials q<sub>k</sub> has a compositional form, and the compositional form of p is
 
-Supported operators are `=, +=, -=, *=`. Right-side types are
+* p = q<sub>0</sub>(y) + x(q<sub>1</sub>(y) + x(q<sub>2</sub>(y) + x(∙∙∙(xq<sub>d</sub>(y))∙∙∙)))
 
-* polynomial
-* scalar
-* expr
-* monomial
-* init-list (*ext*)
+Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary `rank` p(x<sub>1</sub>, ..., x<sub>r</sub>).
 
-Additional overloads for a left-side type of `polynomial&&` may be implemented later.
+A prefix tree is a natural storage model for this. The trie is implemented. The algorithm is not.
 
-#### Arithmetic
+### Multivariate de Casteljau
 
-The type of the resulting expression is a supported expression type.
+TODO details here
 
-Supported operators are `+, -, *`. Right-side and left-side types are
+### Partial evaluation
 
-* polynomial
-* scalar
-* expr
-* monomial
-* init-list (*ext*, right-side XOR left-side)
+If p has rank R, and if fewer than R numeric arguments are specified, the result is an instantiable bind-expression.
 
-#### Extension
+The polynomial constructed from a bind-expression returned by a [binding operator](#binding-operators) is a polynomial defined by a partial evaluation of p.
 
-An extended grammar would include *braced-init-list*s, perhaps as initialization expressions for
-`std::initializer_list`s or `po::monomial`s. E.g.,
+E.g., if
 
-```
-po::polynomial p = 2*(r-3)*r*r - {{4, {3, 0, 3, 2, 1}}, {5.4, {3, 6, 4, 1, 2}}} * 3.2*q;
-```
-This extension is not currently implemented, and it may not be.
+p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup>4</sup>*yz*<sup>4</sup>*w*
 
+is evaluated with *x* = 2 and *y* = 0.5, the result when instantiated is
 
-### Unary operators
+q(z, w) = p(2, 0.5, z, w) = 0.7*z*<sup>2</sup>*w* + 4*z*<sup>4</sup>*w*
 
-The type of the resulting expression is a supported expression type.
+for named variables *x, y, z, w*.
 
-Supported operators are `+, -, D`. `D` represents partial differentiation, treated as a unary operator for test classification.
 
-Support subexpression types are
 
-* polynomial
-* scalar
-* expr
-* monomial
 
+## Elementary Operator Algebra
 
-
-## Expression template instantiation
-
-The basic implementation supports instantiation of polynomial expressions.
-E.g., for polynomials q, r, of 4 variables,
-
-```
-po::polynomial p = po::instantiate(2*(r-3)*r*r - 3.2*q, po::rank<4>{});
-```
-
-The goal is to support
-
-```
-po::polynomial p = 2*(r-3)*r*r - 3.2*q;
-```
-
-which is not supported yet.
-
-
-
-
-
-
-## Binding operators
-
-To multiply two polynomials of different rank, a parameter map must be specified. E.g., for named variables *x*,*y*,*z*, an expression which is evaluation-equivalent to evaluate p(x, y, z) * q(y) may look like
-
-```
-p * po::bind(q, 2);
-```
-
-or for p(x, y, z) * r(x, z),
-
-```
-p * po::bind(r, 1, 3);
-```
-
-with the result of `po::bind` imputed by the rank of the polynomial `p`. This approach may not work to implement q(x) * p(x, y, z), because of class template argument deduction rules. This will be investigated as time available.
-
-
-
-
-
-## Storage
-
-  Individual polynomial storage models.
-
-### flat
-
-  Stores each monomial separately, as a seqence of independent monomial terms.
-
-  This is the currently implemented model.
-
-### trie
-
-Stores a prefix tree of exponent sequences, with coefficients as leaf data. This is asymptotically more space-efficient, but some algorithms may have greater asymptotic time than with a flat model.
-
-An implementation of a polynomial trie is in progress. The goal is to implement an evaluation algorithm which this repo calls "sparse [generalized Horner](#generalized-horner)". This algorithm may be faster than a naïve evaluation on a flat storage model.
-
-A prefix tree representation can not benefit from pre-generated multiindices.
-
-### tensor
-
-Stores polynomial terms by degree, with equal-degree terms stored in a tensor of the implied tensor rank.
-The resulting tensors are totally symmetric, which substantially reduces memory requirements per tensor object, even with a componentwise-sparse tensor implementation.
-
-This storage model is amenable to evaluation of homogeneous polynomials, which may provide a substitute for a flat or trie model.
-
-This also has some advantages for look-up, but may be slower for numerical evaluation. Unclear as yet.
-
-### Polynomial forms
-
-A few polynomial forms can be realized among these storage models
-
-* Euclidean
-* Homogeneous
-* Compositional (maybe)
-
-
-
-
-
-## Ring operations
-
-TODO. This section is incomplete.
-
-### antiderivative
-
-This is a completely evaluated sequence of antiderivative operators.
-
-### composition
-
-To instaniate, this is probably bext done with a Generalized Horner type of expression evaluation.
-
-For the general case, this requires a binding operator.
-
-### differential operators
+### Differential operators
 
 The intent is to support expressions such as
 
@@ -412,94 +609,143 @@ D(0) + 1.8*D(4)*D(1)
 
 where the expression type is a partial differential operator type.
 
-For instantiation, this is, e.g.,
+Applying such an expression to an expression, e.g.,
 
 ```
 (D(0) + 1.8*D(4)*D(1))((p - 3) * q)
 ```
 
-with `polynomial` as the type of the expression evaluation.
+gives an appropriate expression type as the result.
 
 
-### integral operators
-This induces a polynomial / expression of lesser rank.
 
-### antiderivative operators
-This induces a polynomial / expression of greater rank.
 
-### convolution
+### Integral operators
+
+Only integral primitives are supported ("zero gauge").
+
+The intent is to support expressions such as `integral(1, {0, 1}) - 2*integral(3, {-2, 2})`, or maybe `integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})` if given some polynomial `q`. The type of such an expression is an integral operator type.
+
+This is applied to a polynomial `p` (or some other expression type). The result looks like
+
+```
+(integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})(p)
+```
+
+and the resulting expression type is identical to the type of
+
+```
+integral(p, 3, {2, 4}} + 3*q*q*integral(p, 2, {0, 1})
+```
+
+When yhe above is instantiated for a `p` of rank R, the result is a rank R-1 polynomial if R > 2, else it has rank 2.
+
+For `integral(3, {2, 4})(p)`, if p has rank R < 4, the result is a rank R expression, else it is a rank R-1 expression.
+
+### Antiderivative operators
+
+Only integral primitives are supported ("zero gauge").
+
+The intent is to support expressions such as `antiderivative(1)`, or maybe `antiderivative(3) + 3*q*q*antiderivative(2)` if given some polynomial `q`. The type of such an  expression is an antiderivative operator type.
+
+Evaluation on an expression *X* of rank R looks like `(antiderivative(3) + 3*q*q*antiderivative(2))(X)`. The result is an expression which, when instantiated, is a unique rank R+1 polynomial.
+
+The expression
+
+```
+(antiderivative(3) + 3*q*q*antiderivative(2))(X)
+```
+
+has identical type to
+
+```
+antiderivative(3)(X) + 3*q*q*antiderivative(2)(X)
+```
+
+
+
+### Composition
+
+To instantiate, this is probably best done with a Generalized Horner type of expression evaluation.
+
+For the general case, this requires a [binding operator](#binding-operators).
+
+### Convolution
+
 Formally, this a special case of composition.
 
-### elementary rational field computations
-
-
-
-
-# Progress Index
-
-## Done
-
-(This implies unit test coverage and verification, obviously.)
-
-  * [IO streams adaptation](#io-streams-adaption)
-    * basic `std::basic_ostream<char>` support
-  * [Evaluation](#evaluation)
-    * naïve
-    * generalized Horner (dense)
-  * [Operators](#operators)
-    * See [expression-testing](./docs/expression-testing-status.md) for current status.
-  * [Storage](#storage)
-    * flat
-  * [Ring operations](#ring-operations)
-    * partial derivative
-
-
-
-## In progress
-  * [Operators](#operators) (Needs further testing and verification.)
-    |scalar    |polynomial|unary expr|binary expr|
-    |:--------:|:--------:|:--------:|:---------:|
-    |          |          |[`+  - D`]|[`+  - D`] |
-    * See [expression-testing](./docs/expression-testing-status.md) for current status.
-  * [Expression template instantiation](#expression-template-instantiation) (Needs further testing and verification. See the plan section.)
-  * [Storage](#storage)
-    * trie
-  * [Ring operations](#ring-operations)
-    * differential operators
-
-
-
-## Not started
-
-  * [IO streams adaptation](#io-streams-adaption)
-    * basic `std::basic_istream<char>` support
-  * [Evaluation](#evaluation)
-    * sparse Horner
-  * [Induction](#induction)
-    * Orthonormal basis polynomials. Start with an n-dimensional rectangular domain.
-    * "Multinomial Bernstein" basis
-    * series induction
-    * Lagrange basis
-    * Bernstein-Bezier approximation for piecewise continuous functions
-  * [Operators](#operators)
-    * See [expression-testing](./docs/expression-testing-status.md) for current status.
-  * [Induction](#induction)
-  * [Quadrature](#quadrature)
-  * [Binding operators](#binding-operators)
-  * [Storage](#storage)
-    * tensor / homogeneous
-    * compositional
-  * [Ring operations](#ring-operations)
-    * antiderivative
-    * convolution
-    * composition
-    * integral operators
-    * antiderivative operators
-    * elementary rational field computations
 
 
 
 
 
+## IO streams adaptation II
+
+Any of these may or may not be useful. If it turns out that none of them are, this entire heading will be dropped.
+
+Only `<<` is described below. Each of these entails support for `<<` and `>>`.
+
+### JSON
+
+This may also be valuable for testing. If this turns out to be useful, then the following code fragment...
+
+```
+po::polynomial p{{7.1, {4, 2, 3}}, {2.4, {2, 0, 1}}, {-4.5, {6, 3 ,6}}};
+std::cout << po::json << p;
+```
+
+...could emit something like...
+
+```
+polynomial{{coefficient:"7.1", exponents{4, 2, 3}},{coefficient:"2.4", exponents{2, 0, 1}},{coefficient:"-4.5", exponents{6, 3 ,6}}}
+```
+
+...to stdout.
+
+### Compositional form
+
+This might be useful for validation.
+
+Given
+
+* p(x, y) = 7.1x<sup>4</sup>y<sup>2</sup>z<sup>15</sup> + 2.4x<sup>4</sup>y<sup>3</sup> - 4.5x<sup>6</sup>y<sup>2</sup> + 13x
+
+In left-to-right compositional form,
+
+* p(x, y) = x(13) + x<sup>4</sup>( y<sup>2</sup>(z<sup>15</sup>(7.1)) + y<sup>3</sup>(2.4) ) + x<sup>6</sup>(y<sup>2</sup>(-4.5))
+
+For stdout, this tree could be serialized with this code fragment:
+
+```
+po::polynomial p{{7.1, {4, 2, 15}}, {2.4, {2, 0, 0}}, {-4.5, {6, 2, 0}}};
+std::cout << po::compositional << p;
+```
+
+where the result would be something like
+
+```
+1{13},4{2{15{7.1}},3{2.4}},6{2{-4.5}}
+```
+
+(This string is a sparse / tree representation of p. Serializing to a "general" dense form is clearly not scalable.)
+
+### Source code string format
+
+A simple stream adaptor `po::source` can do this.
+
+The following code fragment...
+
+```
+po::polynomial p{{7.1, {4, 2, 3, 1, 3}}, {2.4, {2, 0, 0, 1, 1}}, {-4.5, {6, 2, 4, 3 ,6}}};
+std::cout << po::source << p;
+```
+
+...should emit...
+
+```
+{7.1, {4, 2, 3, 1, 3}}, {2.4, {2, 0, 0, 1, 1}}, {-4.5, {6, 2, 4, 3 ,6}}
+```
+
+...to stdout.
 
 

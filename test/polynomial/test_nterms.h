@@ -34,7 +34,7 @@ void test_nterms()
 
     assert(p.nterms() == 4);
   }
-
+/* Disable non-constant access to coefficients.
   {
     po::polynomial p
     {
@@ -52,7 +52,7 @@ void test_nterms()
     // Non-constant access induces a new term when an exponent sequence is not found
     assert(p.nterms() == 4);
   }
-
+*/
   {
     const po::polynomial p
     {{-3.6, {1, 1, 4, 3, 0, 0, 4}},

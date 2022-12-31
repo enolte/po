@@ -5,11 +5,11 @@
 
 namespace po
 {
-  template<typename E1, typename Rank>
-  polynomial& instantiate(polynomial& p, const expr_unary_minus<E1> expr, Rank&&)
+  template<typename E1>
+  polynomial& instantiate(polynomial& p, const expr_unary_minus<E1> expr, rank_type rank)
   {
-    instantiate(p, expr.expr1, Rank{});
-    p.negate();
+    instantiate(p, expr.expr1, rank);
+    p *= -1;
     return p;
   }
 }

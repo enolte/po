@@ -1,6 +1,9 @@
+#ifndef PO_EXPR_RANK_H
+#define PO_EXPR_RANK_H
+
 #include "is_polynomial.h"
 #include "is_expression.h"
-
+#include "is_integral.h"
 #include "is_scalar.h"
 
 namespace po
@@ -14,7 +17,15 @@ namespace po
     else if constexpr(is_scalar<E>)
       return rank_type{0};
     else if constexpr(is_unary_expression<E>)
-      return expr_rank(e.expr1);
+    {
+      if constexpr(is_integral<E>)
+        if(e.place < expr_rank(e.expr1))
+          return expr_rank(e.expr1) - 1;
+        else
+          return expr_rank(e.expr1);
+      else
+        return expr_rank(e.expr1);
+    }
     else
     {
       const rank_type r1 = expr_rank(e.expr1);
@@ -26,4 +37,6 @@ namespace po
   }
 
 }
+
+#endif
 

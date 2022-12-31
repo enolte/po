@@ -57,7 +57,7 @@ void test_ctor_rank_initialization()
     po::polynomial p({{1.4, {2, 3, 2, 1}}});
     assert(p.rank() == 4);
   }
-
+/*
   {
     po::polynomial p(1.4, 2, 3, 2, 1);
     assert(p.rank() == 4);
@@ -67,7 +67,7 @@ void test_ctor_rank_initialization()
     po::polynomial p{1.4, 2, 3, 2, 1};
     assert(p.rank() == 4);
   }
-
+*/
   {
     po::polynomial p({{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}});
     assert(p.rank() == 4);

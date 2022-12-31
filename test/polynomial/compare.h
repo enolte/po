@@ -109,6 +109,12 @@ bool contains_unique(const T& terms, const po::exponents& exponents)
   return nfound == 1;
 }
 
+template<typename P>
+bool unordered_equal_terms(const P& p, const std::vector<po::monomial>& b)
+{
+  return compare::equal(p.terms, b, compare::operator==);
+}
+
 bool unordered_equal(const std::vector<po::monomial>& a, const std::vector<po::monomial>& b)
 {
   return compare::equal(a, b, compare::operator==);
@@ -127,14 +133,40 @@ bool operator==(const po::monomial& a, const po::monomial& b)
 bool operator==(const po::polynomial& a, const po::polynomial& b)
 {
   return
-    a.this_rank == b.this_rank &&
-    a.total_degree == b.total_degree &&
-    compare::equal(a.variable_degrees, b.variable_degrees) &&
+    a.rank() == b.rank() &&
+    a.degree() == b.degree() &&
+    compare::equal(a.degrees(), b.degrees()) &&
     unordered_equal(a.terms, b.terms) &&
     true;
 }
 
 
+template<typename T>
+bool equal(const std::valarray<T>& a, const std::valarray<T>& b)
+{
+  return a.size() == b.size() && (a == b).min() == true;
+}
+
+template<typename T>
+bool equal(const std::valarray<T>& a, const std::valarray<T>&& b)
+{
+  return a.size() == b.size() && (a == b).min() == true;
+}
+
+bool unordered_near_rel(
+  const std::vector<po::monomial>& a,
+  const std::vector<po::monomial>& b,
+  double coefficient_rel_tolerance)
+{
+  const auto near_rel = [coefficient_rel_tolerance](const po::monomial& a, const po::monomial& b)
+  {
+    return
+      po_test::near_rel(a.coefficient, b.coefficient, coefficient_rel_tolerance) &&
+      equal(a.exponents, b.exponents);
+  };
+
+  return compare::equal(a, b, near_rel);
+}
 #endif
 
 

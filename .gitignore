@@ -23,6 +23,10 @@
 *.cp
 *ocex*
 
+# future
+*__in-progress
+*__II
+
 # transient binary artifacts
 *.stackdump
 

@@ -13,13 +13,16 @@ namespace po
 #include "expr_partial_derivative_binary_plus.h"
 #include "expr_partial_derivative_binary_minus.h"
 #include "expr_partial_derivative_binary_mult.h"
+#include "expr_partial_derivative_unary_plus.h"
+#include "expr_partial_derivative_unary_minus.h"
+#include "expr_partial_derivative_integral.h"
 #include "expr_partial_derivative2.h"
 
 namespace po
 {
   /*
    * polynomial p = ...., q = ....;
-   * D(p, 4) + q;
+   * D(p - 5*q, 4);
    *
    */
   template<expression E1>

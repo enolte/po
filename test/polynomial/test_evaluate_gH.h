@@ -4,12 +4,10 @@
 
 void test_evaluate_gH()
 {
-#if 0 // TODO
   {
     po::polynomial p{};
-    PO_LINE;
+    assert(p.rank() == 0);
     po::evaluate_gH(p);
-    PO_LINE;
     assert(po::evaluate_gH(p) == 0);
   }
 
@@ -22,7 +20,13 @@ void test_evaluate_gH()
     po::polynomial p{0, po::rank<0>{}};
     assert(po::evaluate_gH(p, 0) == 0);
   }
-#endif
+
+  {
+    const auto p = po::polynomial::make_zero(0);
+    assert(p.rank() == 0);
+    assert(po::evaluate_gH(p, 0) == 0);
+  }
+
   {
     po::polynomial p{po::rank<6>{}};
     assert(po::evaluate_gH(p, 3, 2.3, -0.7, 3, 13.65, 5) == 0.);

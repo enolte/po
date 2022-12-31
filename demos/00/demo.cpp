@@ -1,4 +1,5 @@
 #include "../../polynomial.h"
+#include "../../ostream/polynomial_ostream.h"
 #include <iostream>
 
 int main()

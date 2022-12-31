@@ -2,7 +2,7 @@
 #define PO_TRIE_VERTEX_OSTREAM_H
 
 #include "vector_ostream.h"
-#include "../trie/trie_vertex.h"
+#include "../storage/trie/trie_vertex.h"
 
 namespace po
 {

@@ -45,7 +45,7 @@ void test_mult_eq_monomial()
 
     assert(p.nterms() == 4.);
     assert(p.coefficient(1, 0, 0) == 2.5);
-    assert(compare::equal(p.variable_degrees, 3, 1, 0));
+    assert(compare::equal(p.degrees(), 3, 1, 0));
     assert(p.constant() == -3.);
 
     // p(x, y, z) <- (3x**3  -  4xy  -  3  -  2.5x) * 2.5x
@@ -65,7 +65,7 @@ void test_mult_eq_monomial()
 
     assert(p.nterms() == 4);
     assert(p.coefficient(1, 0, 0) == -7.5);
-    assert(compare::equal(p.variable_degrees, 4, 1, 0));
+    assert(compare::equal(p.degrees(), 4, 1, 0));
     assert(p.constant() == 0.);
   }
 
@@ -81,7 +81,7 @@ void test_mult_eq_monomial()
 
     assert(p.nterms() == 4.);
     assert(p.coefficient(1, 0, 0) == 2.5);
-    assert(compare::equal(p.variable_degrees, 3, 1, 0));
+    assert(compare::equal(p.degrees(), 3, 1, 0));
     assert(p.constant() == -3.);
 
     // p(x, y, z) <- (3x**3  -  4xy  -  3  -  2.5x) * 2.5x
@@ -101,7 +101,7 @@ void test_mult_eq_monomial()
 
     assert(p.nterms() == 4);
     assert(p.coefficient(1, 0, 0) == -7.5);
-    assert(compare::equal(p.variable_degrees, 4, 1, 0));
+    assert(compare::equal(p.degrees(), 4, 1, 0));
     assert(p.constant() == 0.);
 
     p *= {2.5, {1, 7, 0}};
@@ -117,7 +117,7 @@ void test_mult_eq_monomial()
 
     assert(p.nterms() == 4);
     assert(p.coefficient(1, 7, 0) == 0.);
-    assert(compare::equal(p.variable_degrees, 5, 8, 0));
+    assert(compare::equal(p.degrees(), 5, 8, 0));
     assert(p.constant() == 0.);
   }
 
@@ -145,7 +145,7 @@ void test_mult_eq_monomial()
       p);
 
     assert(p.coefficient(0, 2, 3) == -6.);
-    assert(compare::equal(p.variable_degrees, 3, 3, 3));
+    assert(compare::equal(p.degrees(), 3, 3, 3));
     assert(p.constant() == 0.);
   }
 

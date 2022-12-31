@@ -63,9 +63,29 @@ void test_expr_rank()
   }
 
   {
-    po::polynomial p{{2, {1, 5, 1, 1, 7}}}, q{{5.5, {9,8,9,8,6}}, {1.2, {0, 1, 2, 0, 4}}};
+    po::polynomial p{{2, {1, 5, 1, 1, 7}}}, q{{5.5, {9, 8, 9, 8, 6}}, {1.2, {0, 1, 2, 0, 4}}};
     auto x = 2*p*(p - q) - D(q*D(3*p*p - q*q*p, 3), 4);
     assert(po::expr_rank(x) == 5);
+  }
+
+  {
+    po::polynomial p{{2, {1, 5, 1, 1, 7}}}, q{{5.5, {9,8,9,8,6}}, {1.2, {0, 1, 2, 0, 4}}};
+    auto x = 2*p*(p - q) - D(q*D(3*p*p - q*q*p, 3), 4);
+    po::polynomial ip(po::polynomial::make_zero(22));
+    ip = x;
+    assert(po::expr_rank(x) == 5);
+    assert(ip.rank() == 5);
+  }
+
+  {
+    po::polynomial p{{  2, {1, 5, 1, 1, 7}}};
+    po::polynomial q{{5.5, {9, 8, 9, 8, 6}}, {1.2, {0, 1, 2, 0, 4}}};
+    po::polynomial r{{  2, {4, 3, 3, 3, 1, 6}}};
+    auto x = 2*p*(p - q) + po::integral(r, {2, {0, 1}})- (q*D(3*p*p - q*q*p, 3), 4);
+    po::polynomial ip(po::polynomial::make_zero(22));
+    ip = x;
+    assert(po::expr_rank(x) == 5);
+    assert(ip.rank() == 5);
   }
 
   PO_LINE;

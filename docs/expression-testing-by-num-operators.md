@@ -2,14 +2,15 @@
 |||
 |--------------|--------------------|
 | created      | 24 July 2022       |
-| last updated | 11 August 2022     |
+| last updated | 18 February 2023   |
 
 # Expression Grammar
 
-(*11 August 2022*) This document needs to be updated to include partial derivatives.
+There are 8 supported operators
 
-There are 5 supported operators
-
+* unary `D`
+* unary `A`
+* unary `I`
 * unary `+`
 * unary `-`
 * binary `+`
@@ -18,14 +19,23 @@ There are 5 supported operators
 
 and 2 terminal symbols, constant (`c`) and polynomial (`p`).
 
+* `D` denotes partial differentiation.
+* `A` denotes antidifferentiation.
+* `I` denotes integration.
+
+These three operator classes are treated as unary operators for test classification purposes.
+
 ## Taxonomy
 
 Expressions are partially ordered by the number of operators in the expression string. This repo calls this the expression *level*. It is the depth of the expression tree constructed from a source character sequence.
 
-For k >= 0, a level k expression is defined to be any supported expression with k many operands.
+For k >= 0, a level k expression is defined to be any supported expression with k many operators.
 
 A level k expression x<sub>k</sub> is defined recursively as any of
 
+* `D`x<sub>k-1</sub>
+* `A`x<sub>k-1</sub>
+* `I`x<sub>k-1</sub>
 * `+`x<sub>k-1</sub>
 * `-`x<sub>k-1</sub>
 * x<sub>i</sub> `+` x<sub>j</sub>
@@ -38,15 +48,19 @@ where
 * i + j + 1 = k for i, j = 0, ..., k.
 
 
-The terminal symbols define level 0. There are s<sub>0</sub> = 2 such expressions. At level k, there are s<sub>k</sub> = 3*s<sub>k-1</sub>s<sub>0</sub> + ... + s<sub>k-1</sub>s<sub>0</sub> + 2*s<sub>k-1</sub> many supported expressions. The first few values in this sequence are
+The terminal symbols define level 0. There are s<sub>0</sub> = 2 such expressions. At level k, there are
+
+* s<sub>k</sub> = 3(s<sub>k-1</sub>s<sub>0</sub> + ... + s<sub>0</sub>s<sub>k-1</sub>) + 5s<sub>k-1</sub>
+
+many supported expressions. The first few values in this sequence are
 
 |   k   | s<sub>k</sub> |
 |-------|--------------:|
 |   0   |             2 |
-|   1   |            16 |
-|   2   |           224 |
-|   3   |          3904 |
-|   4   |         76160 |
+|   1   |            22 |
+|   2   |           374 |
+|   3   |          7810 |
+|   4   |        182813 |
 
 ## Testing
 

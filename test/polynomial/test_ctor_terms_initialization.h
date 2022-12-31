@@ -66,7 +66,7 @@ void test_ctor_terms_initialization()
 
     assert(compare::equal(actual, expected));
   }
-
+/*
   {
     po::polynomial p(1.4, 2, 3, 2, 1);
 
@@ -84,7 +84,7 @@ void test_ctor_terms_initialization()
 
     assert(compare::equal(actual, expected));
   }
-
+*/
   {
     po::polynomial p({{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}});
 

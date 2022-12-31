@@ -19,6 +19,9 @@
 #include "test_instantiate_Dc.h"            // D(x0)
 #include "test_instantiate_Dp.h"            // D(x0)
 
+#include "test_instantiate_integral_c.h"    // I(x0)
+#include "test_instantiate_integral_p.h"    // I(x0)
+
 void test_instantiate_level_1()
 {
   test_instantiate_unary_plus_p();          // +p
@@ -35,6 +38,9 @@ void test_instantiate_level_1()
 
   test_instantiate_Dc();                    // D(x0)
   test_instantiate_Dp();                    // D(x0)
+
+  test_instantiate_integral_c();            // I(x0)
+  test_instantiate_integral_p();            // I(x0)
 
   PO_LINE;
 }

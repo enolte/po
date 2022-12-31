@@ -121,23 +121,23 @@ void test_ctor_exprs()
   {
     po::polynomial p({{1.4, {2, 3, 2, 1}}});
   }
-
+/*
   {
-    po::polynomial(1.4, 2, 3, 2, 1);
+    po::polynomial(1.4, 2, 3, 2, 1);      // Disabled
   }
 
   {
-    po::polynomial p(1.4, 2, 3, 2, 1);
+    po::polynomial p(1.4, 2, 3, 2, 1);    // Disabled
   }
 
   {
-    po::polynomial{1.4, 2, 3, 2, 1};
+    po::polynomial{1.4, 2, 3, 2, 1};      // Disabled
   }
 
   {
-    po::polynomial p{1.4, 2, 3, 2, 1};
+    po::polynomial p{1.4, 2, 3, 2, 1};    // Disabled
   }
-
+*/
   {
     po::polynomial p({{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}});
   }

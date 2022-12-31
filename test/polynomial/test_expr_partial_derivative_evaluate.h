@@ -101,6 +101,12 @@ void test_Dc_evaluate()
   {
     assert(po::D(4.3, 2)(9.01) == 0);
   }
+#if 0
+  // TODO
+  {
+    assert(po::D(4, 2)(9.01) == 0);
+  }
+#endif
 }
 
 void test_Dp_evaluate()
