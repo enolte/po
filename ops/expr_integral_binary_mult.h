@@ -18,9 +18,8 @@ namespace po
     template<typename ...X>
     scalar_type operator()(X... x) const
     {
-      // TODO Without instantiation, maybe
-      const rank_type rank = expr_rank(expr1);
-      return instantiate(*this, rank)(x...);
+      // TODO Without instantiation, probably
+      return instantiate(*this)(x...);
     }
   };
 

@@ -25,6 +25,8 @@ namespace po
         t.exponents[expr.place]--;
     }
 
+    p.update_degrees();
+
     return p;
   }
 

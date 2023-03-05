@@ -109,6 +109,14 @@ namespace po
     }
 
     /*
+     * Construct a polynomial from a supported expression type instance.
+     */
+    template<expression Expr>
+    polynomial(Expr&& expr):
+      polynomial(instantiate(expr))
+    {}
+
+    /*
      * Construct a polynomial from an r-value `std::initializer_list` of monomials.
      * This typically begins with a "braced-init-list" (which is not a std::initializer_list).
      *
@@ -201,6 +209,27 @@ namespace po
      */
     template<expression Expr>
     polynomial& operator=(Expr&& expr);
+
+    // TODO This function does not absorb the monomial.
+    polynomial& operator=(monomial&& m)
+    {
+      zero();
+      m_rank = m.rank();
+      m_degrees.resize(m_rank);
+      accumulate_add(terms, m.coefficient, m.exponents);
+      update_degrees();
+      return *this;
+    }
+
+    polynomial& operator=(const monomial& m)
+    {
+      zero();
+      m_rank = m.rank();
+      m_degrees.resize(m_rank);
+      accumulate_add(terms, m.coefficient, m.exponents);
+      update_degrees();
+      return *this;
+    }
 
 
     /*
@@ -439,6 +468,18 @@ namespace po
     }
 
     /*
+     * Add a scalar constant.
+     *
+     * p -= 6;
+     */
+    polynomial& operator-=(const scalar_type& c)
+    {
+      accumulate_add(terms, -c, exponents(exponent_type{0}, rank()));
+
+      return *this;
+    }
+
+    /*
      * Subtract a scalar constant.
      *
      * p -= 6;
@@ -496,8 +537,16 @@ namespace po
     /*
      * Multiply by a scalar constant.
      *
-     * p *= scalar;
-     * p *= scalar;
+     */
+    polynomial& operator*=(scalar_type&& c)
+    {
+      accumulate_mult(terms, std::move(c));
+      return *this;
+    }
+
+    /*
+     * Multiply by a scalar constant.
+     *
      */
     polynomial& operator*=(const scalar_type& c)
     {
@@ -539,6 +588,25 @@ namespace po
 
       return *this;
     }
+
+    /*
+     * Multiply by another polynomial.
+     */
+    polynomial& operator*=(polynomial&& q)
+    {
+      accumulate_mult(terms, q.terms);
+      update_degrees();
+
+      return *this;
+    }
+
+    polynomial& operator*=(std::initializer_list<monomial>&& list)
+    {
+      accumulate_mult(terms, std::forward<std::initializer_list<monomial>>(list));
+      update_degrees();
+
+      return *this;
+    }
   };
 
 }
@@ -553,8 +621,25 @@ namespace po
   template<expression Expr>
   polynomial& polynomial::operator=(Expr&& expr)
   {
-    *this = instantiate(expr);
-    return *this;
+    return (*this = instantiate(expr));
+  }
+
+  template<expression Expr>
+  polynomial& operator+=(polynomial& p, Expr&& expr)
+  {
+    return p.operator+=(instantiate(expr));
+  }
+
+  template<expression Expr>
+  polynomial& operator-=(polynomial& p, Expr&& expr)
+  {
+    return p.operator-=(instantiate(expr));
+  }
+
+  template<expression Expr>
+  polynomial& operator*=(polynomial& p, Expr&& expr)
+  {
+    return p.operator*=(instantiate(expr));
   }
 
 }

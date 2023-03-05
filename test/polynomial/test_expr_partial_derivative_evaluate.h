@@ -19,6 +19,7 @@ void test_Dp_plus_c_evaluate();
 void test_D__p_plus_p_evaluate();
 void test_D__c_plus_p_evaluate();
 void test_D__p_plus_c_evaluate();
+void test_D__level_2_evaluate();
 
 void test_p_plus_unary_plus_Dp_evaluate();
 void test_c_plus_unary_plus_Dp_evaluate();
@@ -33,6 +34,8 @@ void test_unary_plus_Dp_plus_c_evaluate();
 void test_unary_plus_Dp_plus_p_evaluate();
 
 void test_DDp_evaluate();
+void test_DIp_evaluate();
+void test_D__level_2_evaluate();
 
 void test_expr_partial_derivative_evaluate()
 {
@@ -65,8 +68,34 @@ void test_expr_partial_derivative_evaluate()
   test_unary_plus_Dp_plus_p_evaluate();
 
   test_DDp_evaluate();
+  test_DIp_evaluate();
+
+  test_D__level_2_evaluate();
 
   PO_LINE;
+}
+
+void test_D__level_2_evaluate()
+{
+  {
+    po::polynomial p{{1, {3}}}, q{{2, {2}}};
+    assert(D(q + 2*p, 0)(-1) == -4 + 2*3);
+  }
+
+  {
+    using P = po::polynomial;
+    assert(D(P{{-7, {2}}} + P{{1, {3}}}, 0)(1) == -14 + 3);
+  }
+
+  {
+    po::polynomial p{{1, {3, 3}}}, q{{2, {2, 1}}};
+
+    assert(
+      po_test::near_rel(
+        D(q*p*p, 0)(2, 4.3),
+        q(2, 4.3)*2*p(2, 4.3)*D(p, 0)(2, 4.3) + D(q, 0)(2, 4.3)*p(2, 4.3)*p(2, 4.3),
+        0x1p-52));
+  }
 }
 
 void test_Dc_evaluate()
@@ -598,8 +627,6 @@ void test_Dp_mult_p_evaluate()
 
 void test_DDp_evaluate()
 {
-  using po::D;
-
   {
     po::polynomial p{{2, {1, 1, 1, 1}}, {3, {0, 4, 2, 0}}};
     po::polynomial dp2 {{2, {1, 1, 0, 1}}, {6 , {0, 4, 1, 0}}};
@@ -615,6 +642,26 @@ void test_DDp_evaluate()
     assert(D(D(D(p, 2), 1), 3)(4, 1, 0, 0.215384) == 8);
   }
 }
+
+
+void test_DIp_evaluate()
+{
+  {
+    po::polynomial     p{{2, {1, 1, 1, 1}}, { 3, {0, 4, 2, 0}}};
+    // po::polynomial   a3p{{1, {1, 1, 1, 2}}, {6 , {0, 4, 2, 1}}}; // antiderivative(p) from in place 3
+    po::polynomial   i3p{{3, {1, 1, 1,  }}, { 9, {0, 4, 2,  }}}; // integral(p) from -1 to 2 in place 3
+    po::polynomial d2i3p{{3, {1, 1, 0,  }}, {18, {0, 4, 1,  }}}; // d(i2p)/dx2
+
+    const double ex = d2i3p(1, 1, 1);
+    const double ac = D(integral(p, {3, {-1, 2}}), 2)(1, 1, 1);
+
+    assert(expr_rank(D(integral(p, {3, {-1, 2}}), 2)) == 3);
+
+    PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
+  }
+
+}
+
 
 void test_Dc_plus_Dp__p_evaluate()
 {

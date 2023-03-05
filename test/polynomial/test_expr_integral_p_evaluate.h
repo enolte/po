@@ -9,6 +9,46 @@
 void test_expr_integral_p_evaluate()
 {
   {
+    po::polynomial q     {{ 2, {1, 0}}};
+    po::polynomial Q2_13 {{ 4, {1, 0}}};  // integral over [1, 3] in place 7 >= rank(q)
+
+    const double ex = Q2_13(2, 1);
+    const double ac = po::integral(q, {7, {1, 3}})(2, 1);
+
+    assert(ac == ex);
+  }
+
+  {
+    po::polynomial q     {{ 7, {1, 0, 0, 5}}};
+    po::polynomial Q2_13 {{14, {1, 0, 0, 5}}};  // integral over [1, 3] in place 7 >= rank(q)
+
+    const double ex = Q2_13(3, 2, 1, 1);
+    const double ac = po::integral(q, {7, {1, 3}})(3, 2, 1, 1);
+
+    assert(ac == ex);
+  }
+
+  {
+    po::polynomial q     {{7  , {1, 0, 3, 5}}};
+    po::polynomial Q2_13 {{14 , {1, 0, 3, 5}}};  // integral over [1, 3] in place 7 >= rank(q)
+
+    const double ex = Q2_13(3, 2, 1, 1);
+    const double ac = po::integral(q, {7, {1, 3}})(3, 2, 1, 1);
+
+    assert(ac == ex);
+  }
+
+  {
+    po::polynomial q     {{7 , {1, 0, 0, 5}}};
+    po::polynomial Q2_13 {{14, {1, 0,    5}}};  // integral over [1, 3] in place 2
+
+    const double ex = Q2_13(3, 2, 1);
+    const double ac = po::integral(q, {2, {1, 3}})(3, 2, 1);
+
+    assert(ac == ex);
+  }
+
+  {
     po::polynomial p     {{2, {1, 1, 1, 1}}};
     po::polynomial P2_13 {{8, {1, 1,    1}}}; // integral over [1, 3] in place 2
 
@@ -88,18 +128,11 @@ void test_expr_integral_p_evaluate()
   {
     po::polynomial p     {{2, {1, 1, 1, 1}}};
     po::polynomial P2_13 {{8, {1, 1,    1}}}; // integral over [1, 3] in place 2
+    const auto Ip = po::integral(p, 2, {1, 3});
+    const po::polynomial ip = po::instantiate(Ip);
 
-    const auto x = po::integral(p, 2, {1, 3});
-    const po::polynomial xp = po::instantiate(x, po::rank<3>{});
-
-    assert(p.rank() == 4);
-    assert((p.degrees() == decltype(p.degrees()){1, 1, 1, 1}).min() == true);
-
-    PO_ASSERT(xp.rank() == 3, xp.rank());
-    PO_ASSERT((xp.degrees() == decltype(xp.degrees()){1, 1, 1}).min() == true, xp.degrees());
-
-    assert(xp(3, 2, 1) == P2_13(3, 2, 1));
-    assert(xp(3, 2, 1) == 48);
+    assert(ip(3, 2, 1) == P2_13(3, 2, 1));
+    assert(ip(3, 2, 1) == 48);
   }
 
   PO_LINE;

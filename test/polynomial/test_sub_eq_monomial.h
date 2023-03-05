@@ -16,8 +16,7 @@ void test_sub_eq_monomial()
 
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 0, 0) == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
-
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
 
     PO_ASSERT((unordered_equal(
       p.terms,
@@ -36,7 +35,7 @@ void test_sub_eq_monomial()
 
     // Numerically cancelled terms are not removed.
     assert(p.nterms() == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
 
     assert((unordered_equal(
       p.terms,
@@ -47,6 +46,10 @@ void test_sub_eq_monomial()
         {1.7, {0, 3, 2}},
         {0.0, {1, 5, 0}},
       })));
+
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
+    PO_ASSERT(p.degree() == 6, p.degree());
+    PO_ASSERT(p.rank() == 3, p.rank());
   }
 
   {
@@ -61,8 +64,7 @@ void test_sub_eq_monomial()
 
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 0, 0) == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
-
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
 
     PO_ASSERT((unordered_equal(
       p.terms,
@@ -79,7 +81,7 @@ void test_sub_eq_monomial()
 
     // Numerically cancelled terms are not removed.
     assert(p.nterms() == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
 
     assert((unordered_equal(
       p.terms,
@@ -90,6 +92,13 @@ void test_sub_eq_monomial()
         {1.7, {0, 3, 2}},
         {0.0, {1, 5, 0}},
       })));
+
+    PO_ASSERT(p.rank() == 3, p.rank());
+    PO_ASSERT(p.degree() == 6, p.degree());
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
+
+    // Zero coefficients are not ignored.
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
   }
 
   {
@@ -104,8 +113,7 @@ void test_sub_eq_monomial()
 
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 0, 0) == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
-
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
 
     PO_ASSERT((unordered_equal(
       p.terms,
@@ -122,7 +130,9 @@ void test_sub_eq_monomial()
 
     // Numerically cancelled terms are not removed.
     assert(p.nterms() == 5);
-    PO_ASSERT(compare::equal(p.degrees(), 3, 5, 2), p.degrees());
+    PO_ASSERT(equal(p.degrees(), {3, 5, 2}), p.degrees());
+    PO_ASSERT(p.degree() == 6, p.degree());
+    PO_ASSERT(p.rank() == 3, p.rank());
 
     assert((unordered_equal(
       p.terms,

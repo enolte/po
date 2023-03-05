@@ -14,6 +14,10 @@ void test_instantiate_Dp()
         {0, {5, 0}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {5, 0}), r.degrees());
+    PO_ASSERT(r.degree() == 5, r.degree());
   }
 
   {
@@ -26,6 +30,10 @@ void test_instantiate_Dp()
         {2, {5, 0}}, {6, {2, 1}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {5, 1}), r.degrees());
+    PO_ASSERT(r.degree() == 5, r.degree());
   }
 
   {
@@ -38,6 +46,10 @@ void test_instantiate_Dp()
         {10, {4, 1}}, {6, {1, 2}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {4, 2}), r.degrees());
+    PO_ASSERT(r.degree() == 5, r.degree());
   }
 
   {
@@ -50,6 +62,10 @@ void test_instantiate_Dp()
         {10, {4, 1}}, {6, {1, 2}}, {0, {0, 0}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {4, 2}), r.degrees());
+    PO_ASSERT(r.degree() == 5, r.degree());
   }
 
   {
@@ -62,6 +78,10 @@ void test_instantiate_Dp()
         {10, {4, 1}}, {6, {1, 2}}, {0, {0, 0}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {4, 2}), r.degrees());
+    PO_ASSERT(r.degree() == 5, r.degree());
   }
 
   {
@@ -74,6 +94,10 @@ void test_instantiate_Dp()
         {0, {0, 0}}
       }),
       r);
+
+    PO_ASSERT(r.rank() == 2, r.rank());
+    PO_ASSERT(equal(r.degrees(), {0, 0}), r.degrees());
+    PO_ASSERT(r.degree() == 0, r.degree());
   }
 
 

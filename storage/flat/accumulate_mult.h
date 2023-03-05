@@ -56,10 +56,8 @@ namespace po
     /*
      * Accumulate an init-list of monomials, implements multiplication.
      */
-    // TODO Test
     static void accumulate_mult(storage& p, std::initializer_list<monomial>&& q)
     {
-      // assert(0);
       if(q.size() == 0)
       {
         p.clear();
@@ -71,25 +69,10 @@ namespace po
       for(auto& tp : p)
         for(auto& tq : q)
         {
-/*
-            if(const auto found = find_term(acc, tp.exponents + tq.exponents); found != std::cend(acc))
-              found->coefficient += tp.coefficient * tq.coefficient;
-            else
-              acc.emplace_back(tp.coefficient * tq.coefficient, tp.exponents + tq.exponents);
-*/
-
-          if(tp.coefficient != scalar_type{0} && tq.coefficient != scalar_type{0})
-          {
-            if(const auto found = find_term(acc, tp.exponents + tq.exponents); found != std::cend(acc))
-              found->coefficient += tp.coefficient * tq.coefficient;
-            else
-              acc.emplace_back(tp.coefficient * tq.coefficient, tp.exponents + tq.exponents);
-          }
+          if(const auto found = find_term(acc, tp.exponents + tq.exponents); found != std::cend(acc))
+            found->coefficient += tp.coefficient * tq.coefficient;
           else
-          {
-            acc.emplace_back(scalar_type{0}, tp.exponents + tq.exponents);
-          }
-
+            acc.emplace_back(tp.coefficient * tq.coefficient, tp.exponents + tq.exponents);
         }
 
       p = acc;

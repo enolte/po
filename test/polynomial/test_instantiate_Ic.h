@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-void test_instantiate_integral_c()
+void test_instantiate_Ic()
 {
   {
     const auto x = po::integral(po::expr_constant{6.}, {5, {3, 6}});

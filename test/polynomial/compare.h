@@ -115,6 +115,14 @@ bool unordered_equal_terms(const P& p, const std::vector<po::monomial>& b)
   return compare::equal(p.terms, b, compare::operator==);
 }
 
+/*
+template<typename P>
+bool unordered_equal_terms(const P& p, const P& b)
+{
+  return compare::equal(p.terms, b.terms, compare::operator==);
+}
+*/
+
 bool unordered_equal(const std::vector<po::monomial>& a, const std::vector<po::monomial>& b)
 {
   return compare::equal(a, b, compare::operator==);
@@ -144,13 +152,13 @@ bool operator==(const po::polynomial& a, const po::polynomial& b)
 template<typename T>
 bool equal(const std::valarray<T>& a, const std::valarray<T>& b)
 {
-  return a.size() == b.size() && (a == b).min() == true;
+  return a.size() == b.size() && (a.size() == 0 || (a == b).min() == true);
 }
 
 template<typename T>
 bool equal(const std::valarray<T>& a, const std::valarray<T>&& b)
 {
-  return a.size() == b.size() && (a == b).min() == true;
+  return a.size() == b.size() && (a.size() == 0 || (a == b).min() == true);
 }
 
 bool unordered_near_rel(
@@ -166,6 +174,31 @@ bool unordered_near_rel(
   };
 
   return compare::equal(a, b, near_rel);
+}
+
+template<typename P>
+bool unordered_near_rel_terms(
+  const P& p,
+  const std::vector<po::monomial>& b,
+  double coefficient_rel_tolerance)
+{
+  const auto near_rel = [coefficient_rel_tolerance](const po::monomial& a, const po::monomial& b)
+  {
+    return
+      po_test::near_rel(a.coefficient, b.coefficient, coefficient_rel_tolerance) &&
+      equal(a.exponents, b.exponents);
+  };
+
+  return compare::equal(p.terms, b, near_rel);
+}
+
+
+template<typename P>
+bool unordered_near_rel_terms(
+  const P& p,
+  const std::vector<po::monomial>& b)
+{
+  return compare::equal(p.terms, b, compare::near_rel);
 }
 #endif
 

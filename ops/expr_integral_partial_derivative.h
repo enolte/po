@@ -1,8 +1,6 @@
 #ifndef PO_EXPR_INTEGRAL_PARTIAL_DERIVATIVE_H
 #define PO_EXPR_INTEGRAL_PARTIAL_DERIVATIVE_H
 
-#include "expr_rank.h"
-
 namespace po
 {
   template<expression E1>
@@ -15,13 +13,11 @@ namespace po
     const rank_type place;
     const scalar_type a, b;
 
-
     template<typename ...X>
     scalar_type operator()(X... x) const
     {
-      // TODO Without instantiation, maybe
-      const rank_type rank = expr_rank(expr1);
-      return instantiate(*this, rank-1)(x...);
+      // TODO Without instantiation, probably
+      return instantiate(*this)(x...);
     }
   };
 
@@ -38,9 +34,8 @@ namespace po
     template<typename ...X>
     scalar_type operator()(X... x) const
     {
-      // TODO Without instantiation, maybe
-      const rank_type rank = expr_rank(expr1);
-      return instantiate(*this, rank-1)(x...);
+      // TODO Without instantiation, probably
+      return instantiate(*this)(x...);
     }
   };
 

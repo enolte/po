@@ -34,6 +34,7 @@
 #include "test_instantiate_p_plus_c_plus_p.h"     //           x0 +     x1  x1 +     x0
 #include "test_instantiate_p_plus_c_plus_c.h"     //           x0 +     x1  x1 +     x0
 #include "test_instantiate_c_plus_c_plus_p.h"     //           x0 +     x1
+#include "test_instantiate_c_plus_p_plus_p.h"     //           x0 +     x1  x1 +     x0
 
 #include "test_instantiate_pos_p_plus_p.h"        //                        x1 +     x0
 #include "test_instantiate_pos_p_plus_c.h"        //                        x1 +     x0
@@ -75,6 +76,7 @@
 
 #include "test_instantiate_p_plus_Ip.h"           // x0 +     I(x0)
 
+#include "test_instantiate_IDc.h"                 // I(D(x0))
 #include "test_instantiate_IDp.h"                 // I(D(x0))
 #include "test_instantiate_IIp.h"                 // I(I(x0))
 #include "test_instantiate_DIp.h"                 // D(I(x0))
@@ -82,9 +84,13 @@
 #include "test_instantiate_I__neg_p.h"            // I(+x0))
 #include "test_instantiate_I__pos_p.h"            // I(-x0))
 
+#include "test_instantiate_I__p_plus_p.h"         // I(x0 +     x0)
+#include "test_instantiate_I__p_minus_p.h"        // I(x0   -   x0)
+#include "test_instantiate_I__p_mult_p.h"         // I(x0     * x0)
+
+
 #if 0
 // TODO
-#include "test_instantiate_c_plus_p_plus_p.h"     //           x0 +     x1  x1 +     x0
 #include "test_instantiate_c_plus_p_plus_c.h"     //           x0 +     x1  x1 +     x0
 #include "test_instantiate_p_plus_c_minus_p.h"    //           x0 +     x1  x1   -   x0
 #include "test_instantiate_c_plus_p_minus_p.h"    //           x0 +     x1  x1   -   x0
@@ -112,7 +118,6 @@
 #include "test_instantiate_c_mult_p_mult_p.h"     //           x0     * x1  x1     * x0
 #include "test_instantiate_c_mult_p_mult_c.h"     //           x0     * x1  x1     * x0
 #include "test_instantiate_c_mult_c_mult_p.h"     //           x0     * x1  x1     * x0
-#include "test_instantiate_c_mult_c_mult_c.h"     //           x0     * x1  x1     * x0
 
 #endif
 
@@ -148,6 +153,7 @@ void test_instantiate_level_2()
   test_instantiate_p_plus_c_plus_p();             //           x0 +     x1  x1 +     x0
   test_instantiate_p_plus_c_plus_c();             //           x0 +     x1  x1 +     x0
   test_instantiate_c_plus_c_plus_p();             //           x0 +     x1
+  test_instantiate_c_plus_p_plus_p();             //           x0 +     x1  x1 +     x0
 
   test_instantiate_pos_p_plus_p();                //                        x1 +     x0
   test_instantiate_pos_p_plus_c();                //                        x1 +     x0
@@ -164,6 +170,7 @@ void test_instantiate_level_2()
   test_instantiate_p_mult_c_mult_p();             //           x0     * x0         * x0
   test_instantiate_p_mult_p_mult_p();             //           x0     * x0         * x0
   test_instantiate_p_mult_p_plus_p();             //           x0     * x0     +     x0
+
 
   test_instantiate_DDc();                         // D(x1)
   test_instantiate_DDp();                         // D(x1)
@@ -189,12 +196,17 @@ void test_instantiate_level_2()
 
   test_instantiate_p_plus_Ip();                   // x0 +     I(x0)
 
+  test_instantiate_IDc();                         // I(D(x0))
   test_instantiate_IDp();                         // I(D(x0))
   test_instantiate_IIp();                         // I(I(x0))
   test_instantiate_DIp();                         // D(I(x0))
 
   test_instantiate_I__pos_p();                    // I(+x0)
   test_instantiate_I__neg_p();                    // I(-x0)
+
+  test_instantiate_I__p_plus_p();                 // I(x0 +     x0)
+  test_instantiate_I__p_minus_p();                // I(x0   -   x0)
+  test_instantiate_I__p_mult_p();                 // I(x0     * x0)
 
   PO_LINE;
 }

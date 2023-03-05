@@ -29,14 +29,9 @@ void test_expr_integral_integral_p_instantiate()
 
     const auto iip= integral(ip, {0, {-1, 2}});
     PO_ASSERT(po::expr_rank(iip) == 0, po::expr_rank(iip));
-// PO_TRACE("───────────────────────────────────────────────────────────────────────────");
-// PO_LINE;
-// PO_TRACE(" p = " << p);
+
     po::polynomial iip_i = po::instantiate(iip);
-// PO_TRACE(" iip_i.rank() = " << iip_i.rank());
-// PO_TRACE(" iip_i = " << iip_i);
-// PO_TRACE("───────────────────────────────────────────────────────────────────────────");
-    PO_ASSERT(iip_i.rank() == 0, iip_i.rank());
+
     PO_ASSERT(unordered_equal(
       iip_i.terms,
       {
@@ -44,6 +39,9 @@ void test_expr_integral_integral_p_instantiate()
       }),
       iip_i);
 
+    PO_ASSERT(equal(iip_i.degrees(), {}), iip_i.degrees());
+    PO_ASSERT(iip_i.degree() == 0, iip_i.degree());
+    PO_ASSERT(iip_i.rank() == 0, iip_i.rank());
   }
 
   {
@@ -60,7 +58,6 @@ void test_expr_integral_integral_p_instantiate()
 
     po::polynomial iip_i = po::instantiate(iip);
 
-    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
     PO_ASSERT(unordered_equal(
       iip_i.terms,
       {
@@ -68,6 +65,9 @@ void test_expr_integral_integral_p_instantiate()
       }),
       iip_i);
 
+    PO_ASSERT(equal(iip_i.degrees(), {0}), iip_i.degrees());
+    PO_ASSERT(iip_i.degree() == 0, iip_i.degree());
+    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
   }
 
   {
@@ -84,7 +84,6 @@ void test_expr_integral_integral_p_instantiate()
 
     po::polynomial iip_i = po::instantiate(iip);
 
-    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
     PO_ASSERT(unordered_equal(
       iip_i.terms,
       {
@@ -92,6 +91,10 @@ void test_expr_integral_integral_p_instantiate()
         {4.5 , {1}},
       }),
       iip_i);
+
+    PO_ASSERT(equal(iip_i.degrees(), {1}), iip_i.degrees());
+    PO_ASSERT(iip_i.degree() == 1, iip_i.degree());
+    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
   }
 
   {
@@ -116,6 +119,10 @@ void test_expr_integral_integral_p_instantiate()
         {56.25, {4}}
       }),
       iip_i);
+
+    PO_ASSERT(equal(iip_i.degrees(), {4}), iip_i.degrees());
+    PO_ASSERT(iip_i.degree() == 4, iip_i.degree());
+    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
   }
 
   {
@@ -142,6 +149,10 @@ void test_expr_integral_integral_p_instantiate()
         {2800./3, {4}}
       }),
       iip_i);
+
+    PO_ASSERT(equal(iip_i.degrees(), {4}), iip_i.degrees());
+    PO_ASSERT(iip_i.degree() == 4, iip_i.degree());
+    PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
   }
 
 }

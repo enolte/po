@@ -18,7 +18,7 @@ namespace po
     template<typename ...X>
     scalar_type operator()(X... x) const
     {
-      return -1. * integral(expr1, place, a, b);
+      return -expr_integral<E1>{expr1.expr1, place, a, b}(x...);
     }
   };
 

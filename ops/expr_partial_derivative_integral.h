@@ -18,9 +18,9 @@ namespace po
     template<scalar ...X>
     scalar_type operator()(X... x) const
     {
-      // TODO Test
-      auto p = instantiate(expr1.expr1);
-      return D(p, place);
+      // TODO without instantitation
+      auto p = instantiate(expr1);
+      return D(p, place)(x...);
     }
   };
 
@@ -37,9 +37,8 @@ namespace po
     template<scalar ...X>
     scalar_type operator()(X... x) const
     {
-      // TODO Test
-      auto p = instantiate(expr1.expr1);
-      return D(p, place);
+      auto p = instantiate(expr1);
+      return D(p, place)(x...);
     }
   };
 

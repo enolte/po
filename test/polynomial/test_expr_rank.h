@@ -88,6 +88,22 @@ void test_expr_rank()
     assert(ip.rank() == 5);
   }
 
+  {
+    po::polynomial p{{  2, {1, 5, 1, 1, 7}}};
+    po::polynomial q{{5.5, {9, 8, 9, 8, 6}}, {1.2, {0, 1, 2, 0, 4}}};
+
+    assert(po::expr_rank(p*q) == 5);
+    assert(po::expr_rank(integral(p*q, {2, {-1, 3}})) == 4);
+  }
+
+  {
+    po::polynomial p{{  2, {1, 5, 1, 1, 7}}};
+    po::polynomial q{{5.5, {9, 8, 9, 8, 6}}, {1.2, {0, 1, 2, 0, 4}}};
+
+    assert(po::expr_rank(p*q) == 5);
+    assert(po::expr_rank(integral(p*q, {11, {-1, 3}})) == 5);
+  }
+
   PO_LINE;
 }
 

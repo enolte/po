@@ -66,9 +66,13 @@ many supported expressions. The first few values in this sequence are
 
 ### Methodology
 
+Expressions involving only constants are not parsed by this repo; these are implemented by the compiler's expression parser. This reduces the number of expression to be tested at each level.
+
+TODO The s<sub>k</sub> table above does not represent this.
+
 #### Current
 
-At the moment, testing is done at levels 1, 2, and 3. For this first iteration, all expression-dependent tests are manual. Only partial coverage at level 3 is included.
+At the moment, testing is done at levels 1, 2, and 3. For this first iteration, all expression-dependent tests are manual. Only partial coverage at level 3 is included. A few level-4 expressions are also verified, and one level-6 expression.
 
 #### Next
 

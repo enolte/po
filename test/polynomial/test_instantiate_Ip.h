@@ -14,7 +14,7 @@ void test_expr_integral_p_instantiate_place3_rank3(); // OOR case: rank(resultan
 
 void test_expr_integral_p_instantiate_terms_rank4();
 
-void test_instantiate_integral_p()
+void test_instantiate_Ip()
 {
   test_expr_integral_p_instantiate_place1_rank2();
   test_expr_integral_p_instantiate_place0_rank3();
@@ -47,6 +47,10 @@ void test_expr_integral_p_instantiate_place1_rank2()
       {1.5, {0}}
     }),
     ip_i);
+
+  PO_ASSERT(ip_i.degree() == 1, ip_i.degree());
+  PO_ASSERT(equal(ip_i.degrees(), {1}), ip_i.degrees());
+  PO_ASSERT(ip_i.rank() == 1, ip_i.rank());
 }
 
 void test_expr_integral_p_instantiate_terms_rank4()
@@ -69,6 +73,10 @@ void test_expr_integral_p_instantiate_terms_rank4()
 
     PO_ASSERT(unordered_equal(xp.terms, p2_13.terms), xp);
     assert(&xp.terms != &p2_13.terms);
+
+    PO_ASSERT(xp.degree() == 3, xp.degree());
+    PO_ASSERT(equal(xp.degrees(), {1, 1, 1}), xp.degrees());
+    PO_ASSERT(xp.rank() == 3, xp.rank());
   }
 }
 
@@ -90,6 +98,10 @@ void test_expr_integral_p_instantiate_place3_rank3()
         {4, {1, 1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 3, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 3, ip.rank());
   }
 }
 
@@ -111,6 +123,10 @@ void test_expr_integral_p_instantiate_place0_rank3()
         {1, {1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
   {
@@ -126,6 +142,10 @@ void test_expr_integral_p_instantiate_place0_rank3()
         {4, {1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
   // Zero result
@@ -141,12 +161,16 @@ void test_expr_integral_p_instantiate_place0_rank3()
         {0, {1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
   {
     po::polynomial p{{2, {1, 1, 1}}};
     auto x  = integral(p, 0, {0, 3});
-    auto ip = instantiate(x, po::rank<2>{});
+    auto ip = instantiate(x);
     // PO_TRACE(" integral(p, 0, {0, 3}) = " << ip);
 
     PO_ASSERT(unordered_equal(
@@ -155,6 +179,10 @@ void test_expr_integral_p_instantiate_place0_rank3()
         {9, {1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
 }
@@ -175,6 +203,9 @@ void test_expr_integral_p_instantiate_place1_rank3()
       }),
       ip);
 
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
   {
@@ -191,6 +222,9 @@ void test_expr_integral_p_instantiate_place1_rank3()
       }),
       ip);
 
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 }
 
@@ -209,6 +243,10 @@ void test_expr_integral_p_instantiate_place2_rank3()
         {4, {1, 1}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 2, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {1, 1}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 
   {
@@ -225,6 +263,10 @@ void test_expr_integral_p_instantiate_place2_rank3()
         {32, {3, 2}}
       }),
       ip);
+
+    PO_ASSERT(ip.degree() == 5, ip.degree());
+    PO_ASSERT(equal(ip.degrees(), {3, 2}), ip.degrees());
+    PO_ASSERT(ip.rank() == 2, ip.rank());
   }
 }
 

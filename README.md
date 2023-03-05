@@ -98,7 +98,7 @@ then `p + q` is not defined. With the current implementation (Phase I) `p + q` c
 
 As mentioned under [Status](#status), all unit tests are implemented by a simple program entry point, located at test/polynomial/polynomial.cpp.
 
-From the repo root, a typical command line to compile all polynomial UTs is
+From the repo root, a typical command line to compile and link all polynomial UTs is
 
 ```
 g++ --std=c++23 test/polynomial/polynomial.cpp
@@ -106,7 +106,7 @@ g++ --std=c++23 test/polynomial/polynomial.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 138 unit test sets, many of which include multiple specific test cases.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 160 unit test sets, many of which include multiple specific test cases.
 
 
 
@@ -292,7 +292,7 @@ po::polynomial p = 2*(r-3)*r*r - 3.2*q;
 
 ## Ring operations
 
-Elementary rational field computations
+Elementary polynomial ring computations
 
 ### Integrals
 
@@ -383,7 +383,7 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
   * [Operators](#operators-i) (See [expression-testing](./docs/expression-testing-status.md) for current status.)
     |scalar       |polynomial   |unary expr   |binary expr  |
     |:-----------:|:-----------:|:-----------:|:-----------:|
-    | `+ - D   I` | `+ - D   I` |             |             |
+    | `+ - D   I` | `+ - D   I` | `+ -      ` | `+ -      ` |
 
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
@@ -395,7 +395,7 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
   * [Operators](#operators-i) (Needs further testing and verification. See [expression-testing](./docs/expression-testing-status.md) for current status.)
     |scalar       |polynomial   |unary expr   |binary expr  |
     |:-----------:|:-----------:|:-----------:|:-----------:|
-    | `         ` | `         ` | `+ - D   I` | `+ - D   I` |
+    | `         ` | `         ` | `    D   I` | `    D   I` |
 
 
 

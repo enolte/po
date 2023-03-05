@@ -78,7 +78,7 @@ void test_expr_I__pos_p_instantiate_place3_rank3()
     po::polynomial p{{2, {1, 1, 1}}};
     // PO_TRACE(" p = " << p);
 
-    po::polynomial ip = instantiate(integral(+p, 3, {0, 2}), po::rank<2>{});
+    po::polynomial ip = instantiate(integral(+p, 3, {0, 3.8}), po::rank<2>{});
     // PO_TRACE(" integral(+p, 3, {0, 2}) = " << ip);
 
     assert(ip.rank() == 3);
@@ -87,7 +87,7 @@ void test_expr_I__pos_p_instantiate_place3_rank3()
     PO_ASSERT(unordered_equal(
       ip.terms,
       {
-        {4, {1, 1, 1}}
+        {7.6, {1, 1, 1}}
       }),
       ip);
   }

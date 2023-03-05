@@ -22,16 +22,25 @@ using po::operator<<;
 #include "test_nterms.h"
 #include "test_degree.h"
 #include "test_evaluate.h"
-#include "test_add_eq_monomial.h"
+
 #include "test_add_eq_scalar.h"
+#include "test_add_eq_polynomial.h"
+#include "test_add_eq_monomial.h"
 #include "test_add_eq_init_list.h"
+#include "test_add_eq_expr.h"
+
+#include "test_sub_eq_scalar.h"
+#include "test_sub_eq_polynomial.h"
 #include "test_sub_eq_monomial.h"
 #include "test_sub_eq_init_list.h"
-#include "test_add_eq_polynomial.h"
-#include "test_mult_eq_monomial.h"
+#include "test_sub_eq_expr.h"
+
 #include "test_mult_eq_scalar.h"
-#include "test_mult_eq_init_list.h"
 #include "test_mult_eq_polynomial.h"
+#include "test_mult_eq_monomial.h"
+#include "test_mult_eq_init_list.h"
+#include "test_mult_eq_expr.h"
+
 #include "test_constant_term.h"
 
 // Disabled for test iteration
@@ -80,16 +89,25 @@ void test()
   test_nterms();
   test_degree();
   test_evaluate();
-  test_add_eq_monomial();
+
   test_add_eq_scalar();
+  test_add_eq_polynomial();
+  test_add_eq_monomial();
   test_add_eq_init_list();
+  test_add_eq_expr();
+
+  test_sub_eq_scalar();
+  test_sub_eq_polynomial();
   test_sub_eq_monomial();
   test_sub_eq_init_list();
-  test_add_eq_polynomial();
+  test_sub_eq_expr();
+
   test_mult_eq_scalar();
+  test_mult_eq_polynomial();
   test_mult_eq_monomial();
   test_mult_eq_init_list();
-  test_mult_eq_polynomial();
+  test_mult_eq_expr();
+
   test_constant_term();
 
   test_expr_rank();
@@ -99,6 +117,7 @@ void test()
   test_is_binary_expression();
   test_is_unary_expression();
   test_is_expression();
+
   test_expr_constant();
   test_expr_unary_plus();
   test_expr_unary_minus();
