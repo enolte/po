@@ -1,5 +1,4 @@
 #include "../../polynomial.h"
-
 #include <cassert>
 
 void test_constant_term()

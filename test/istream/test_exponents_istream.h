@@ -9,8 +9,6 @@
 #include "../../istream/exponents_istream.h"
 
 
-
-
 using po::operator<<;
 using po::operator>>;
 
@@ -33,8 +31,6 @@ void test_exponents_istream()
 
   test_exponents_out_in();
   test_exponents_in_out();
-
-  PO_LINE;
 }
 
 // exponents --> string --> exponents
@@ -47,6 +43,8 @@ void test_exponents_out_in()
   ss >> after;
 
   assert((after == before).min() == true);
+
+  PO_LINE;
 }
 
 // string --> exponents --> string
@@ -64,6 +62,8 @@ void test_exponents_in_out()
   ss >> after;
 
   PO_ASSERT(after == before, after);
+
+  PO_LINE;
 }
 
 
@@ -89,6 +89,8 @@ void test_exponents1_istream()
 
   // PO_TRACE("exponents = " << exponents);
   PO_ASSERT((exponents == decltype(exponents){5, 2, 3, 4}).min() == true, exponents);
+
+  PO_LINE;
 }
 
 /*
@@ -116,6 +118,8 @@ void test_exponents2_istream()
 
   // PO_TRACE("exponents = " << exponents);
   PO_ASSERT((exponents == decltype(exponents){5, 2, 3, 4}).min() == true, exponents);
+
+  PO_LINE;
 }
 
 /*
@@ -130,6 +134,8 @@ void test_exponents3_istream()
 
   ss >> exponents;
   assert(ss.fail());
+
+  PO_LINE;
 }
 
 /*
@@ -158,4 +164,6 @@ void test_exponents4_istream()
 
   // PO_TRACE("exponents = " << exponents);
   PO_ASSERT((exponents == decltype(exponents){5, 2, 3, 4}).min() == true, exponents);
+
+  PO_LINE;
 }

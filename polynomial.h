@@ -6,7 +6,6 @@
 
 #include "evaluate.h"
 #include "monomial.h"
-#include "default_types.h"
 
 #include "storage/flat.h"
 
@@ -16,6 +15,8 @@
 #include "ops/expr_binary_plus.h"
 #include "ops/expr_binary_minus.h"
 #include "ops/expr_binary_mult.h"
+
+#include "ops/is_exponent.h"
 
 #include <numeric>
 #include <algorithm>
@@ -40,7 +41,7 @@ namespace po
   private:
     degree_type m_degree;
 
-    std::valarray<degree_type> m_degrees;
+    exponents m_degrees;
 
     rank_type m_rank;
 
@@ -49,21 +50,14 @@ namespace po
     {
       m_degree = 0;
 
-      // not constexpr:
-      //m_degrees = 0;
       for(auto i{0zu}; i < m_rank; ++i)
         m_degrees[i] = 0;
 
-      // not constexpr: begin(), end()
-      //for(const auto& t : terms);
       std::ranges::for_each(
         terms,
         [this](const auto& t)
         {
           m_degree = std::max(m_degree, t.degree());
-
-          // std::valarray<T>::sum is not constexpr.
-          // m_degree = std::max(m_degree, exponents.sum());
           for(auto i{0zu}; i < m_rank; ++i)
             m_degrees[i] = std::max(m_degrees[i], t.exponents[i]);
         });
@@ -88,7 +82,7 @@ namespace po
     polynomial(rank_type rank):
       terms{},
       m_degree{0},
-      m_degrees(index_data_type{0}, rank),
+      m_degrees(degree_type{0}, rank),
       m_rank{rank}
     {}
 
@@ -100,10 +94,7 @@ namespace po
      * polynomial p{2.12, 15};
      */
     polynomial(const scalar_type& c, rank_type rank):
-      terms{},
-      m_degree{0},
-      m_degrees(index_data_type{0}, rank),
-      m_rank{rank}
+      polynomial(rank)
     {
       accumulate_add(terms, c, exponents(exponent_type{0}, rank));
     }
@@ -171,28 +162,6 @@ namespace po
     }
 #endif
 
-#if 0
-    // Disabled
-    /*
-     * Construct from a coefficient and an exponent pack, for construction from the fields
-     * for a single monomial term.
-     *
-     * polynomial p(7.7, 3, 4, 5);
-     * polynomial p{7.7, 3, 4, 5};
-     * polynomial{7.7, 3, 4, 5};
-     */
-    template<typename Scalar, typename ...Exponents>
-      requires scalar<Scalar> && (sizeof ...(Exponents) > 0) && (std::integral<Exponents> && ...)
-    constexpr polynomial(Scalar&& _coefficient, Exponents&&... _exponents)
-    : terms{{std::move(scalar_type(_coefficient)), {exponent_type(_exponents)...}}},
-      m_degree{0},
-      m_degrees{exponent_type(_exponents)...},
-      m_rank{sizeof ...(_exponents)}
-    {
-      for(const auto& t : terms)
-        m_degree = std::max(m_degree, t.degree());
-    }
-#endif
 
 #if 0
     // TODO Verify removal.
@@ -250,7 +219,7 @@ namespace po
      * TODO
      * Specifically, a term's exponents are accounted even if its coefficient value is zero or NaN.
      */
-    std::size_t degree(std::size_t i) const
+    degree_type degree(std::size_t i) const
     {
       if(rank() > i)
         return m_degrees[i];
@@ -299,8 +268,7 @@ namespace po
      * Evaluate this polynomial at the given args.
      *
      */
-    template<typename ...X>
-      requires (po::scalar<X> && ...)
+    template<scalar ...X>
     scalar_type operator()(X&&... x) const
     {
       using S = std::common_type_t<scalar_type, X&&...>;
@@ -319,38 +287,10 @@ namespace po
     /*
      * Get the coefficient of the term with multiindex given by pack MI.
      */
-    template<typename ...MI>
-      requires (std::integral<MI> && ...)
+    template<exponent ...MI>
     constexpr scalar_type coefficient(MI... mi) const
     {
       return find_coefficient(terms, mi...);
-    }
-
-#if 0
-    // Disable non-constant access to coefficients.
-    /*
-     * Get the coefficient of the term with multiindex given by pack MI.
-     * If no such multiindex is found, a new term is added with that multiindex,
-     * and a reference to its coefficient field is returned.
-     */
-    template<typename ...MI>
-      requires (std::integral<MI> && ...)
-    constexpr scalar_type& coefficient(MI... mi)
-    {
-      return get_coefficient(terms, mi...);
-    }
-#endif
-
-    /*
-     * Add a scalar constant.
-     *
-     * p += 6;
-     */
-    polynomial& operator+=(const scalar_type& c)
-    {
-      accumulate_add(terms, c, exponents(exponent_type{0}, rank()));
-
-      return *this;
     }
 
     /*
@@ -359,7 +299,7 @@ namespace po
      * p += 6;
      * p += {6};
      */
-    polynomial& operator+=(scalar_type&& c)
+    polynomial& operator+=(scalar_type c)
     {
       accumulate_add(terms, std::forward<scalar_type>(c), exponents(exponent_type{0}, rank()));
 
@@ -411,6 +351,7 @@ namespace po
      *
      * p += std::move(q);
      */
+    // TODO This function does not absorb the polynomial.
     polynomial& operator+=(polynomial&& q)
     {
       for(const auto& s : q.terms)
@@ -441,6 +382,7 @@ namespace po
      *
      * p -= std::move(q);
      */
+    // TODO This function does not absorb the polynomial.
     // TODO test
     polynomial& operator-=(polynomial&& q)
     {
@@ -468,24 +410,12 @@ namespace po
     }
 
     /*
-     * Add a scalar constant.
-     *
-     * p -= 6;
-     */
-    polynomial& operator-=(const scalar_type& c)
-    {
-      accumulate_add(terms, -c, exponents(exponent_type{0}, rank()));
-
-      return *this;
-    }
-
-    /*
      * Subtract a scalar constant.
      *
      * p -= 6;
      * p -= {6};
      */
-    polynomial& operator-=(scalar_type&& c)
+    polynomial& operator-=(scalar_type c)
     {
       accumulate_add(terms, std::forward<scalar_type>(-c), exponents(exponent_type{0}, rank()));
 
@@ -538,19 +468,9 @@ namespace po
      * Multiply by a scalar constant.
      *
      */
-    polynomial& operator*=(scalar_type&& c)
+    polynomial& operator*=(scalar_type c)
     {
       accumulate_mult(terms, std::move(c));
-      return *this;
-    }
-
-    /*
-     * Multiply by a scalar constant.
-     *
-     */
-    polynomial& operator*=(const scalar_type& c)
-    {
-      accumulate_mult(terms, c);
       return *this;
     }
 
@@ -559,6 +479,7 @@ namespace po
      *
      * p *= {5., {3, 2, 1, 2}};
      */
+    // TODO This function does not absorb the monomial.
     polynomial& operator*=(monomial&& m)
     {
       accumulate_mult(terms, m.coefficient, m.exponents);
@@ -592,6 +513,7 @@ namespace po
     /*
      * Multiply by another polynomial.
      */
+    // TODO This function does not absorb the polynomial.
     polynomial& operator*=(polynomial&& q)
     {
       accumulate_mult(terms, q.terms);

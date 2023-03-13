@@ -29,8 +29,6 @@ void test_monomial_istream()
 
   test_monomial_out_in();
   test_monomial_in_out();
-
-  PO_LINE;
 }
 
 
@@ -45,6 +43,8 @@ void test_monomial_out_in()
 
   assert(after.coefficient == before.coefficient);
   assert((after.exponents == before.exponents).min() == true);
+
+  PO_LINE;
 }
 
 // string --> monomial --> string
@@ -62,6 +62,8 @@ void test_monomial_in_out()
   ss >> after;
 
   PO_ASSERT(after == before, after);
+
+  PO_LINE;
 }
 
 void test_monomial0_istream()
@@ -84,6 +86,8 @@ void test_monomial0_istream()
 
   ss >> right_bracket >> std::ws;
   PO_ASSERT(ss.eof() || ss.peek() == '+', char(ss.peek()));
+
+  PO_LINE;
 }
 
 void test_monomial1_istream()
@@ -98,6 +102,8 @@ void test_monomial1_istream()
 
   assert(m.coefficient == 2.4);
   PO_ASSERT((m.exponents == decltype(m.exponents){5, 2, 3, 4}).min() == true, m.exponents);
+
+  PO_LINE;
 }
 
 void test_monomial2_istream()
@@ -112,6 +118,8 @@ void test_monomial2_istream()
 
   assert(m.coefficient == 3.7);
   PO_ASSERT((m.exponents == decltype(m.exponents){0, 0, 6, 1}).min() == true, m.exponents);
+
+  PO_LINE;
 }
 
 

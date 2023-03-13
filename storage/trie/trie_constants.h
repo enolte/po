@@ -2,7 +2,7 @@
 #define PO_TRIE_CONSTANTS_H
 
 #include "../../exponents.h"
-#include "../../field.h"
+#include "../../scalar.h"
 
 #include <limits>
 

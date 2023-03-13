@@ -5,7 +5,7 @@
 
 #include "../../exponents.h"
 #include "../../monomial.h"
-#include "../../field.h"
+#include "../../scalar.h"
 
 #include "trie_vertex.h"
 

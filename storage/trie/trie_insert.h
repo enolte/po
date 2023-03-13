@@ -4,7 +4,7 @@
 #include "trie_vertex.h"
 #include "trie_longest_prefix.h"
 #include "trie_get_path.h"
-#include "../../field.h"
+#include "../../scalar.h"
 #include <vector>
 #include <tuple>
 

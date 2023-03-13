@@ -9,10 +9,12 @@
 #include "../../istream/polynomial_istream.h"
 
 #include "../macros.h"
-#include "../polynomial/compare.h"
+#include "../compare.h"
 
 using po::operator<<;
 using po::operator>>;
+
+using namespace po_test::compare;
 
 void test_polynomial1_istream();
 void test_polynomial2_istream();
@@ -32,8 +34,6 @@ void test_polynomial_istream()
   test_polynomial_in_out();
 
   test_polynomial_expr_istream();
-
-  PO_LINE;
 }
 
 void test_polynomial_expr_istream()
@@ -82,7 +82,9 @@ void test_polynomial_out_in()
   po::polynomial p1{};
   ss >> p1;
 
-  assert(unordered_equal(p.terms, p1.terms));
+  assert(unordered_equal_terms(p, p1));
+
+  PO_LINE;
 }
 
 // string --> polynomial --> string
@@ -100,6 +102,8 @@ void test_polynomial_in_out()
   ss >> after;
 
   PO_ASSERT(after == before, after);
+
+  PO_LINE;
 }
 
 void test_polynomial3_istream()
@@ -110,13 +114,16 @@ void test_polynomial3_istream()
 
   // std::cout << "p = " << p << std::endl;
 
-  PO_ASSERT(unordered_equal(
-    p.terms,
+  PO_ASSERT(unordered_equal_terms(
+    p,
     {
       {71.51    , { 2, 31, 12,   1}},
       { 0.000512, {14, 11,  4, 190}},
     }),
     p);
+
+
+  PO_LINE;
 }
 
 void test_polynomial2_istream()
@@ -127,13 +134,16 @@ void test_polynomial2_istream()
 
   // std::cout << "p = " << p << std::endl;
 
-  PO_ASSERT(unordered_equal(
-    p.terms,
+  PO_ASSERT(unordered_equal_terms(
+    p,
     {
       {0.5, {4, 1, 4, 1}},
       {1.4, {2, 3, 2, 1}},
     }),
     p);
+
+
+  PO_LINE;
 }
 
 void test_polynomial1_istream()
@@ -146,11 +156,14 @@ void test_polynomial1_istream()
 
   // std::cout << "p = " << p << std::endl;
 
-  PO_ASSERT(unordered_equal(
-    p.terms,
+  PO_ASSERT(unordered_equal_terms(
+    p,
     {
       {2.4, {5, 2, 3, 4}},
       {3.7, {0, 0, 6, 1}},
     }),
     p);
+
+  PO_LINE;
 }
+

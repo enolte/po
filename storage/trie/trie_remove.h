@@ -3,7 +3,7 @@
 
 #include "trie_vertex.h"
 #include "trie_longest_prefix.h"
-#include "../../field.h"
+#include "../../scalar.h"
 #include <vector>
 
 namespace po

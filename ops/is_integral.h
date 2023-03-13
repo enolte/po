@@ -14,10 +14,6 @@ namespace po
       e.a;
       e.place;
     };
-
-  // template<typename Expr>
-  // concept integral = is_integral<Expr>;
-
 }
 
 #endif

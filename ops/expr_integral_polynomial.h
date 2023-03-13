@@ -14,7 +14,7 @@ namespace po
     struct expr_integral
     {
       using _E1 = E1;
-      using F1 = expr_field_type<E1>;
+      using F1 = subexpr_type<E1>;
 
       const F1 expr1;
       const rank_type place;

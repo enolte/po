@@ -9,7 +9,7 @@ namespace po
   struct expr_partial_derivative<expr_unary_plus<E1>>
   {
     using _E1 = expr_unary_plus<E1>;
-    using F1 = expr_field_type<expr_unary_plus<E1>>;
+    using F1 = subexpr_type<expr_unary_plus<E1>>;
 
     const F1 expr1;
     const rank_type place;

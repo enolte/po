@@ -11,6 +11,7 @@ namespace po
     // (g++ 11.2.0) This causes a diagnostic re invalid initialization
     // return o << m.coefficient << '[' << m.exponents << ']';
     o << m.coefficient << '[' << m.exponents << ']';
+    // o.operator<<(m.coefficient) << '[' << m.exponents << ']';
     return o;
   }
 }

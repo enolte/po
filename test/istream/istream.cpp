@@ -1,16 +1,10 @@
-#include "test_exponents_istream.h"
-#include "test_monomial_istream.h"
-#include "test_polynomial_istream.h"
+#include "all_istream_tests.h"
 
-#include "../../ostream/polynomial_ostream.h"
+using namespace po_test;
 
 int main()
 {
-  test_exponents_istream();
-  test_monomial_istream();
-  test_polynomial_istream();
-
-  PO_LINE;
+  all_istream_tests();
 
   return 0;
 }

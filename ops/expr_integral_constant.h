@@ -9,7 +9,7 @@ namespace po
   struct expr_integral<expr_constant>
   {
     using _E1 = expr_constant;
-    using F1 = expr_field_type<expr_constant>;
+    using F1 = subexpr_type<expr_constant>;
 
     const F1 expr1;
     const rank_type place;
@@ -26,7 +26,7 @@ namespace po
   struct expr_integral<scalar_type>
   {
     using _E1 = scalar_type;
-    using F1 = expr_field_type<scalar_type>;
+    using F1 = subexpr_type<scalar_type>;
 
     const F1 expr1;
     const rank_type place;

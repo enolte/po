@@ -9,7 +9,6 @@ namespace po
     if(begin != end)
     {
       for(; begin != std::prev(end); ++begin)
-        // o << *begin << ", ";
         o << *begin << ",";
       o << *begin;
     }

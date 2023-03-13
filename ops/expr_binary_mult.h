@@ -4,7 +4,7 @@
 #include "is_scalar.h"
 #include "is_expression.h"
 #include "expr_constant.h"
-#include "expr_field_type.h"
+#include "subexpr_type.h"
 
 namespace po
 {
@@ -14,8 +14,8 @@ namespace po
     using _E1 = E1;
     using _E2 = E2;
 
-    using F1 = expr_field_type<E1>;
-    using F2 = expr_field_type<E2>;
+    using F1 = subexpr_type<E1>;
+    using F2 = subexpr_type<E2>;
 
     F1 expr1;
     F2 expr2;

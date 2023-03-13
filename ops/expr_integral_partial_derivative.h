@@ -7,7 +7,7 @@ namespace po
   struct expr_integral<expr_partial_derivative<E1>>
   {
     using _E1 = expr_partial_derivative<E1>;
-    using F1 = expr_field_type<expr_partial_derivative<E1>>;
+    using F1 = subexpr_type<expr_partial_derivative<E1>>;
 
     const F1 expr1;
     const rank_type place;
@@ -25,7 +25,7 @@ namespace po
   struct expr_integral<const expr_partial_derivative<E1>&>
   {
     using _E1 = const expr_partial_derivative<E1>&;
-    using F1 = expr_field_type<const expr_partial_derivative<E1>&>;
+    using F1 = subexpr_type<const expr_partial_derivative<E1>&>;
 
     const F1 expr1;
     const rank_type place;

@@ -1,13 +1,11 @@
 #ifndef PO_MONOMIAL_H
 #define PO_MONOMIAL_H
 
-#include "field.h"
+#include "scalar.h"
 #include "exponents.h"
 #include "rank.h"
 #include "degree.h"
 #include "utils.h"
-
-#include <type_traits>
 
 namespace po
 {

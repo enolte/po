@@ -19,7 +19,7 @@ void test_coefficient()
 
   {
     po::polynomial p{7.5, po::rank<6>{}};
-    assert(compare::equal(p.degrees(), 0, 0, 0, 0, 0, 0));
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0, 0, 0}));
 
     assert(p.coefficient(0, 0, 0, 0, 0, 0) == 7.5);
     assert(p.coefficient(0, 3, 0, 0, 0, 0) == 0.0);

@@ -3,7 +3,7 @@
 
 #include "is_expression.h"
 #include "../rank.h"
-#include "../field.h"
+#include "../scalar.h"
 
 namespace po
 {
@@ -37,22 +37,10 @@ namespace po
 
   /*
    * polynomial p = ...., q = ....;
-   * auto x = integral(D(p, 4) + q, 2, 2.3, 8.7);
+   * auto x = integral(D(p, 4) + q, {2, {2.3, 8.7}});
    * const double y = x(1, 2, 3);
    *
    */
-  template<expression E1>
-  constexpr expr_integral<E1> integral(E1&& expr, rank_type place, scalar_type a, scalar_type b)
-  {
-    return expr_integral<E1>{std::move(expr), place, a, b};
-  }
-
-  template<expression E1>
-  constexpr expr_integral<E1> integral(E1&& expr, rank_type place, interval&& i)
-  {
-    return expr_integral<E1>{std::move(expr), place, i.a, i.b};
-  }
-
   template<expression E1>
   constexpr expr_integral<E1> integral(E1&& expr, parametric_interval&& i)
   {
@@ -64,6 +52,20 @@ namespace po
   {
     return expr_integral<E1>{std::move(expr), i.place, i.i.a, i.i.b};
   }
+
+  template<expression E1, typename ParametricInterval0, typename ...ParametricInterval>
+  constexpr auto integral(E1&& expr, ParametricInterval0&& i0, ParametricInterval&&... i)
+  {
+    if constexpr (sizeof ...(i) > 0)
+    {
+      return integral(integral(std::forward<E1>(expr), i0), std::forward<ParametricInterval>(i)...);
+    }
+    else
+    {
+      return expr_integral<E1>{std::forward<E1>(expr), i0.place, i0.i.a, i0.i.b};
+    }
+  }
+
 }
 
 

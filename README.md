@@ -11,8 +11,8 @@ C++23 hobby project.
 * [Running Unit Tests](#running-unit-tests)
 * [Demo/Example](#example)
 * [Plan Phase I](#plan-phase-i)
-  * [IO streams adaptation](#io-streams-adaptation)
-  * [Evaluation](#evaluation)
+  * [IO streams adaptation](#io-streams-adaptation-i)
+  * [Evaluation](#evaluation-i)
   * [Operators I](#operators-i)
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
@@ -24,7 +24,7 @@ C++23 hobby project.
   * [Evaluation II](#evaluation-ii)
   * [Induction](#induction)
   * [Quadrature](#quadrature)
-  * [Elementary Operator Algebra](#elementary-operator-algebra)
+  * [Elementary operator algebra](#elementary-operator-algebra)
   * [IO streams adaptation II](#io-streams-adaptation-ii)
 
 
@@ -74,7 +74,7 @@ This list is not exhaustive.
 
 ## Representation
 
-`po::polynomial` is a value type: it stores all of its own multiindices and coefficients. This is bad if many polynomials are instantiated with overlapping lifetimes, as it requires redundant data storage. A better approach with a flat storage model is to pre-generate and [pool](#pooled-exponents) multiindices to be used, to reference from individual monomial terms. A few [storage](#storage-ii) models are planned for experimentation.
+`po::polynomial` is a value type: it stores all of its own multiindices and coefficients. This is bad if many polynomials are instantiated with overlapping lifetimes, as it requires redundant data storage. A better approach with a flat storage model is to pre-generate and [pool](#pooled-exponents) multiindices to be used, to reference from individual monomial terms. A few [storage](#storage-ii) models are planned for experimentation in Phase II.
 
 The currently implemented storage is a flat model, consisting of a sequence of independently stored monomials.
 
@@ -92,21 +92,56 @@ For Phase I, arithmetic operators and assignment operators are implemented only 
 
 then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined.
 
+This is also the subject of [binding operators](#binding-operators) for Phase II.
+
+## Partial evaluation
+
+A partial evaluations compiles and deterministically executes, but the result is undefined for Phase I.
+
+E.g.,
+
+```
+po::polynomial p{7.5, po::rank<6>{}};
+assert(compare::equal(p.variable_degrees, 0, 0, 0, 0, 0, 0));
+
+// Partial matches
+assert(p.coefficient(0, 0, 0, 0) == 7.5);
+assert(p.coefficient(0, 3, 0, 0) == 0.0);
+```
+
+This is a problem because (a) there is no guaranteed term storage order, and (b) the result
+is ambiguous, even with a guaranteed storage order.
+
+E.g.,
+```
+po::polynomial p{
+  { 7.5, 0, 0, 0, 0, 0, 0},
+  { 7.5, 1, 1, 1, 1, 0, 0},
+  {-7.5, 1, 1, 1, 0, 0, 0}};
+
+// What is expected?
+assert(p.coefficient(1, 1, 1) == 7.5);
+```
+
+The above gives 7.5, but with a different order in the terms list above, -7.5 would
+be expected instead.
+
+This is also the subject of [binding operators](#binding-operators) for Phase II.
 
 
 # Running Unit Tests
 
-As mentioned under [Status](#status), all unit tests are implemented by a simple program entry point, located at test/polynomial/polynomial.cpp.
+As mentioned under [Status](#status), all unit tests are implemented by a simple program entry point, located at test/po.cpp.
 
 From the repo root, a typical command line to compile and link all polynomial UTs is
 
 ```
-g++ --std=c++23 test/polynomial/polynomial.cpp
+g++ --std=c++23 test/po.cpp
 ```
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 160 unit test sets, many of which include multiple specific test cases.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 235 indexed unit test sets, many of which include multiple specific test cases.
 
 
 
@@ -157,7 +192,7 @@ The file [demos/00/demo.cpp](./demos/00/demo.cpp) contains the above program sou
 In progress. See [Progress Index](#progress-index-phase-i) for current status.
 
 
-## IO streams adaptation
+## IO streams adaptation I
 
 ### Basic `std::basic_ostream<char>` support
 
@@ -196,7 +231,7 @@ p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup
 for named variables *x, y, z, w*.
 
 
-## Evaluation
+## Evaluation I
 
 There are two evaluation algorithms implemented. Given a polynomial and parameter values such that each intermediate computational result value can be exactly represented in the scalar field numeric type, the two algorithms below produce identical outputs.
 
@@ -299,46 +334,30 @@ Elementary polynomial ring computations
 Given a rank 2 polynomial, p(x, y) = 2x<sup>2</sup>y - 4xy<sup>3</sup>, then integration over both *x* and *y* in [-1,1] x [-1, 1] is zero, a numerical value. The intent is to support this with
 
 ```
-double v = integral(p, {-1, 1}, {-1, 1});
+double v = integral(p, {0, {-1, 1}}, {0, {-1, 1}});
 ```
 
-For a rank 2 polynomial, `p`, integration over only one of its variables results in a polynomial in one variable. The intent is to support this with
+Integration over only one of its variables results in a polynomial in one variable. The intent is to support statements such as
 
 ```
-integral-expr x = integral(p, 1, {-1, 1});
-```
-or maybe
-```
+integral-expr x = integral(p, {0, {-1, 1}});
 integral-expr x = integral(p, {1, {-1, 1}});
 ```
-to support positional specification and variadic signatures in a "natural" way, for multiple integrals.
+which includes a positional specification, with variadic signatures in a "natural" way, for multiple integrals.
 
+The above yields an instantiable `integral-expr` type instance for a polynomial of one variable.
 
-Either of the above yields an instantiable `integral-expr` type instance for a polynomial of one variable.
-
-Logically,
-
-```
-integral(p, {-1, 1}, {-1, 1})
-```
-is equivalent to either of
+Logically, the integral of p on [-1, 1] x [-1, 1] is equivalent to either of
 
 ```
-integral(integral(p, 1, {-1, 1}), 0, {-1, 1})
-integral(integral(p, 0, {-1, 1}), 0, {-1, 1})
+integral(integral(p, {1, {-1, 1}}), {0, {-1, 1}})  // integrate in y first, then x
+integral(integral(p, {0, {-1, 1}}), {0, {-1, 1}})  // integrate in x first, then y
 ```
 
-or, alternatively,
+Typically, each integral operation produces an expression with rank = {input rank} - 1. When applied to a general expression, the result of instantiating an integral is a polynomial of either the same rank as the input expression (if the positional argument >= expr rank),
+or one less than the input rank (if the positional argument < expr rank). That polynomial is "the integral" of the input expression with respect to the given positional argument and interval end points.
 
-```
-integral(integral(p, {1, {-1, 1}}), {0, {-1, 1}})
-integral(integral(p, {0, {-1, 1}}), {0, {-1, 1}})
-```
-
-
-When applied to a general expression, the result of instantiating an integral is a polynomial of either the same rank as the input expression,
-or one less than the input rank. That polynomial is "the integral" of the input expression with respect to the given positional argument and interval end points.
-
+For polynomials or expressions of arbitrary rank, the above generalizes in an obvious way.
 
 
 ### Partial derivatives
@@ -370,21 +389,12 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
 
 
 
-
-
 # Progress Index Phase I
 
 ## Done
 
-(This implies unit test coverage and verification, obviously.)
-
   * [IO streams adaptation](#io-streams-adaption)
   * [Evaluation](#evaluation)
-  * [Operators](#operators-i) (See [expression-testing](./docs/expression-testing-status.md) for current status.)
-    |scalar       |polynomial   |unary expr   |binary expr  |
-    |:-----------:|:-----------:|:-----------:|:-----------:|
-    | `+ - D   I` | `+ - D   I` | `+ -      ` | `+ -      ` |
-
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
     * Partial derivatives
@@ -392,18 +402,20 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
 
 
 ## In progress
-  * [Operators](#operators-i) (Needs further testing and verification. See [expression-testing](./docs/expression-testing-status.md) for current status.)
-    |scalar       |polynomial   |unary expr   |binary expr  |
-    |:-----------:|:-----------:|:-----------:|:-----------:|
-    | `         ` | `         ` | `    D   I` | `    D   I` |
+  * Expression grammar [operator](#operators-i) testing. See [expression-testing](./test/exprs) for current details.
 
-
+|                     |scalar       |polynomial   |unary expr   |binary expr  |
+|:-------------------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| binary `*`          | Done        | Done        | Done        | Done        |
+| binary `+`          | Done        | Done        | Done        | Done        |
+| binary `-`          | Done        | Done        | Done        | Done        |
+| unary `+`           | Done        | Done        | Done        | Done        |
+| unary `-`           | Done        | Done        | Done        | Done        |
+| differentiation     | Done        | Done        | In progress | In progress |
+| antidifferentiation | Not started | Not started | Not started | Not started |
+| integration         | Done        | Done        | In progress | In progress |
 
 ## Not started
-  * [Operators](#operators-i)
-    |scalar       |polynomial   |unary expr   |binary expr  |
-    |:-----------:|:-----------:|:-----------:|:-----------:|
-    | `      A  ` | `      A  ` | `      A  ` | `      A  ` |
 
   * [Ring operations](#ring-operations)
     * Antiderivatives
