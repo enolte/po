@@ -1,8 +1,8 @@
 #ifndef PO_TRIE_CONSTANTS_H
 #define PO_TRIE_CONSTANTS_H
 
-#include "../../exponents.h"
-#include "../../scalar.h"
+#include "../../types/exponents.h"
+#include "../../types/scalar.h"
 
 #include <limits>
 

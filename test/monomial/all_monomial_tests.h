@@ -8,7 +8,7 @@
 #include "../macros.h"
 #include "../../ostream/valarray_ostream.h"
 
-#include "../../monomial.h"
+#include "../../types/monomial.h"
 
 void spot_test1();
 void spot_test2();

@@ -11,15 +11,15 @@ C++23 hobby project.
 * [Running Unit Tests](#running-unit-tests)
 * [Demo/Example](#example)
 * [Plan Phase I](#plan-phase-i)
-  * [IO streams adaptation](#io-streams-adaptation-i)
-  * [Evaluation](#evaluation-i)
+  * [IO streams adaptation I](#io-streams-adaptation-i)
+  * [Evaluation I](#evaluation-i)
   * [Operators I](#operators-i)
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
 * [Progress Index Phase I](#progress-index-phase-i)
 * [Plan Phase II](#plan-phase-ii)
   * [Binding operators](#binding-operators)
-  * [Storage II](#storage-ii)
+  * [Storage](#storage-ii)
   * [Operators II](#operators-ii)
   * [Evaluation II](#evaluation-ii)
   * [Induction](#induction)
@@ -32,12 +32,14 @@ C++23 hobby project.
 
 # Status
 
-(*06 February 2023*) Moved some things to Phase II, including the completion of the prefix tree storage model. The trie is implemented. The interface for the polynomial type is partially implemented.
+(*05 April 2023*) File organization is done for now. Support for variadic differentation and integration is implemented and verified. The remaining piece of Phase I is antiderivatives. This is in progress.
 
 Progress continues as time available.
 
 <details>
 <summary>Previous</summary>
+
+(*06 February 2023*) Moved some things to Phase II, including the completion of the prefix tree storage model. The trie is implemented. The interface for the polynomial type is partially implemented.
 
 (*06 September 2022*) Having just started my new job, this project is in hibernation for now. Progress continues as time available, with reduced time available.
 
@@ -141,7 +143,7 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 235 indexed unit test sets, many of which include multiple specific test cases.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 238 indexed unit test sets, many of which include multiple specific test cases.
 
 
 
@@ -372,6 +374,14 @@ then `D(3*p, 2)` yields
 
 when instantiated.
 
+A variadic signature supports multiple partial derivatives. Differentiation is applied to place values in left-to-right order. E.g., `D(x, 1, 2)` differentiates the expression `x` in the first argument, then differentiates the result in the second argument.
+
+The intent is to support expressions like
+
+* `D(p, 1, 2)`
+* `D(p*p - 9*D(3*p*q, 0, 2), 0, 2, 1)`
+
+etc.
 
 ### Antiderivatives
 
@@ -411,14 +421,14 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
 | binary `-`          | Done        | Done        | Done        | Done        |
 | unary `+`           | Done        | Done        | Done        | Done        |
 | unary `-`           | Done        | Done        | Done        | Done        |
-| differentiation     | Done        | Done        | In progress | In progress |
+| differentiation     | Done        | Done        | Done        | Done        |
 | antidifferentiation | Not started | Not started | Not started | Not started |
-| integration         | Done        | Done        | In progress | In progress |
-
-## Not started
+| integration         | Done        | Done        | Done        | Done        |
 
   * [Ring operations](#ring-operations)
     * Antiderivatives
+
+## Not started
 
 
 # Plan Phase II
@@ -609,7 +619,7 @@ for named variables *x, y, z, w*.
 
 
 
-## Elementary Operator Algebra
+## Elementary operator algebra
 
 ### Differential operators
 

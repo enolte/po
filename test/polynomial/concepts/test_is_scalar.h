@@ -1,5 +1,5 @@
 #include "../../../ops/is_scalar.h"
-#include "../../../scalar.h"
+#include "../../../types/scalar.h"
 
 void test_is_scalar()
 {

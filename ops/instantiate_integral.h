@@ -1,7 +1,7 @@
 #ifndef PO_INSTANTIATE_INTEGRAL_H
 #define PO_INSTANTIATE_INTEGRAL_H
 
-#include "../utils.h"
+#include "../utils/pow.h"
 #include "expr_integral.h"
 
 #include "is_expression.h"

@@ -1,8 +1,8 @@
 #ifndef PO_EVALUATE_GENERALIZED_HORNER_H
 #define PO_EVALUATE_GENERALIZED_HORNER_H
 
-#include "../exponents.h"
-#include "../nan.h"
+#include "../types/exponents.h"
+#include "../utils/nan.h"
 
 namespace po
 {

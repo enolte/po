@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "../../monomial.h"
+#include "../../types/monomial.h"
 #include "../../ostream/monomial_ostream.h"
 #include "../macros.h"
 

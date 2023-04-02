@@ -5,6 +5,7 @@
 #include "subexpressions/test_expr_unary_plus_subexpressions.h"
 #include "subexpressions/test_expr_unary_minus_subexpressions.h"
 #include "subexpressions/test_expr_unary_partial_derivative_subexpressions.h"
+#include "subexpressions/test_expr_unary_integral_subexpressions.h"
 
 void test_expr_subexpressions()
 {
@@ -15,4 +16,5 @@ void test_expr_subexpressions()
   test_expr_unary_plus_subexpressions();
   test_expr_unary_minus_subexpressions();
   test_expr_unary_partial_derivative_subexpressions();
+  test_expr_unary_integral_subexpressions();
 }

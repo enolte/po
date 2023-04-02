@@ -2,7 +2,7 @@
 #define PO_NAN_H
 
 #include <limits>
-#include "scalar.h"
+#include "../types/scalar.h"
 
 namespace po
 {

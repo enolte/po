@@ -1,7 +1,7 @@
 #ifndef PO_EVALUATE_NAIVE_H
 #define PO_EVALUATE_NAIVE_H
 
-#include "../scalar.h"
+#include "../types/scalar.h"
 
 namespace po
 {

@@ -3,7 +3,7 @@
 
 #include "trie_path_index_iterator.h"
 
-#include "../../monomial.h"
+#include "../../types/monomial.h"
 
 namespace po
 {

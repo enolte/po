@@ -5,40 +5,62 @@
 
 namespace po
 {
-  template<>
-  struct expr_integral<expr_constant>
+  namespace detail
   {
-    using _E1 = expr_constant;
-    using F1 = subexpr_type<expr_constant>;
-
-    const F1 expr1;
-    const rank_type place;
-    const scalar_type a, b;
-
-    template<typename ...X>
-    scalar_type operator()(X... x) const
+    template<typename T>
+    struct expr_integral_constant
     {
-      return expr1.expr1 * (b - a);
-    }
-  };
+      using _E1 = T;
+      using F1 = subexpr_type<T>;
+
+      const F1 expr1;
+      const rank_type place;
+      const scalar_type a, b;
+
+      template<typename ...X>
+      scalar_type operator()(X... x) const
+      {
+        return expr1.expr1 * (b - a);
+      }
+    };
+
+  }
 
   template<>
-  struct expr_integral<scalar_type>
+  struct expr_integral<expr_constant> : detail::expr_integral_constant<expr_constant> {};
+
+  template<>
+  struct expr_integral<expr_constant&> : detail::expr_integral_constant<expr_constant&> {};
+
+  namespace detail
   {
-    using _E1 = scalar_type;
-    using F1 = subexpr_type<scalar_type>;
-
-    const F1 expr1;
-    const rank_type place;
-    const scalar_type a, b;
-
-    template<typename ...X>
-    scalar_type operator()(X... x) const
+    template<typename T>
+    struct expr_integral_scalar
     {
-      return expr1 * (b - a);
-    }
-  };
+      using _E1 = T;
+      using F1 = subexpr_type<T>;
 
+      const F1 expr1;
+      const rank_type place;
+      const scalar_type a, b;
+
+      template<typename ...X>
+      scalar_type operator()(X... x) const
+      {
+        return expr1 * (b - a);
+      }
+    };
+
+  }
+
+  template<>
+  struct expr_integral<scalar_type> : detail::expr_integral_scalar<scalar_type> {};
+
+  template<>
+  struct expr_integral<scalar_type&> : detail::expr_integral_scalar<scalar_type&> {};
+
+  template<>
+  struct expr_integral<const scalar_type&> : detail::expr_integral_scalar<scalar_type&> {};
 
 }
 

@@ -2,8 +2,8 @@
 #define PO_EXPR_INTEGRAL_H
 
 #include "is_expression.h"
-#include "../rank.h"
-#include "../scalar.h"
+#include "../types/rank.h"
+#include "../types/scalar.h"
 
 namespace po
 {
@@ -34,6 +34,8 @@ namespace po
     rank_type place;
     interval&& i;
   };
+
+  using place = parametric_interval;
 
   /*
    * polynomial p = ...., q = ....;

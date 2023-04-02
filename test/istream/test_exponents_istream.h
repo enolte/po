@@ -1,4 +1,4 @@
-#include "../../exponents.h"
+#include "../../types/exponents.h"
 
 #include <iostream>
 #include <sstream>

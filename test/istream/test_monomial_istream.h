@@ -1,4 +1,4 @@
-#include "../../monomial.h"
+#include "../../types/monomial.h"
 
 #include <iostream>
 #include <sstream>

@@ -1,7 +1,7 @@
 #ifndef PO_EXPR_PARTIAL_DERIVATIVE_POLYNOMIAL_H
 #define PO_EXPR_PARTIAL_DERIVATIVE_POLYNOMIAL_H
 
-#include "../utils.h"
+#include "../utils/pow.h"
 
 namespace po
 {
@@ -60,7 +60,7 @@ namespace po
     scalar_type evaluate(const P& expr1, rank_type place, X... x)
     {
       if(sizeof ...(X) != expr1.rank())
-        return 0./0.;
+        return nan;
 
       if(place >= expr1.rank())
         return scalar_type{0};
@@ -76,7 +76,7 @@ namespace po
     scalar_type evaluate(const monomial& m, rank_type place, X... x)
     {
       if(sizeof ...(X) != m.rank())
-        return 0./0.;
+        return nan;
 
       if(place >= m.rank())
         return scalar_type{0};

@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "../../exponents.h"
-#include "../../monomial.h"
-#include "../../scalar.h"
+#include "../../types/exponents.h"
+#include "../../types/monomial.h"
+#include "../../types/scalar.h"
 
 #include "trie_vertex.h"
 

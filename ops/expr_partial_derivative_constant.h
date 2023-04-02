@@ -36,7 +36,7 @@ namespace po
 
   template<>
   struct expr_partial_derivative<const scalar_type&>
-  : detail::expr_partial_derivative_constant<scalar_type>
+  : detail::expr_partial_derivative_constant<scalar_type&>
   {};
 
   template<>

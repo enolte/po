@@ -1,7 +1,8 @@
 #ifndef PO_EXPR_INTEGRAL_POLYNOMIAL_H
 #define PO_EXPR_INTEGRAL_POLYNOMIAL_H
 
-#include "../utils.h"
+#include "../utils/pow.h"
+#include "../utils/nan.h"
 #include "../ostream/monomial_ostream.h"
 namespace po
 {
@@ -59,14 +60,14 @@ namespace po
       if(place >= expr1.rank())
       {
         if(sizeof ...(X) != expr1.rank())
-          return 0./0.;
+          return nan;
 
         return expr1(x...) * (b - a);
       }
       else
       {
         if(sizeof ...(X) != expr1.rank() - 1)
-          return 0./0.;
+          return nan;
 
         double acc = 0.;
         for(const auto& t : expr1.terms)

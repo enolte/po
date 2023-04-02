@@ -1,7 +1,7 @@
 #ifndef PO_STORAGE_FLAT_H
 #define PO_STORAGE_FLAT_H
 
-#include "../monomial.h"
+#include "../types/monomial.h"
 #include <vector>
 
 namespace po

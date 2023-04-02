@@ -3,7 +3,7 @@
 
 #include "trie_vertex.h"
 #include "trie_constants.h"
-#include "../../exponents.h"
+#include "../../types/exponents.h"
 
 namespace po
 {

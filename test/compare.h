@@ -1,7 +1,7 @@
 #ifndef PO_COMPARE_H
 #define PO_COMPARE_H
 
-#include "../exponents.h"
+#include "../types/exponents.h"
 
 #include "errors.h"
 

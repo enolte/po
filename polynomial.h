@@ -1,11 +1,11 @@
 #ifndef PO_POLYNOMIAL_H
 #define PO_POLYNOMIAL_H
 
-#include "rank.h"
-#include "degree.h"
+#include "types/rank.h"
+#include "types/degree.h"
 
 #include "evaluate.h"
-#include "monomial.h"
+#include "types/monomial.h"
 
 #include "storage/flat.h"
 

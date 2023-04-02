@@ -5,7 +5,8 @@
 #include "exponents.h"
 #include "rank.h"
 #include "degree.h"
-#include "utils.h"
+#include "../utils/pow.h"
+#include "../utils/nan.h"
 
 namespace po
 {
@@ -25,7 +26,7 @@ namespace po
     scalar_type operator()(X... x) const
     {
       if(sizeof ...(X) != rank())
-        return 0./0.;
+        return nan;
 
       double acc = 1.;
       std::size_t i = 0;
