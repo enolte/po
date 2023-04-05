@@ -33,11 +33,11 @@ void test_assign_expr_level_4()
 
     q2 = u + 3*v*u;
 
-    PO_ASSERT(compare::unordered_equal_terms(q, q2.terms), q2);
+    PO_ASSERT(compare::unordered_equal_terms(q, q2), q2);
     PO_ASSERT(q2.rank() == 5, q2.rank());
     PO_ASSERT(q2.degree() == 30, q2.degree());
     PO_ASSERT(compare::equal(q2.degrees(), {7, 3, 9, 8, 5}), q2.degrees());
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

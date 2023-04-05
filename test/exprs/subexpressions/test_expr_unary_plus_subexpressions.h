@@ -5,7 +5,7 @@
 
 void test_expr_unary_plus_subexpressions()
 {
-   PO_LINE;
+  PO_LINE;
 }
 
 namespace static_asserts

@@ -22,6 +22,8 @@ void test_instantiate_p__mult__p_mult_p_plus_p()
         {36, {1, 10, 8}}, {-14.4, { 4, 8, 6}}, {30.6, {11, 10, 6}}
       }),
       z);
+
+    PO_LINE;
   }
 
 #if 0
@@ -53,8 +55,10 @@ p(qr + s) =
 
       }),
       z);
+
+
+    PO_LINE;
   }
 #endif
 
-  PO_LINE;
 }

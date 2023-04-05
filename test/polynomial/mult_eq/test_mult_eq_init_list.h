@@ -16,6 +16,8 @@ void test_mult_eq_init_list()
         {6, {3, 2, 5, 3}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -30,7 +32,7 @@ void test_mult_eq_init_list()
         {12, {3, 3, 4, 3}}
       }),
       p);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

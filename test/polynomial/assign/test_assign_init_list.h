@@ -20,7 +20,7 @@ void test_assign_init_list()
     assert(p.rank() == 5);
     assert(p.degree() == 15);
     assert(compare::equal(p.degrees(), {2, 2, 3, 4, 5}));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

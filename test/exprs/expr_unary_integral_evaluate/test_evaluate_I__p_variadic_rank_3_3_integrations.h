@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include "../../compare.h"
@@ -23,6 +23,8 @@ void test_evaluate_I__p_variadic_rank_3_3_integrations()
       )();
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   /*
@@ -40,8 +42,8 @@ void test_evaluate_I__p_variadic_rank_3_3_integrations()
         po::parametric_interval{0, {0, 1}}))();
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }

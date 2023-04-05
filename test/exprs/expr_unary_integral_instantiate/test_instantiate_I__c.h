@@ -20,6 +20,8 @@ void test_instantiate_I__c()
         {18., {}},
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -37,8 +39,8 @@ void test_instantiate_I__c()
         {21.6, {}},
       }),
       p);
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }

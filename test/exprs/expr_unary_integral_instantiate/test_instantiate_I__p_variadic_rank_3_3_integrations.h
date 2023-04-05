@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include "../../compare.h"
@@ -28,7 +28,8 @@ void test_instantiate_I__p_variadic_rank_3_3_integrations()
     const double ac = iiip();
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

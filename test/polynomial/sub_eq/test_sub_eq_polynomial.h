@@ -37,6 +37,8 @@ void test_sub_eq_polynomial()
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));
+
+    PO_LINE;
   }
 
   {
@@ -83,6 +85,8 @@ void test_sub_eq_polynomial()
 
     PO_ASSERT(p.degree() == 17, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {6, 2, 9}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -117,9 +121,9 @@ void test_sub_eq_polynomial()
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 

@@ -10,6 +10,8 @@ void test_evaluate_p__mult__c()
     auto x = p * -4;
 
     assert(x.expr2.expr1 == -4);
+
+    PO_LINE;
   }
 
   {
@@ -18,6 +20,8 @@ void test_evaluate_p__mult__c()
     auto x = p * c;
 
     assert(x.expr2.expr1 == c);
+
+    PO_LINE;
   }
 
   {
@@ -25,6 +29,8 @@ void test_evaluate_p__mult__c()
     po::scalar_type c = 5;
 
     assert((p * c * c)(3) == 0);
+
+    PO_LINE;
   }
 
   {
@@ -32,6 +38,8 @@ void test_evaluate_p__mult__c()
     po::scalar_type c = 5;
 
     assert((p * c * c)(3) == 0);
+
+    PO_LINE;
   }
 
   {
@@ -39,7 +47,8 @@ void test_evaluate_p__mult__c()
     po::scalar_type c = 5;
 
     assert((p * c * c)(3, 2, 1) == (4 * 1 * 16 * 1) * 5 * 5);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

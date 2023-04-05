@@ -17,7 +17,7 @@ void test_add_eq_polynomial()
 
     p += q;
 
-    assert(compare::unordered_equal_terms(p, q.terms));
+    assert(compare::unordered_equal_terms(p, q));
     assert(compare::equal(p.degrees(), q.degrees()));
     assert(p.constant() == q.constant() && p.constant() == 0.);
     assert(p.rank() == q.rank() && p.rank() == 6);
@@ -25,6 +25,8 @@ void test_add_eq_polynomial()
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));
+
+    PO_LINE;
   }
 
   {
@@ -61,11 +63,13 @@ void test_add_eq_polynomial()
         { 3.2, {3, 2, 9}},
         { 6.2, {6, 2, 9}}
       }),
-      p.terms);
+      p);
 
     assert(p.constant() == 5.2);
     PO_ASSERT(p.coefficient(0, 0, 0) == 5.2, p.coefficient(0, 0, 0));
     PO_ASSERT(compare::equal(p.degrees(), {6, 2, 9}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -80,7 +84,7 @@ void test_add_eq_polynomial()
 
     p += std::move(q);
 
-    assert(compare::unordered_equal_terms(p, q.terms));
+    assert(compare::unordered_equal_terms(p, q));
     assert(compare::equal(p.degrees(), q.degrees()));
     assert(p.constant() == q.constant() && p.constant() == 0.);
     assert(p.rank() == q.rank() && p.rank() == 6);
@@ -88,9 +92,9 @@ void test_add_eq_polynomial()
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 

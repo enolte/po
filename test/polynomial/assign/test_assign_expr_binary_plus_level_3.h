@@ -39,7 +39,7 @@ void test_assign_expr_binary_plus_level_3()
     PO_ASSERT(q.rank() == 5, q.rank());
     PO_ASSERT(q.degree() == 22, q.degree());
     PO_ASSERT(compare::equal(q.degrees(), {6, 4, 7, 6, 5}), q.degrees());
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

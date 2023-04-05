@@ -17,7 +17,7 @@ void test_evaluate_D__Ip()
     assert(expr_rank(D(integral(p, {3, {-1, 2}}), 2)) == 3);
 
     PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

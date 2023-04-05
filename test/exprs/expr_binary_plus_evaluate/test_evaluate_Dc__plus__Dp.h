@@ -7,8 +7,8 @@ void test_evaluate_Dc__plus__Dp()
 {
   {
     assert((po::D(2.7, 0) + D(po::polynomial{{1, {3}}}, 0))(1) == 3);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

@@ -17,6 +17,8 @@ void test_sub_eq_scalar()
     assert(p.nterms() == 1);
     assert(p.constant() == -8.);
     assert(p.coefficient(0, 0, 0) == -8.);
+
+    PO_LINE;
   }
 
   {
@@ -36,8 +38,9 @@ void test_sub_eq_scalar()
     assert(p.nterms() == 4);
     assert(p.constant() == -8);
     assert(p.coefficient(0, 0, 0) == -8.);
-  }
 
+    PO_LINE;
+  }
 
   {
     po::polynomial p
@@ -57,6 +60,8 @@ void test_sub_eq_scalar()
     assert(p.nterms() == 4);
     assert(p.constant() == -11.);
     assert(p.coefficient(0, 0, 0) == -11.);
+
+    PO_LINE;
   }
 
   {
@@ -77,9 +82,10 @@ void test_sub_eq_scalar()
     assert(p.nterms() == 4);
     assert(p.constant() == -11.);
     assert(p.coefficient(0, 0, 0) == -11.);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }
 
 

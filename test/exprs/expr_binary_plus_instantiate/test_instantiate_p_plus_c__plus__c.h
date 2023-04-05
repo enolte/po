@@ -18,7 +18,7 @@ void test_instantiate_p_plus_c__plus__c()
         {19.1, { 0, 0, 0}}
       }),
       s);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

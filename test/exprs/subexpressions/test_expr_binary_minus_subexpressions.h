@@ -12,8 +12,6 @@ void test_expr_binary_minus_subexpressions()
   test_expr_binary_p_minus_c_subexpressions();
   test_expr_binary_p_minus_p_subexpressions();
   test_expr_binary_c_minus_p_subexpressions();
-
-  PO_LINE;
 }
 
 void test_expr_binary_c_minus_p_subexpressions()
@@ -24,6 +22,8 @@ void test_expr_binary_c_minus_p_subexpressions()
     auto x = -4 - p;
     assert(x.expr1.expr1 == -4);
     assert(&x.expr2 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -31,6 +31,8 @@ void test_expr_binary_c_minus_p_subexpressions()
     po::scalar_type c = 5;
     assert((c - p).expr1.expr1 == 5);
     assert(&(c - p).expr2 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -51,6 +53,8 @@ void test_expr_binary_c_minus_p_subexpressions()
 
     assert(&(c - (p - p)).expr2.expr1 == &p);
     assert(&(c - (p - p)).expr2.expr2 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -59,6 +63,8 @@ void test_expr_binary_c_minus_p_subexpressions()
 
     assert((c - (c - p)).expr1.expr1 == 5);
     assert((c - (c - p)).expr2.expr1.expr1 == 5);
+
+    PO_LINE;
   }
 
   {
@@ -66,6 +72,8 @@ void test_expr_binary_c_minus_p_subexpressions()
 
     assert((5 - (6 - p)).expr1.expr1 == 5);
     assert((5 - (6 - p)).expr2.expr1.expr1 == 6);
+
+    PO_LINE;
   }
 }
 
@@ -90,6 +98,8 @@ void test_expr_binary_p_minus_p_subexpressions()
 
     assert(&(p + q).expr1 == &p);
     assert(&(p + q).expr2 == &q);
+
+    PO_LINE;
   }
 
 }
@@ -109,6 +119,8 @@ void test_expr_binary_p_minus_c_subexpressions()
       }));
 
     assert(&x.expr1 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -122,6 +134,8 @@ void test_expr_binary_p_minus_c_subexpressions()
       }));
 
     assert(&(p + c).expr1 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -135,6 +149,8 @@ void test_expr_binary_p_minus_c_subexpressions()
       }));
 
     assert(&(p + c + c).expr1.expr1 == &p);
+
+    PO_LINE;
   }
 
   {
@@ -148,6 +164,8 @@ void test_expr_binary_p_minus_c_subexpressions()
       }));
 
     assert(&(p + (c + c)).expr1 == &p);
+
+    PO_LINE;
   }
 }
 

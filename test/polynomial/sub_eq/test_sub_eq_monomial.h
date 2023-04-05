@@ -51,6 +51,8 @@ void test_sub_eq_monomial()
     PO_ASSERT(compare::equal(p.degrees(), {3, 5, 2}), p.degrees());
     PO_ASSERT(p.degree() == 6, p.degree());
     PO_ASSERT(p.rank() == 3, p.rank());
+
+    PO_LINE;
   }
 
   {
@@ -100,6 +102,8 @@ void test_sub_eq_monomial()
 
     // Zero coefficients are not ignored.
     PO_ASSERT(compare::equal(p.degrees(), {3, 5, 2}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -144,8 +148,9 @@ void test_sub_eq_monomial()
         {1.7, {0, 3, 2}},
         {0.0, {1, 5, 0}},
       })));
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }
 

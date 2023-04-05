@@ -3,17 +3,7 @@
 #include "../../compare.h"
 #include <cassert>
 
-void test_expr_integral_integral_p_instantiate();
-
 void test_instantiate_I__Ip()
-{
-  test_expr_integral_integral_p_instantiate();
-
-  PO_LINE;
-}
-
-
-void test_expr_integral_integral_p_instantiate()
 {
   {
     /*
@@ -39,6 +29,8 @@ void test_expr_integral_integral_p_instantiate()
     PO_ASSERT(compare::equal(iip_i.degrees(), {}), iip_i.degrees());
     PO_ASSERT(iip_i.degree() == 0, iip_i.degree());
     PO_ASSERT(iip_i.rank() == 0, iip_i.rank());
+
+    PO_LINE;
   }
 
   {
@@ -65,6 +57,8 @@ void test_expr_integral_integral_p_instantiate()
     PO_ASSERT(compare::equal(iip_i.degrees(), {0}), iip_i.degrees());
     PO_ASSERT(iip_i.degree() == 0, iip_i.degree());
     PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
+
+    PO_LINE;
   }
 
   {
@@ -92,6 +86,8 @@ void test_expr_integral_integral_p_instantiate()
     PO_ASSERT(compare::equal(iip_i.degrees(), {1}), iip_i.degrees());
     PO_ASSERT(iip_i.degree() == 1, iip_i.degree());
     PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
+
+    PO_LINE;
   }
 
   {
@@ -120,6 +116,8 @@ void test_expr_integral_integral_p_instantiate()
     PO_ASSERT(compare::equal(iip_i.degrees(), {4}), iip_i.degrees());
     PO_ASSERT(iip_i.degree() == 4, iip_i.degree());
     PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
+
+    PO_LINE;
   }
 
   {
@@ -150,6 +148,8 @@ void test_expr_integral_integral_p_instantiate()
     PO_ASSERT(compare::equal(iip_i.degrees(), {4}), iip_i.degrees());
     PO_ASSERT(iip_i.degree() == 4, iip_i.degree());
     PO_ASSERT(iip_i.rank() == 1, iip_i.rank());
+
+    PO_LINE;
   }
 
 }

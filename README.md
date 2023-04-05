@@ -1,6 +1,6 @@
 # po
 
-Elementary computations in the real polynomial ring R[x<sub>1</sub>, ..., x<sub>r</sub>].
+Elementary computations in the real polynomial ring $\mathbb{R}[x_1, ..., x_r]$.
 
 C++23 hobby project.
 
@@ -37,7 +37,7 @@ C++23 hobby project.
 Progress continues as time available.
 
 <details>
-<summary>Previous</summary>
+<summary><h3>Previous updates</h3></summary>
 
 (*06 February 2023*) Moved some things to Phase II, including the completion of the prefix tree storage model. The trie is implemented. The interface for the polynomial type is partially implemented.
 
@@ -143,7 +143,7 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 238 indexed unit test sets, many of which include multiple specific test cases.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 772 indexed unit test sets, a few of which include multiple specific test cases.
 
 
 
@@ -331,9 +331,23 @@ po::polynomial p = 2*(r-3)*r*r - 3.2*q;
 
 Elementary polynomial ring computations
 
+### Partial derivatives
+
+Given any supported expression `x`, of any rank >= 0, `D(x, 2)` should do the right thing when evaluated or instantiated. The type of `D(x, 2)` is a supported expression type. E.g., if $p(x, y, z) = xz^4 - 6y^3 + 3x^8yz$, then `D(3*p, 2)` yields $12xz^3 + 9x^8y$ when instantiated.
+
+A variadic signature supports multiple partial derivatives. Differentiation is applied to place values in left-to-right order. E.g., `D(x, 1, 2)` differentiates the expression `x` in the first argument, then differentiates the result in the second argument.
+
+E.g., the following are supported.
+
+* `D(x, 1, 2)`
+* `D(x*q - 9*D(3*p*x, 0, 2), 0, 2, 1)` given `p` and `q`
+
+etc.
+
+
 ### Integrals
 
-Given a rank 2 polynomial, p(x, y) = 2x<sup>2</sup>y - 4xy<sup>3</sup>, then integration over both *x* and *y* in [-1,1] x [-1, 1] is zero, a numerical value. The intent is to support this with
+Given a rank 2 polynomial, $p(x, y) = 2x^2y - 4xy^3$, then integration over both $x$ and $y$ in $[-1,1] \times [-1, 1]$ is zero, a numerical value. The intent is to support this with
 
 ```
 double v = integral(p, {0, {-1, 1}}, {0, {-1, 1}});
@@ -349,51 +363,57 @@ which includes a positional specification, with variadic signatures in a "natura
 
 The above yields an instantiable `integral-expr` type instance for a polynomial of one variable.
 
-Logically, the integral of p on [-1, 1] x [-1, 1] is equivalent to either of
+Logically, the integral of $p$ on $[-1, 1] \times [-1, 1]$ is equivalent to either of
 
 ```
 integral(integral(p, {1, {-1, 1}}), {0, {-1, 1}})  // integrate in y first, then x
 integral(integral(p, {0, {-1, 1}}), {0, {-1, 1}})  // integrate in x first, then y
 ```
 
-Typically, each integral operation produces an expression with rank = {input rank} - 1. When applied to a general expression, the result of instantiating an integral is a polynomial of either the same rank as the input expression (if the positional argument >= expr rank),
-or one less than the input rank (if the positional argument < expr rank). That polynomial is "the integral" of the input expression with respect to the given positional argument and interval end points.
+When an integral-expr is instantiated, the resulting polynomial is "the integral" of the input expression with respect to the given positional argument and interval end points.
 
 For polynomials or expressions of arbitrary rank, the above generalizes in an obvious way.
 
+#### Change of rank
 
-### Partial derivatives
+The following uses zero-based enumeration of variables.
 
-Given any supported expression `x`, of any rank >= 0, `D(x, 2)` should do the right thing when evaluated or instantiated. The type of `D(x, 2)` is a supported expression type. E.g., if
+Given $rank(p) = 3$, say, $p(u, v, w) = 2u^5 - 3v^3w$, the integral of $p$ in place 1 ( $v$ ) from 0 to 1, say, is conventionally written as something like
 
-* p(x, y, z) = xz<sup>4</sup> - 6y<sup>3</sup> + 3x<sup>8</sup>yz,
+$$P_1(u, w) = \int\limits_0^1 p(u, v, w) \ dv = 2u^5 - \frac 34 w$$
 
-then `D(3*p, 2)` yields
+which implies that $rank(P_1) = 2$, because $v$ was "integrated out".
 
-* p<sub>2</sub>(x, y, z) = 12xz<sup>3</sup> + 9x<sup>8</sup>y
+If instead $p$ is integrated from a to b with respect to some out-of-range place, say place 7, then
 
-when instantiated.
+$$P_7(u, v, w, \alpha, \beta, \gamma, \delta, \epsilon) = \int\limits_a^b p(u, v, w) \ d\epsilon = (b-a)p(u, v, w)$$
 
-A variadic signature supports multiple partial derivatives. Differentiation is applied to place values in left-to-right order. E.g., `D(x, 1, 2)` differentiates the expression `x` in the first argument, then differentiates the result in the second argument.
+with no explicit dependence upon $\alpha, \beta, \gamma$, or $\delta$.
 
-The intent is to support expressions like
+For integration, this repo implements both of these conventions: to increase $rank(\int\limits_a^b p)$ to accommodate the given place of integration whenever place $\ge rank(p)$, and to reduce $rank(\int\limits_a^b p)$ by one when the place number $\lt rank(p)$.
 
-* `D(p, 1, 2)`
-* `D(p*p - 9*D(3*p*q, 0, 2), 0, 2, 1)`
-
-etc.
 
 ### Antiderivatives
 
-TODO. This section is incomplete.
-
 Only integral primitives are supported ("zero gauge").
 
-Given a polynomial (or other expression) `p`, the intent is to support expressions such as `antiderivative(p, 1)`. The type of such an expression is an antiderivative expression type.
+Given a expression `x`, expressions such as `antiderivative(x, 1, 0, 2)` are supported. Each argument after `x` refers to a place with respect to which to integrate. Integration is applied in parameter order, left to right.
 
-The result is an expression which, when instantiated, is a unique rank R+1 polynomial if p has rank R.
+The type of such an expression is an antiderivative expression type which, when instantiated, is a unique polynomial $P$ with $rank(P) \ge rank(x)$
 
+#### Change of rank
 
+The following uses zero-based enumeration of variables.
+
+Given a rank-4 polynomial $p(u, v, w, x) = 2ux - 3v^3w$, with place 0, 1, 2, 3,  if we antidifferentiate with respect to, say, $v$ (place 2), the result is
+
+$$P_2(u, v, w, x) = \int\ p(u, v, w, x) \ dx = 2uvx - \frac 34 v^4w$$
+
+No change of rank is implied ( $rank(P_2) = rank(p)$ ), because the place number is less than $rank(p)$. Antidifferentiating $p$ with respect a hypothetical place 6 yields
+
+$$P_6(u, v, w, x, \alpha, \beta, \gamma) = \int\ p(u, v, w, x) \ d\gamma = 2ux\gamma - 3v^3w\gamma = \gamma p(u, v, w, x)$$
+
+This repo implements this convention: increase the rank to accommodate the place number. In implementation, $P_6$ is a rank 7 polynomial, with no evaluation-dependence upon places 4 or 5.
 
 
 
@@ -422,13 +442,11 @@ The result is an expression which, when instantiated, is a unique rank R+1 polyn
 | unary `+`           | Done        | Done        | Done        | Done        |
 | unary `-`           | Done        | Done        | Done        | Done        |
 | differentiation     | Done        | Done        | Done        | Done        |
-| antidifferentiation | Not started | Not started | Not started | Not started |
+| antidifferentiation | Done        | Done        | In progress | In progress |
 | integration         | Done        | Done        | Done        | Done        |
 
   * [Ring operations](#ring-operations)
     * Antiderivatives
-
-## Not started
 
 
 # Plan Phase II

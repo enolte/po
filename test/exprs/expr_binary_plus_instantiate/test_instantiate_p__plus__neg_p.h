@@ -15,7 +15,7 @@ void test_instantiate_p__plus__neg_p()
         {0., { 3, 3, 1}},
         {0., {10, 5, 1}}
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

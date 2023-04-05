@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -20,6 +20,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {0, 0}), r.degrees());
     PO_ASSERT(r.degree() == 0, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank, non-zero constant term
@@ -37,6 +39,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {0, 0}), r.degrees());
     PO_ASSERT(r.degree() == 0, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank, zero non-constant term
@@ -54,8 +58,9 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {1, 6}), r.degrees());
     PO_ASSERT(r.degree() == 7, r.degree());
-  }
 
+    PO_LINE;
+  }
 
   // lvalue polynomial, place within rank, with zero coefficient
   {
@@ -72,6 +77,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {5, 0}), r.degrees());
     PO_ASSERT(r.degree() == 5, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank
@@ -89,6 +96,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {5, 1}), r.degrees());
     PO_ASSERT(r.degree() == 5, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank, without zero term
@@ -106,6 +115,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {4, 2}), r.degrees());
     PO_ASSERT(r.degree() == 5, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank, with zero term
@@ -123,6 +134,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {4, 2}), r.degrees());
     PO_ASSERT(r.degree() == 5, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place within rank
@@ -140,6 +153,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {4, 2}), r.degrees());
     PO_ASSERT(r.degree() == 5, r.degree());
+
+    PO_LINE;
   }
 
   // lvalue polynomial, place not in rank
@@ -157,6 +172,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {0, 0}), r.degrees());
     PO_ASSERT(r.degree() == 0, r.degree());
+
+    PO_LINE;
   }
 
   // rvalue polynomial, place not in rank
@@ -174,6 +191,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 2, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {0, 0}), r.degrees());
     PO_ASSERT(r.degree() == 0, r.degree());
+
+    PO_LINE;
   }
 
   // rvalue polynomial, place within rank
@@ -192,7 +211,8 @@ void test_instantiate_D__p()
     PO_ASSERT(r.rank() == 3, r.rank());
     PO_ASSERT(compare::equal(r.degrees(), {5, 1, 4}), r.degrees());
     PO_ASSERT(r.degree() == 9, r.degree());
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

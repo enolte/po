@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -26,6 +26,8 @@ void test_evaluate_I__p_mult_p()
     const double ac = po::integral(p * q, {2, {1, 3}})(3, 2, 1);
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   // r-value p, r-value q
@@ -52,7 +54,8 @@ void test_evaluate_I__p_mult_p()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 5040., ac);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

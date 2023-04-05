@@ -16,6 +16,8 @@ void test_instantiate_p__mult__c_mult_p()
         {54, {3}}
       }),
       r);
+
+    PO_LINE;
   }
 
   // x0 * x1
@@ -31,6 +33,8 @@ void test_instantiate_p__mult__c_mult_p()
         {27, {4, 2}},
       }),
       r);
+
+    PO_LINE;
   }
 
   // x0 * x1
@@ -47,6 +51,8 @@ void test_instantiate_p__mult__c_mult_p()
         {36, {2, 4}},
       }),
       r);
+
+    PO_LINE;
   }
 
   // LR
@@ -63,7 +69,7 @@ void test_instantiate_p__mult__c_mult_p()
         {36, {2, 4}},
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

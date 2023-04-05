@@ -65,7 +65,7 @@ namespace po
 
   }
 
-  template<is_constant E1>
+  template<constant E1>
   polynomial& instantiate(polynomial& p, const expr_integral<E1> expr, rank_type rank)
   {
     p = polynomial::make_zero(rank);

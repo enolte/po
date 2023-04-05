@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -25,8 +25,8 @@ void test_instantiate_Dp_mult_p__plus__p_mult_Dp()
         { 0, {1, 0}},
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

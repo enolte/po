@@ -10,13 +10,15 @@ void test_evaluate_D__c_plus_p()
     po::polynomial p{{1, {3}}};
     assert(D(4 + p, 0)(1) == 3);
     assert(D(4 + p, 0)(2) == 12);
+
+    PO_LINE;
   }
 
   // r-value + r-value
   {
     assert(D(4 + po::polynomial{{1, {3}}}, 0)(1) == 3);
     assert(D(4 + po::polynomial{{1, {3}}}, 0)(2) == 12);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

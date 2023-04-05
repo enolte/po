@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -10,6 +10,8 @@ void test_evaluate_I__c()
     const double ac = po::integral(1., {0, {0, 18.5}})();
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 
   {
@@ -17,6 +19,8 @@ void test_evaluate_I__c()
     const double ac = po::integral(1., {1, {-11., 10.2}})();
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 
   {
@@ -24,6 +28,8 @@ void test_evaluate_I__c()
     const double ac = po::integral(2.3, {2, {-11., 10.2}})();
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 #if 0
   // TODO
@@ -32,8 +38,9 @@ void test_evaluate_I__c()
     const double ac = po::integral(1, {2, {-11., 10.2}})();
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 #endif
 
-  PO_LINE;
 }

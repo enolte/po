@@ -29,6 +29,8 @@ void test_add_eq_monomial()
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 7, 0) == 2.5);
     assert(compare::equal(p.degrees(), {3, 7, 0}));
+
+    PO_LINE;
   }
 
   {
@@ -59,6 +61,8 @@ void test_add_eq_monomial()
         {1.7, {0, 3, 2}},
       })),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -103,6 +107,8 @@ void test_add_eq_monomial()
     // A term with a zero coefficient is preserved.
     assert(p.nterms() == nterms_at_entry + 4);
     assert(compare::equal(p.degrees(), {8, 5, 4, 4, 0, 4, 4}));
+
+    PO_LINE;
   }
 
   {
@@ -121,8 +127,8 @@ void test_add_eq_monomial()
       }
     ),
     k);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

@@ -22,6 +22,8 @@ void test_sub_eq_expr_level_2()
     PO_ASSERT(p.rank() == 4, p.rank());
     PO_ASSERT(p.degree() == 9, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {2, 1, 4, 2}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -50,6 +52,8 @@ void test_sub_eq_expr_level_2()
         {3, {2, 1, 4, 2}}
       }),
       q);
+
+    PO_LINE;
   }
 
   {
@@ -70,7 +74,8 @@ void test_sub_eq_expr_level_2()
     PO_ASSERT(p.rank() == 4, p.rank());
     PO_ASSERT(p.degree() == 18, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {4, 4, 8, 4}), p.degrees());
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

@@ -17,6 +17,8 @@ void test_instantiate_p__plus__Ip()
         {                       1, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -33,6 +35,8 @@ void test_instantiate_p__plus__Ip()
         {                       4, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -48,6 +52,8 @@ void test_instantiate_p__plus__Ip()
         { 9, {3, 1}},
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -63,8 +69,8 @@ void test_instantiate_p__plus__Ip()
         { 9, {3, 1}},
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

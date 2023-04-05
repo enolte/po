@@ -20,6 +20,8 @@ void test_instantiate_I__Dc()
     PO_ASSERT(ac.rank() == 0, ac.rank());
     PO_ASSERT(ac.degree() == 0, ac.degree());
     PO_ASSERT(compare::equal(ac.degrees(), {}), ac.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -35,6 +37,8 @@ void test_instantiate_I__Dc()
     PO_ASSERT(ac.rank() == 0, ac.rank());
     PO_ASSERT(ac.degree() == 0, ac.degree());
     PO_ASSERT(compare::equal(ac.degrees(), {}), ac.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -50,6 +54,8 @@ void test_instantiate_I__Dc()
     PO_ASSERT(ac.rank() == 0, ac.rank());
     PO_ASSERT(ac.degree() == 0, ac.degree());
     PO_ASSERT(compare::equal(ac.degrees(), {}), ac.degrees());
+
+    PO_LINE;
   }
 #if 0
   // TODO
@@ -68,8 +74,8 @@ void test_instantiate_I__Dc()
     PO_ASSERT(ac.rank() == 3, ac.rank());
     PO_ASSERT(ac.degree() == 0, ac.degree());
     PO_ASSERT(compare::equal(ac.degrees(), {0, 0, 0}), ac.degrees());
+
+    PO_LINE;
   }
 #endif
-
-  PO_LINE;
 }

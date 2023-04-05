@@ -10,8 +10,6 @@ void test_assign_monomial()
 {
   test_assign_monomial_lvalue();
   test_assign_monomial_rvalue();
-
-  PO_LINE;
 }
 
 void test_assign_monomial_lvalue()
@@ -32,6 +30,8 @@ void test_assign_monomial_lvalue()
     assert(p.rank() == 3);
     assert(p.degree() == 9);
     PO_ASSERT(compare::equal(p.degrees(), {2, 5, 2}), p.degrees());
+
+    PO_LINE;
   }
 }
 
@@ -53,5 +53,7 @@ void test_assign_monomial_rvalue()
     assert(p.rank() == 3);
     assert(p.degree() == 9);
     PO_ASSERT(compare::equal(p.degrees(), {2, 5, 2}), p.degrees());
+
+    PO_LINE;
   }
 }

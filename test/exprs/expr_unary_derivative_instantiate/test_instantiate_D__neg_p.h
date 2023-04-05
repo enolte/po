@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -15,6 +15,8 @@ void test_instantiate_D__neg_p()
         {0, {5, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -27,6 +29,8 @@ void test_instantiate_D__neg_p()
         {-2, {5, 0}}, {-6, {2, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -39,6 +43,8 @@ void test_instantiate_D__neg_p()
         {-10, {4, 1}}, {-6, {1, 2}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -51,6 +57,8 @@ void test_instantiate_D__neg_p()
         {-10, {4, 1}}, {-6, {1, 2}}, {0, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -63,6 +71,8 @@ void test_instantiate_D__neg_p()
         {-10, {4, 1}}, {-6, {1, 2}}, {0, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -75,8 +85,8 @@ void test_instantiate_D__neg_p()
         {0, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }

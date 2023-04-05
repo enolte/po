@@ -9,16 +9,22 @@ void test_evaluate_p__plus__unary_plus_Dp()
     po::polynomial p{{1, {3}}};
     po::polynomial q{{2, {2}}};
     assert((q + +D(p, 0))(1) == 5);
+
+    PO_LINE;
   }
 
   {
     po::polynomial q{{2, {2}}};
     assert((q + (+D(po::polynomial{{1, {3}}}, 0)))(1) == 5);
+
+    PO_LINE;
   }
 
   {
     po::polynomial p{{1, {3}}};
     assert((po::polynomial{{2, {2}}} + +D(p, 0))(1) == 5);
+
+    PO_LINE;
   }
 
   {
@@ -28,7 +34,7 @@ void test_evaluate_p__plus__unary_plus_Dp()
         +
         (+D(po::polynomial{{1, {3}}}, 0))
       )(1) == 5);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

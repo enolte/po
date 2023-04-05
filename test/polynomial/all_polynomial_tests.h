@@ -1,10 +1,9 @@
 #include <iostream>
 
 #include "../../test/macros.h"
+
 #include "../../polynomial.h"
 
-#include "../../ostream/vector_ostream.h"
-#include "../../ostream/monomial_ostream.h"
 #include "../../ostream/polynomial_ostream.h"
 using po::operator<<;
 

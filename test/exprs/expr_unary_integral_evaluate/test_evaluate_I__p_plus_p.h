@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -15,6 +15,8 @@ void test_evaluate_I__p_plus_p()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 90., ac);
+
+    PO_LINE;
   }
 
   // l-value p, r-value q
@@ -27,6 +29,8 @@ void test_evaluate_I__p_plus_p()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 90., ac);
+
+    PO_LINE;
   }
 
   // r-value p, l-value q
@@ -39,6 +43,8 @@ void test_evaluate_I__p_plus_p()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 90., ac);
+
+    PO_LINE;
   }
 
   // r-value p, r-value q
@@ -53,7 +59,8 @@ void test_evaluate_I__p_plus_p()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 90., ac);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

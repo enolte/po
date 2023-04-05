@@ -17,6 +17,8 @@ void test_instantiate_c__mult__neg_p()
         {-15.3, {10, 5, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -32,7 +34,7 @@ void test_instantiate_c__mult__neg_p()
         {  7.2, { 0, 0, 0}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

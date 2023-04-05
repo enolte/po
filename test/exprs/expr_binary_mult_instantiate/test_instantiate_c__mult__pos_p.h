@@ -17,6 +17,8 @@ void test_instantiate_c__mult__pos_p()
         {15.3, {10, 5, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -31,5 +33,7 @@ void test_instantiate_c__mult__pos_p()
         {-7.2, { 3, 3, 1}},
         {15.3, {10, 5, 1}}
       }));
+
+    PO_LINE;
   }
 }

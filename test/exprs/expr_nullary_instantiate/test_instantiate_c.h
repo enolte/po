@@ -17,6 +17,8 @@ void test_instantiate_c()
         {6, {}},
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -31,7 +33,7 @@ void test_instantiate_c()
       {
         { 7.7, { 0, 0, 0}},
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

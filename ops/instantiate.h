@@ -10,24 +10,23 @@
 #include "instantiate_binary_mult.h"
 #include "instantiate_partial_derivative.h"
 #include "instantiate_integral.h"
+#include "instantiate_antiderivative.h"
 
 namespace po
 {
-  template<typename Expr>
+  template<expression Expr>
   polynomial instantiate(Expr&& expr, rank_type rank)
   {
     polynomial p = polynomial::make_zero(rank);
     instantiate(p, std::move(expr), rank);
     return p;
   }
-#if 1
-  // TODO Further testing
-  template<typename Expr>
+
+  template<expression Expr>
   polynomial instantiate(Expr&& expr)
   {
     return instantiate(std::move(expr), expr_rank(expr));
   }
-#endif
 }
 
 #endif

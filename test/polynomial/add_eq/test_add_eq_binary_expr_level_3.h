@@ -24,7 +24,7 @@ void test_add_eq_binary_expr_level_3()
     PO_ASSERT(p.rank() == 4, p.rank());
     PO_ASSERT(p.degree() == 9, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {2, 4, 4, 2}), p.degrees());
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

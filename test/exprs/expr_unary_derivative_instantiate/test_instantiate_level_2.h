@@ -9,6 +9,7 @@
 #include "test_instantiate_D__p_mult_p.h"         // D(x0     * x0)
 
 #include "test_instantiate_D__Ip.h"               // D(I(x0))
+#include "test_instantiate_D__Ap.h"               // D(A(x0))
 
 namespace expr_unary_derivative_instantiate
 {
@@ -25,6 +26,7 @@ namespace expr_unary_derivative_instantiate
     test_instantiate_D__p_mult_p();               // D(x0     * x0)
 
     test_instantiate_D__Ip();                     // D(I(x0))
+    test_instantiate_D__Ap();                     // D(A(x0))
   }
 
 }

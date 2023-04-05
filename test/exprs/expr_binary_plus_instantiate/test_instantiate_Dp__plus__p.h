@@ -15,6 +15,8 @@ void test_instantiate_Dp__plus__p()
         { 0, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -31,6 +33,8 @@ void test_instantiate_Dp__plus__p()
         { 1, {0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -46,6 +50,8 @@ void test_instantiate_Dp__plus__p()
         { 6, {2, 2}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -62,6 +68,8 @@ void test_instantiate_Dp__plus__p()
         {3, {2, 2, 8}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -77,8 +85,8 @@ void test_instantiate_Dp__plus__p()
         { 3, {2, 2, 8}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

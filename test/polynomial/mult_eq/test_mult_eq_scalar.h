@@ -34,6 +34,8 @@ void test_mult_eq_scalar()
     assert(p.coefficient(1, 1, 0) == -2.0);
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
     assert(p.constant() == 1.5);
+
+    PO_LINE;
   }
 
   {
@@ -65,6 +67,8 @@ void test_mult_eq_scalar()
     assert(p.coefficient(1, 1, 0) == -2.0);
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
     assert(p.constant() == 1.5);
+
+    PO_LINE;
   }
 
   {
@@ -96,6 +100,8 @@ void test_mult_eq_scalar()
     assert(p.coefficient(1, 1, 0) == -2.0);
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
     assert(p.constant() == 1.5);
+
+    PO_LINE;
   }
 
   {
@@ -128,6 +134,8 @@ void test_mult_eq_scalar()
     assert(p.coefficient(1, 1, 0) == -2.0);
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
     assert(p.constant() == 1.5);
+
+    PO_LINE;
   }
 
   {
@@ -159,8 +167,8 @@ void test_mult_eq_scalar()
     assert(p.coefficient(1, 1, 0) == 0.);
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
     assert(p.constant() == 0.);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 

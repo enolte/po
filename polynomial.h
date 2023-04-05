@@ -4,7 +4,7 @@
 #include "types/rank.h"
 #include "types/degree.h"
 
-#include "evaluate.h"
+#include "evaluate/evaluate.h"
 #include "types/monomial.h"
 
 #include "storage/flat.h"
@@ -253,7 +253,7 @@ namespace po
      */
     scalar_type constant() const
     {
-      return model::constant(terms);
+      return model::get_constant(terms);
     }
 
     /*
@@ -271,9 +271,13 @@ namespace po
     template<scalar ...X>
     scalar_type operator()(X&&... x) const
     {
-      using S = std::common_type_t<scalar_type, X&&...>;
-      // return evaluate_naive(*this, S(x)...);
-      return evaluate_gH(*this, S(x)...);
+      using S = std::common_type_t<scalar_type, X...>;
+
+      // TODO Remove branch, shouldn't be necessary
+      if (sizeof ...(x) != rank())
+        return nan;
+      else
+        return evaluate(*this, S(x)...);
     }
 
     /*
@@ -535,6 +539,7 @@ namespace po
 
 #include "ops/expr_partial_derivative.h"
 #include "ops/expr_integral.h"
+#include "ops/expr_antiderivative.h"
 
 #include "ops/instantiate.h"
 

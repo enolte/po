@@ -23,7 +23,7 @@ void test_assign_polynomial()
     assert(q.rank() == 5);
     assert(q.degree() == 22);
     assert(compare::equal(q.degrees(), {4, 1, 7, 6, 5}));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

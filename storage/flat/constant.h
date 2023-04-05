@@ -7,7 +7,7 @@ namespace po
 {
   inline namespace flat_model
   {
-    static constexpr scalar_type constant(const storage& terms)
+    static constexpr scalar_type get_constant(const storage& terms)
     {
       scalar_type constant{0};
 

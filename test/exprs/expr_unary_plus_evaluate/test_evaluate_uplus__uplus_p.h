@@ -12,7 +12,8 @@ void test_evaluate_uplus__uplus_p()
     assert(expr(1, 1) == p(1, 1));
     assert((+ +p)(1, 1) == p(1, 1));
     assert((+ +p)(1.7, -0.238543873) == p(1.7, -0.238543873));
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

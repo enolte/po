@@ -17,6 +17,8 @@ void test_instantiate_Dp__mult__p()
       {
         {0, {0, 0}},
       });
+
+    PO_LINE;
   }
 
   {
@@ -32,6 +34,8 @@ void test_instantiate_Dp__mult__p()
         {24, {2, 2}},
         { 6, {1, 2}}
       });
+
+    PO_LINE;
   }
 
   {
@@ -55,10 +59,9 @@ void test_instantiate_Dp__mult__p()
         {12, {2, 2}},
         // { 0, {2, 2}}
       });
+
+    PO_LINE;
   }
-
-
-  PO_LINE;
 }
 
 template<typename Rank>

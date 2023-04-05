@@ -48,6 +48,8 @@ void test_mult_eq_monomial()
     PO_ASSERT(p.rank() == 4, p.rank());
     PO_ASSERT(p.degree() == 16, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {4, 5, 6, 3}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -92,6 +94,8 @@ void test_mult_eq_monomial()
     PO_ASSERT(p.rank() == 3, p.rank());
     PO_ASSERT(p.degree() == 4, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {4, 1, 0}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -154,6 +158,8 @@ void test_mult_eq_monomial()
     PO_ASSERT(p.rank() == 3, p.rank());
     PO_ASSERT(p.degree() == 12, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {5, 8, 0}), p.degrees());
+
+    PO_LINE;
   }
 
   {
@@ -186,9 +192,8 @@ void test_mult_eq_monomial()
     PO_ASSERT(p.rank() == 3, p.rank());
     PO_ASSERT(p.degree() == 8, p.degree());
     PO_ASSERT(compare::equal(p.degrees(), {3, 3, 3}), p.degrees());
+
+    PO_LINE;
   }
-
-
-  PO_LINE;
 }
 

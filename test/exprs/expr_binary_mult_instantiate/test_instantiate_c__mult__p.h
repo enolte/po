@@ -12,6 +12,8 @@ void test_instantiate_c__mult__p()
       p,
       {}),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -24,6 +26,8 @@ void test_instantiate_c__mult__p()
         {0., {0, 0, 0}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -36,6 +40,8 @@ void test_instantiate_c__mult__p()
         {24, {0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -49,7 +55,7 @@ void test_instantiate_c__mult__p()
         {12.9, {1, 1}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

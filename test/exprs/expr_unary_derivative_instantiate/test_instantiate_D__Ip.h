@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -13,8 +13,6 @@ void test_instantiate_D__Ip()
 {
   test_instantiate_D__Ip_instantiate_case1();
   test_instantiate_D__Ip_instantiate_case1_extraneous_variable();
-
-  PO_LINE;
 }
 
 
@@ -42,6 +40,8 @@ void test_instantiate_D__Ip_instantiate_case1()
       {0, {0}},
     }),
     d0i1p_i);
+
+  PO_LINE;
 }
 
 /*
@@ -95,5 +95,8 @@ void test_instantiate_D__Ip_instantiate_case1_extraneous_variable()
       {0, {1, 0}},
     }),
     d1i0p_i);
+
+
+  PO_LINE;
 }
 

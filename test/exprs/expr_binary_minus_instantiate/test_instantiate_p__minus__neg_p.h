@@ -17,7 +17,7 @@ void test_instantiate_p__minus__neg_p()
         {-4.8, { 3, 3, 1}},
         {10.2, {10, 5, 1}}
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

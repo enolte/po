@@ -9,13 +9,15 @@ void test_evaluate_D__p_plus_p()
   {
     po::polynomial p{{1, {3}}}, q{{2, {2}}};
     assert(D(q + p, 0)(-1) == 3 + -4);
+
+    PO_LINE;
   }
 
   // r-values
   {
     using P = po::polynomial;
     assert(D(P{{-7, {2}}} + P{{1, {3}}}, 0)(1) == -14 + 3);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

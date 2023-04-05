@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include "../../compare.h"
@@ -32,6 +32,8 @@ void test_evaluate_I__p_variadic_rank_2_2_integrations()
       // {0, {0, 1}}));
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   /*
@@ -44,6 +46,8 @@ void test_evaluate_I__p_variadic_rank_2_2_integrations()
     const double ac = instantiate(integral(p, po::parametric_interval{1, {0, 1}}, po::parametric_interval{0, {0, 1}}))();
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   /*
@@ -66,6 +70,8 @@ void test_evaluate_I__p_variadic_rank_2_2_integrations()
     assert(iip.degrees().size() == 0);
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   /*
@@ -84,6 +90,8 @@ void test_evaluate_I__p_variadic_rank_2_2_integrations()
     const auto iip = instantiate(integral(p, po::parametric_interval{0, {0, 1}}, po::parametric_interval{0, {0, 1}}));
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
   /*
@@ -100,7 +108,8 @@ void test_evaluate_I__p_variadic_rank_2_2_integrations()
       )();
 
     PO_ASSERT(ac == ex, ac);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

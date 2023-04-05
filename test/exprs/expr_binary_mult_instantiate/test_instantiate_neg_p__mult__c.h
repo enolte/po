@@ -15,6 +15,8 @@ void test_instantiate_neg_p__mult__c()
         {-2.4, {0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   // x1 * x0
@@ -29,6 +31,8 @@ void test_instantiate_neg_p__mult__c()
         {4.2, {1, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   // x0 * x1
@@ -42,7 +46,7 @@ void test_instantiate_neg_p__mult__c()
         {-2.4, {0}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

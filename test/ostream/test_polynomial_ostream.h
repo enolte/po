@@ -10,12 +10,23 @@
 void test_polynomial_ostream()
 {
   {
+    std::stringstream ss;
+    ss << po::polynomial{};
+
+    assert(ss.str().empty());
+
+    PO_LINE;
+  }
+
+  {
     po::polynomial p{{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}};
 
     std::stringstream ss;
     ss << p;
 
-    std::cout << ss.str() << std::endl;
+    assert(ss.str() == "1.4[2,3,2,1]+0.5[4,1,4,1]");
+
+    PO_LINE;
   }
 
   {
@@ -24,7 +35,11 @@ void test_polynomial_ostream()
     std::stringstream ss;
     ss << p << std::endl;
 
-    std::cout << ss.str();
+    std::stringstream ss0;
+    ss0 << ss.str();
+    assert(ss0.str().starts_with("1.4[2,3,2,1]+0.5[4,1,4,1]"));
+
+    PO_LINE;
   }
 
   {
@@ -33,24 +48,21 @@ void test_polynomial_ostream()
     std::stringstream ss;
     po::operator<<(ss, p);
 
-    std::cout << ss.str() << std::endl;
+    assert(ss.str() == "1.4[2,3,2,1]+0.5[4,1,4,1]");
+
+    PO_LINE;
   }
+
 
   {
     po::polynomial p{{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}};
+
     std::stringstream ss;
-
     PO_TRACE_OSTREAM(ss, p);
-    assert(ss.str().size() > 0);
 
-    po::scalar_type c;
-    ss >> c;
-    PO_ASSERT(c == 1.4, c);
+    assert(ss.str().starts_with("1.4[2,3,2,1]+0.5[4,1,4,1]"));
+
+    PO_LINE;
   }
 
-  {
-    po::polynomial p{{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}};
-
-    PO_TRACE("p = " << p);
-  }
 }

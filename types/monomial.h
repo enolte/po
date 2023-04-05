@@ -1,6 +1,8 @@
 #ifndef PO_MONOMIAL_H
 #define PO_MONOMIAL_H
 
+#include "../evaluate/nargs.h"
+#include "../ops/is_scalar.h"
 #include "scalar.h"
 #include "exponents.h"
 #include "rank.h"
@@ -22,15 +24,28 @@ namespace po
      * Naive implementation. Evaluate this monomial. Compute the result as a `double`, then
      * return the static cast to `scalar_type`.
      */
-    template<typename ...X>
+    template<is_scalar ...X>
     scalar_type operator()(X... x) const
     {
       if(sizeof ...(X) != rank())
         return nan;
 
+      return this->operator()(nargs{rank()}, x...);
+    }
+
+    /*
+     * Partial evaluation. Evaluate with the first n values in x...
+     * This can probably be done better.
+     */
+    template<is_scalar ...X>
+    scalar_type operator()(nargs n, X... x) const
+    {
+      if((n == 0 && rank() > 0) || sizeof ...(X) < n)
+        return nan;
+
       double acc = 1.;
       std::size_t i = 0;
-      ((acc *= utils::pow(x, exponents[i++])), ... );
+      ((acc *= i < n ? utils::pow(x, exponents[i++]) : 1.), ... );
       return scalar_type{acc * coefficient};
     }
 
@@ -52,6 +67,7 @@ namespace po
 
     /*
      * Get the exponent of the ith variable in this monomial.
+     * Assumes: rank > 0
      */
     exponent_type operator[](std::size_t i) const
     {

@@ -11,11 +11,15 @@
 #include <list>
 #include <functional>
 #include <concepts>
+#include <tuple>
 
 namespace po_test
 {
   namespace compare
   {
+    using term = std::tuple<po::scalar_type, std::initializer_list<po::exponent_type>>;
+    using term_list = std::initializer_list<term>;
+
     bool equal(const po::exponents& xa, const po::exponents& xb)
     {
       return std::ranges::equal(xa, xb);
@@ -26,32 +30,35 @@ namespace po_test
       return std::ranges::equal(xa, xb);
     }
 
+    bool equal_terms(const po::monomial& xa, const term& xb)
+    {
+      return xa.coefficient == std::get<0>(xb) && std::ranges::equal(xa.exponents, std::get<1>(xb));
+    }
+
     bool equal_monomials(const po::monomial& a, const po::monomial& b)
     {
       return a.coefficient == b.coefficient && compare::equal(a.exponents, b.exponents);
     }
 
+
     constexpr double default_coefficient_rel_tolerance = 0x1p-50;
 
-    using term_predicate = std::function<bool(const po::monomial&, const po::monomial&)>;
+    using term_predicate = std::function<bool(const po::monomial&, const term&)>;
 
     const term_predicate near_rel(double coefficient_rel_tolerance)
     {
       return
-        [coefficient_rel_tolerance](const po::monomial& a, const po::monomial& b)
+        [coefficient_rel_tolerance](const po::monomial& a, const term& b)
           {
             return
-              po_test::near_rel(a.coefficient, b.coefficient, coefficient_rel_tolerance) &&
-              compare::equal(a.exponents, b.exponents);
+              po_test::near_rel(a.coefficient, std::get<0>(b), coefficient_rel_tolerance) &&
+              compare::equal(a.exponents, std::get<1>(b));
           };
     }
 
     /*
      * Unordered comparison of monomial terms
      */
-    // template<typename Ra, typename Rb>
-    // using binary_predicate = std::is_nothrow_invocable_r<bool, const typename Ra::value_type& , const typename Rb::value_type&>;
-
     template<typename Ra, typename Rb, typename P>
     bool equal(const Ra& a, const Rb& b, const P& p)
     {
@@ -97,19 +104,14 @@ namespace po_test
       return compare::equal(p.terms, q.terms, equal_monomials);
     }
 
-    bool unordered_equal_terms(const po::polynomial& p, const std::vector<po::monomial>& b)
+    bool unordered_equal_terms(const po::polynomial& p, term_list&& b)
     {
-      return compare::equal(p.terms, b, equal_monomials);
-    }
-
-    bool unordered_equal_terms(const po::polynomial& p, std::initializer_list<po::monomial>&& b)
-    {
-      return compare::equal(p.terms, b, equal_monomials);
+      return compare::equal(p.terms, b, equal_terms);
     }
 
     bool unordered_near_rel_terms(
       const po::polynomial& p,
-      const std::vector<po::monomial>& b,
+      term_list&& b,
       double coefficient_rel_tolerance = default_coefficient_rel_tolerance)
     {
       return compare::equal(p.terms, b, near_rel(coefficient_rel_tolerance));
@@ -124,10 +126,9 @@ bool operator==(const po::polynomial& a, const po::polynomial& b)
   return
     a.rank() == b.rank() &&
     a.degree() == b.degree() &&
-    compare::equal(a.degrees(), b.degrees()) &&
-    compare::unordered_equal_terms(a, b.terms);
+    po_test::compare::equal(a.degrees(), b.degrees()) &&
+    po_test::compare::unordered_equal_terms(a, b);
 }
-
 
 bool operator==(const po::monomial& a, const po::monomial& b)
 {

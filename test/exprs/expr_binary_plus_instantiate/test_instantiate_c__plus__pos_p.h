@@ -17,6 +17,8 @@ void test_instantiate_c__plus__pos_p()
         { 3. , { 0, 0, 0}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -32,7 +34,7 @@ void test_instantiate_c__plus__pos_p()
         { 5.1, {10, 5, 1}},
         { 3. , { 0, 0, 0}}
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

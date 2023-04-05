@@ -20,8 +20,6 @@ void test_instantiate_I__neg_p()
   test_expr_I__neg_p_instantiate_place3_rank3();
 
   test_expr_I__neg_p_instantiate_terms_rank4();
-
-  PO_LINE;
 }
 
 void test_expr_I__neg_p_instantiate_place1_rank2()
@@ -44,6 +42,8 @@ void test_expr_I__neg_p_instantiate_place1_rank2()
       {-1.5, {0}}
     }),
     ip_i);
+
+  PO_LINE;
 }
 
 void test_expr_I__neg_p_instantiate_terms_rank4()
@@ -55,6 +55,8 @@ void test_expr_I__neg_p_instantiate_terms_rank4()
     assert(x.place == 2);
     assert(x.a == 1);
     assert(x.b == 3);
+
+    PO_LINE;
   }
 
   {
@@ -64,8 +66,10 @@ void test_expr_I__neg_p_instantiate_terms_rank4()
     const auto x = po::integral(-p, {2, {1, 3}});
     const po::polynomial xp = po::instantiate(x, po::rank<3>{});
 
-    PO_ASSERT(compare::unordered_equal_terms(xp, p2_13.terms), xp);
+    PO_ASSERT(compare::unordered_equal_terms(xp, p2_13), xp);
     assert(&xp.terms != &p2_13.terms);
+
+    PO_LINE;
   }
 }
 
@@ -87,6 +91,8 @@ void test_expr_I__neg_p_instantiate_place3_rank3()
         {-4, {1, 1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 }
 
@@ -108,6 +114,8 @@ void test_expr_I__neg_p_instantiate_place0_rank3()
         {-1, {1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 
   {
@@ -123,6 +131,8 @@ void test_expr_I__neg_p_instantiate_place0_rank3()
         {-4, {1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 
   // Zero result
@@ -138,6 +148,8 @@ void test_expr_I__neg_p_instantiate_place0_rank3()
         {0, {1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 
   {
@@ -152,6 +164,8 @@ void test_expr_I__neg_p_instantiate_place0_rank3()
         {-9, {1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 
 }
@@ -172,6 +186,7 @@ void test_expr_I__neg_p_instantiate_place1_rank3()
       }),
       ip);
 
+    PO_LINE;
   }
 
   {
@@ -188,6 +203,7 @@ void test_expr_I__neg_p_instantiate_place1_rank3()
       }),
       ip);
 
+    PO_LINE;
   }
 }
 
@@ -206,6 +222,8 @@ void test_expr_I__neg_p_instantiate_place2_rank3()
         {-4, {1, 1}}
       }),
       ip);
+
+    PO_LINE;
   }
 
   {
@@ -222,6 +240,8 @@ void test_expr_I__neg_p_instantiate_place2_rank3()
         {-32, {3, 2}}
       }),
       ip);
+
+    PO_LINE;
   }
 }
 

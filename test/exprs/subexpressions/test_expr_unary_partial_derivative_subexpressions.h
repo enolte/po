@@ -22,6 +22,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CP&>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // rvalue polynomial
@@ -33,6 +35,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CP>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue scalar_type
@@ -45,6 +49,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CS&>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // rvalue scalar_type
@@ -56,6 +62,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CS>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue const scalar_type
@@ -68,6 +76,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CS&>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // rvalue const scalar_type
@@ -79,6 +89,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CS>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue constant
@@ -91,6 +103,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CC&>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // rvalue constant
@@ -102,6 +116,8 @@ void test_expr_unary_partial_derivative_subexpressions()
 
     static_assert(std::same_as<decltype(x.expr1.expr1), CC>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue op lvalue
@@ -115,6 +131,8 @@ void test_expr_unary_partial_derivative_subexpressions()
     assert( x.expr1.expr1.expr2.expr1 ==  s);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue op lvalue (constexprs)
@@ -128,10 +146,11 @@ void test_expr_unary_partial_derivative_subexpressions()
     static_assert(&y.expr1.expr1.expr1 == &p);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // constexpr with lvalue
-
   {
     constexpr auto x = D(D(p, 2), 1);
     constexpr auto y = D(p, 2, 1);
@@ -140,6 +159,8 @@ void test_expr_unary_partial_derivative_subexpressions()
     static_assert(&y.expr1.expr1 == &p);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue op rvalue (constexpr)
@@ -151,6 +172,8 @@ void test_expr_unary_partial_derivative_subexpressions()
     static_assert(&y.expr1.expr1.expr1 == &p);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue op lvalue (constexpr)
@@ -167,6 +190,8 @@ void test_expr_unary_partial_derivative_subexpressions()
     static_assert( x.expr1.expr1.expr2.expr1 ==  s);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    PO_LINE;
   }
 
   // lvalue op {expr rvalue} (constexpr)
@@ -186,9 +211,9 @@ void test_expr_unary_partial_derivative_subexpressions()
     static_assert( x.expr1.expr1.expr2.expr1 ==  s);
 
     static_assert(std::same_as<decltype(x), decltype(y)>);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 namespace static_asserts

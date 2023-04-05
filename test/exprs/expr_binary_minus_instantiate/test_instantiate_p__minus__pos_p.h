@@ -18,7 +18,7 @@ void test_instantiate_p__minus__pos_p()
         {-2.4, { 3, 3, 1}},
         { 5.1, {10, 5, 1}}
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

@@ -6,6 +6,7 @@
 #include "expr_binary_mult_evaluate/test_evaluate_expr_binary_mult.h"
 #include "expr_unary_derivative_evaluate/test_evaluate_expr_partial_derivative.h"
 #include "expr_unary_integral_evaluate/test_evaluate_expr_integral.h"
+#include "expr_unary_antiderivative_evaluate/test_evaluate_expr_antiderivative.h"
 
 void test_expr_evaluate()
 {
@@ -17,4 +18,6 @@ void test_expr_evaluate()
   test_evaluate_expr_binary_mult();
   test_evaluate_expr_partial_derivative();
   test_evaluate_expr_integral();
+  test_evaluate_expr_antiderivative();
 }
+

@@ -34,7 +34,6 @@ void test_assign_expr_unary_minus_level_1()
     PO_ASSERT(q.degree() == 22, q.degree());
     PO_ASSERT(compare::equal(q.degrees(), {4, 1, 7, 6, 5}), q.degrees());
 
+    PO_LINE;
   }
-
-  PO_LINE;
 }

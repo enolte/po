@@ -3,6 +3,8 @@
 
 #include "../types/rank.h"
 
+
+
 namespace po
 {
   template<expression>
@@ -18,6 +20,7 @@ namespace po
 #include "expr_partial_derivative_unary_plus.h"
 #include "expr_partial_derivative_unary_minus.h"
 #include "expr_partial_derivative_integral.h"
+#include "expr_partial_derivative_antiderivative.h"
 #include "expr_partial_derivative2.h"
 
 namespace po

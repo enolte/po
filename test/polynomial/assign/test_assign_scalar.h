@@ -19,7 +19,7 @@ void test_assign_scalar()
     assert(p.rank() == 0);
     assert(p.degree() == 0);
     assert(compare::equal(p.degrees(), {}));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

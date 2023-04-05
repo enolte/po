@@ -23,7 +23,7 @@ void test_instantiate_p_mult_p__mult__p()
         {30.6 , {11, 11, 6}}
       }),
       z);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

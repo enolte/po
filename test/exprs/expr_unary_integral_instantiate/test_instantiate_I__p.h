@@ -28,8 +28,6 @@ void test_instantiate_I__p()
   test_instantiate_I__p_place3_rank3();
 
   test_instantiate_I__p_terms_rank4();
-
-  PO_LINE;
 }
 
 
@@ -52,6 +50,8 @@ void test_instantiate_I__p_place1_two_constant_terms()
   PO_ASSERT(ip_i.degree() == 0, ip_i.degree());
   PO_ASSERT(compare::equal(ip_i.degrees(), {0}), ip_i.degrees());
   PO_ASSERT(ip_i.rank() == 1, ip_i.rank());
+
+  PO_LINE;
 }
 
 void test_instantiate_I__p_place1_degree9_zero_coefficient()
@@ -73,6 +73,8 @@ void test_instantiate_I__p_place1_degree9_zero_coefficient()
   PO_ASSERT(ip_i.degree() == 3, ip_i.degree());
   PO_ASSERT(compare::equal(ip_i.degrees(), {1, 1, 0, 1}), ip_i.degrees());
   PO_ASSERT(ip_i.rank() == 4, ip_i.rank());
+
+  PO_LINE;
 }
 
 void test_instantiate_I__p_place1_degree0_nonzero_coefficient()
@@ -94,6 +96,8 @@ void test_instantiate_I__p_place1_degree0_nonzero_coefficient()
   PO_ASSERT(ip_i.degree() == 0, ip_i.degree());
   PO_ASSERT(compare::equal(ip_i.degrees(), {0, 0, 0, 0}), ip_i.degrees());
   PO_ASSERT(ip_i.rank() == 4, ip_i.rank());
+
+  PO_LINE;
 }
 
 
@@ -116,6 +120,8 @@ void test_instantiate_I__p_place1_degree0_zero_coefficient()
   PO_ASSERT(ip_i.degree() == 0, ip_i.degree());
   PO_ASSERT(compare::equal(ip_i.degrees(), {0, 0, 0, 0}), ip_i.degrees());
   PO_ASSERT(ip_i.rank() == 4, ip_i.rank());
+
+  PO_LINE;
 }
 
 
@@ -142,6 +148,8 @@ void test_instantiate_I__p_place1_rank2()
   PO_ASSERT(ip_i.degree() == 1, ip_i.degree());
   PO_ASSERT(compare::equal(ip_i.degrees(), {1}), ip_i.degrees());
   PO_ASSERT(ip_i.rank() == 1, ip_i.rank());
+
+  PO_LINE;
 }
 
 void test_instantiate_I__p_terms_rank4()
@@ -153,6 +161,8 @@ void test_instantiate_I__p_terms_rank4()
     assert(x.place == 2);
     assert(x.a == 1);
     assert(x.b == 3);
+
+    PO_LINE;
   }
 
   {
@@ -162,12 +172,14 @@ void test_instantiate_I__p_terms_rank4()
     const auto x = po::integral(p, {2, {1, 3}});
     const po::polynomial xp = po::instantiate(x, po::rank<3>{});
 
-    PO_ASSERT(compare::unordered_equal_terms(xp, p2_13.terms), xp);
+    PO_ASSERT(compare::unordered_equal_terms(xp, p2_13), xp);
     assert(&xp.terms != &p2_13.terms);
 
     PO_ASSERT(xp.degree() == 3, xp.degree());
     PO_ASSERT(compare::equal(xp.degrees(), {1, 1, 1}), xp.degrees());
     PO_ASSERT(xp.rank() == 3, xp.rank());
+
+    PO_LINE;
   }
 }
 
@@ -193,6 +205,8 @@ void test_instantiate_I__p_place3_rank3()
     PO_ASSERT(ip.degree() == 3, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 3, ip.rank());
+
+    PO_LINE;
   }
 }
 
@@ -216,6 +230,8 @@ void test_instantiate_I__p_place0_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
   {
@@ -233,6 +249,8 @@ void test_instantiate_I__p_place0_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
   // Zero result
@@ -252,6 +270,8 @@ void test_instantiate_I__p_place0_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
   {
@@ -270,6 +290,8 @@ void test_instantiate_I__p_place0_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
 }
@@ -292,6 +314,8 @@ void test_instantiate_I__p_place1_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
   {
@@ -310,6 +334,8 @@ void test_instantiate_I__p_place1_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 }
 
@@ -330,6 +356,8 @@ void test_instantiate_I__p_place2_rank3()
     PO_ASSERT(ip.degree() == 2, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {1, 1}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 
   {
@@ -348,6 +376,8 @@ void test_instantiate_I__p_place2_rank3()
     PO_ASSERT(ip.degree() == 5, ip.degree());
     PO_ASSERT(compare::equal(ip.degrees(), {3, 2}), ip.degrees());
     PO_ASSERT(ip.rank() == 2, ip.rank());
+
+    PO_LINE;
   }
 }
 

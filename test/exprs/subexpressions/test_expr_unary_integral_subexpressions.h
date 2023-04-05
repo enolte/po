@@ -11,103 +11,117 @@ void test_expr_unary_integral_subexpressions()
 {
   using namespace static_asserts;
 
-  // lvalue polynomial
+  // lvalue polynomial, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(p, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(p, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1 == &p);
     assert(&y.expr1.expr1 == &p);
 
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  // rvalue polynomial
+  // rvalue polynomial, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(P{}, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(P{}, place{2, {-1, 1}}, place{1, {-1, 1}});
 
-    assert(&x.expr1.expr1 != &y.expr1.expr1);
-
     static_assert(std::same_as<decltype(x.expr1.expr1), CP>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    assert(&x.expr1.expr1 != &y.expr1.expr1);
+
+    PO_LINE;
   }
 
-  // lvalue scalar_type
+  // lvalue scalar_type, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(s, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(s, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x.expr1.expr1), const po::scalar_type&>);
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1 == &s);
     assert(&y.expr1.expr1 == &s);
 
-    static_assert(std::same_as<decltype(x.expr1.expr1), const po::scalar_type&>);
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  // lvalue const scalar_type
+  // lvalue const scalar_type, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(cs, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(cs, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x.expr1.expr1), const po::scalar_type&>);
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1 == &cs);
     assert(&y.expr1.expr1 == &cs);
 
-    static_assert(std::same_as<decltype(x.expr1.expr1), const po::scalar_type&>);
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  // lvalue constant
+  // lvalue constant, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(c, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(c, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x.expr1.expr1), CC&>);
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1 == &c);
     assert(&y.expr1.expr1 == &c);
 
-    static_assert(std::same_as<decltype(x.expr1.expr1), CC&>);
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  // rvalue constant
+  // rvalue constant, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(C{}, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(C{}, place{2, {-1, 1}}, place{1, {-1, 1}});
 
-    assert(&x.expr1.expr1 != &y.expr1.expr1);
-
     static_assert(std::same_as<decltype(x.expr1.expr1), CC>);
     static_assert(std::same_as<decltype(x), decltype(y)>);
+
+    assert(&x.expr1.expr1 != &y.expr1.expr1);
+
+    PO_LINE;
   }
 
-  // lvalue op lvalue
+  // lvalue op lvalue, compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(p * p, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(p * p, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1.expr1 == &p);
     assert(&x.expr1.expr1.expr2 == &p);
     assert(&y.expr1.expr1.expr1 == &p);
     assert(&y.expr1.expr1.expr2 == &p);
 
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  // lvalue op lvalue (constexprs)
+  // lvalue op lvalue (constexprs), compound v. variadic
   {
     using po::place;
 
@@ -122,22 +136,23 @@ void test_expr_unary_integral_subexpressions()
     static_assert(std::same_as<decltype(x), decltype(y)>);
   }
 
-  // lvalue op {expr rvalue}
+  // lvalue op (expr rvalue), compound v. variadic
   {
     using po::place;
 
     auto x = integral(integral(p * p - s, place{2, {-1, 1}}), place{1, {-1, 1}});
     auto y = integral(p * p - s, place{2, {-1, 1}}, place{1, {-1, 1}});
 
+    static_assert(std::same_as<decltype(x), decltype(y)>);
+
     assert(&x.expr1.expr1.expr1.expr1 == &p);
     assert(&x.expr1.expr1.expr1.expr2 == &p);
     assert(&y.expr1.expr1.expr2.expr1 != &s);
     assert( y.expr1.expr1.expr2.expr1 ==  s);
 
-    static_assert(std::same_as<decltype(x), decltype(y)>);
+    PO_LINE;
   }
 
-  PO_LINE;
 }
 
 namespace static_asserts

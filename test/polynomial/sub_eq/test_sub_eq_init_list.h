@@ -29,6 +29,8 @@ void test_sub_eq_init_list()
     assert(p.nterms() == 5);
     assert(p.coefficient(1, 7, 0) == -2.5);
     assert(compare::equal(p.degrees(), {3, 7, 0}));
+
+    PO_LINE;
   }
 
   {
@@ -66,9 +68,9 @@ void test_sub_eq_init_list()
         { 2, {1, 1, 1, 3, 0, 0, 1}}
       }),
       k);
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }
 

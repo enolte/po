@@ -18,6 +18,8 @@ void test_instantiate_p__mult__p()
         {15.3, {10, 10, 4}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -37,7 +39,7 @@ void test_instantiate_p__mult__p()
         {14.28, {10,  8, 3}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

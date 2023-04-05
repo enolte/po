@@ -17,6 +17,8 @@ void test_instantiate_p__plus__p()
       r);
 
     assert(r(7.3) == p(7.3) + q(7.3));
+
+    PO_LINE;
   }
 
   {
@@ -33,6 +35,8 @@ void test_instantiate_p__plus__p()
       r);
 
     assert(r(4, 2.2, -5) == p(4, 2.2, -5) + q(4, 2.2, -5));
+
+    PO_LINE;
   }
 
   {
@@ -49,9 +53,9 @@ void test_instantiate_p__plus__p()
       r);
 
     assert(r(4, 2.2, -5) == p(4, 2.2, -5) + q(4, 2.2, -5));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 

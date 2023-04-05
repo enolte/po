@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include "../../compare.h"
@@ -28,6 +28,8 @@ void test_evaluate_I__p_variadic_rank_3_2_integrations()
     assert(iip.rank() == 1);
     assert(iip.degree() == 1);
     assert(compare::equal(iip.degrees(), {1}));
+
+    PO_LINE;
   }
 
   /*
@@ -52,5 +54,7 @@ void test_evaluate_I__p_variadic_rank_3_2_integrations()
     assert(iip.rank() == 1);
     assert(iip.degree() == 0);
     assert(compare::equal(iip.degrees(), {0}));
+
+    PO_LINE;
   }
 }

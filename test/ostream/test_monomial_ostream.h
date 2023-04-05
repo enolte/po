@@ -10,21 +10,28 @@
 void test_monomial_ostream()
 {
   {
-    po::monomial m{1.5, {4, 3, 6, 6, 1, 3}};
+    po::monomial m{po::nan, {4, 3, 6, 6, 1, 3}};
 
     std::stringstream ss;
     ss << m;
 
-    std::cout << ss.str() << std::endl;
+    assert(
+      ss.str() == "nan[4,3,6,6,1,3]" ||
+      ss.str() == "NaN[4,3,6,6,1,3]" ||
+      ss.str() == "NAN[4,3,6,6,1,3]");
+
+    PO_LINE;
   }
 
   {
     po::monomial m{1.5, {4, 3, 6, 6, 1, 3}};
 
     std::stringstream ss;
-    ss << m << std::endl;
+    ss << m;
 
-    std::cout << ss.str();
+    assert(ss.str() == "1.5[4,3,6,6,1,3]");
+
+    PO_LINE;
   }
 
   {
@@ -33,7 +40,9 @@ void test_monomial_ostream()
     std::stringstream ss;
     po::operator<<(ss, m);
 
-    std::cout << ss.str() << std::endl;
+    assert(ss.str() == "1.5[4,3,6,6,1,3]");
+
+    PO_LINE;
   }
 
   {
@@ -46,11 +55,9 @@ void test_monomial_ostream()
     po::scalar_type c;
     ss >> c;
     PO_ASSERT(c == 1.5, c);
+
+    PO_LINE;
   }
 
-  {
-    po::monomial m{1.5, {4, 3, 6, 6, 1, 3}};
 
-    PO_TRACE("m = " << m);
-  }
 }

@@ -12,8 +12,6 @@ void test_instantiate_I__p_minus_p()
   test_expr_I__p_minus_p_instantiate_place1_rank2();
   test_expr_I__p_minus_p_instantiate_place2_rank3();
   test_expr_I__p_minus_p_instantiate_place3_rank5();
-
-  PO_LINE;
 }
 
 
@@ -42,7 +40,7 @@ void test_expr_I__p_minus_p_instantiate_place2_rank3()
     assert(x_diff_1.rank() == 2);
     assert(x_diff_2.rank() == 2);
 
-    assert(compare::unordered_equal_terms(x_diff_1, x_diff_2.terms));
+    assert(compare::unordered_equal_terms(x_diff_1, x_diff_2));
     PO_ASSERT(compare::unordered_near_rel_terms(
       x_diff_1,
       {
@@ -51,6 +49,8 @@ void test_expr_I__p_minus_p_instantiate_place2_rank3()
         { 5 * 32./5, {3, 2}},
       }),
       x_diff_1);
+
+    PO_LINE;
   }
 }
 
@@ -88,6 +88,8 @@ void test_expr_I__p_minus_p_instantiate_place1_rank2()
   PO_ASSERT(ix_i.rank() == 1, ix_i.rank());
   PO_ASSERT(ix_i.degree() == 2, ix_i.degree());
   PO_ASSERT(compare::equal(ix_i.degrees(), {2}), ix_i.degrees());
+
+  PO_LINE;
 }
 
 /*
@@ -134,4 +136,6 @@ void test_expr_I__p_minus_p_instantiate_place3_rank5()
   PO_ASSERT(ix_i.degree() == 7, ix_i.degree());
   PO_ASSERT(compare::equal(ix_i.degrees(), {2, 1, 4, 4}), ix_i.degrees());
 
+  PO_LINE;
 }
+

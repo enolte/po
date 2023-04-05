@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -16,6 +16,8 @@ void test_evaluate_I__Dp()
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 24, ac);
+
+    PO_LINE;
   }
 
   // l-value reference derivative expression
@@ -32,6 +34,8 @@ void test_evaluate_I__Dp()
 
     assert(ac == ex);
     assert(ac == 24);
+
+    PO_LINE;
   }
 
   // r-value derivative expression
@@ -44,8 +48,9 @@ void test_evaluate_I__Dp()
     const double ac = po::integral(D(p, 1), {2, {1, 3}})(3, 2, 1);
 
     PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), ac);
-  }
 
+    PO_LINE;
+  }
 
   // l-value reference derivative expression
   {
@@ -59,6 +64,8 @@ void test_evaluate_I__Dp()
     const double ac = po::integral(dp1, {2, {1, 3}})(3, 2, 1);
 
     PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), ac);
+
+    PO_LINE;
   }
 
   {
@@ -74,6 +81,8 @@ void test_evaluate_I__Dp()
     const double ac = po::integral(dp1, {1, {1, 3}})(3, 2, 1);
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 
   {
@@ -87,6 +96,8 @@ void test_evaluate_I__Dp()
     const double ac = po::integral(D(p, 1), {1, {1, 3}})(3, 2, 1);
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 
   // Derivative is identically zero.
@@ -102,6 +113,8 @@ void test_evaluate_I__Dp()
     const double ac = po::integral(D(p, 44), {1, {1, 3}})(3, 2, 1);
 
     assert(ac == ex);
+
+    PO_LINE;
   }
 
   // Place of integration is OOR
@@ -119,6 +132,8 @@ void test_evaluate_I__Dp()
     assert(p.rank() == expr_rank(po::integral(D(p, 0), {1, {1, 3}})));
 
     PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
+
+    PO_LINE;
   }
 
   // Place of integration is OOR
@@ -137,7 +152,8 @@ void test_evaluate_I__Dp()
     assert(p.rank() == expr_rank(po::integral(D(p, 0), {6, {1, 3}})));
 
     PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

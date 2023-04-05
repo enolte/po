@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -26,6 +26,8 @@ void test_instantiate_D__IDp()
     assert(compare::equal(ac.degrees(), {1, 0, 1}));
 
     PO_ASSERT(ex == ac, ac);
+
+    PO_LINE;
   }
 
   {
@@ -47,7 +49,8 @@ void test_instantiate_D__IDp()
     assert(compare::equal(ac.degrees(), {1, 0, 0}));
 
     PO_ASSERT(ex == ac, ac);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

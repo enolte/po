@@ -21,6 +21,8 @@ void test_instantiate_neg__neg_p()
         { 5.1, {3, 0, 10, 5, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -41,7 +43,8 @@ void test_instantiate_neg__neg_p()
         {-5.1, {3, 0, 10, 5, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }

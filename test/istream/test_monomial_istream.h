@@ -98,10 +98,8 @@ void test_monomial1_istream()
   po::monomial m{};
   ss >> m;
 
-  // std::cout << "m = " << m << std::endl;
-
   assert(m.coefficient == 2.4);
-  PO_ASSERT((m.exponents == decltype(m.exponents){5, 2, 3, 4}).min() == true, m.exponents);
+  assert(compare::equal(m.exponents, {5, 2, 3, 4}));
 
   PO_LINE;
 }
@@ -114,10 +112,8 @@ void test_monomial2_istream()
   po::monomial m{};
   ss >> m;
 
-  // std::cout << "m = " << m << std::endl;
-
   assert(m.coefficient == 3.7);
-  PO_ASSERT((m.exponents == decltype(m.exponents){0, 0, 6, 1}).min() == true, m.exponents);
+  assert(compare::equal(m.exponents, {0, 0, 6, 1}));
 
   PO_LINE;
 }

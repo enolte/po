@@ -16,6 +16,8 @@ void test_mult_eq_polynomial()
         {6, {3, 2, 5, 3}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -38,6 +40,8 @@ void test_mult_eq_polynomial()
         {3, {2, 1, 4, 2}}
       }),
       q);
+
+    PO_LINE;
   }
 
   {
@@ -52,6 +56,8 @@ void test_mult_eq_polynomial()
         {6, {3, 2, 5, 3}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -67,6 +73,8 @@ void test_mult_eq_polynomial()
         {9, {2, 5, 6, 2}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -94,6 +102,8 @@ sum: {6, {3, 2, 5, 3}}, {9, {2, 5, 6, 2}}, {2, {2, 1, 1, 1}}, {3, {1, 4, 2, 0}}
         {3, {1, 4, 2, 0}}
       }),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -121,7 +131,7 @@ sum= 9   3 5 7 3     +     9   4 6 12 4     +     2   2 4 2 2
         {2, {2, 4, 2, 2}}
       }),
       p);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

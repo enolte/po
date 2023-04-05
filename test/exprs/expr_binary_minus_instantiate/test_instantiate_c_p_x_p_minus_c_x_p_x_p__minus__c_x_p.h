@@ -5,8 +5,6 @@
 
 void test_instantiate_c_p_x_p_minus_c_x_p_x_p__minus__c_x_p()
 {
-  expr_unary_plus_instantiate::test_instantiate_level_6();
-
   po::polynomial
     r{{4, {1, 1, 1, 1, 1}}, {5, {2, 2, 2, 2, 2}}},
     q{{7, {1, 1, 1, 1, 1}}, {9, {2, 2, 2, 2, 2}}};

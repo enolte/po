@@ -10,6 +10,8 @@ void test_evaluate_c__minus__p()
 
     assert(x.expr1.expr1 == -4);
     assert((-4 - p)(7.3) == -4);
+
+    PO_LINE;
   }
 
   {
@@ -18,7 +20,7 @@ void test_evaluate_c__minus__p()
     auto x = c - p;
 
     assert(x.expr1.expr1 == c);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

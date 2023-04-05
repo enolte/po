@@ -12,47 +12,20 @@
 *.la
 *.a
 
-# Transitional source files
-*.oc*
-*.!oc*
-*.ex*
-*.!ex*
-*__oc*
-*__ex*
-*.ox*
-*.cp
-*ocex*
-
-# future
-*__in-progress
-*__II
-
-# transient binary artifacts
-*.stackdump
-
-# auto-backups
-*.bak
-*.!bak
-*.cur
-*.!cur
-
-# code fragmants
-*.frag
+# Local-only files
+**/__*/*
+*.*-*
 
 # diff files
 *.diff
 
-# test programs
-test*.exe
+# Windows programs
+*.exe
 
 # Default binary program suffix for linux linker outputs
 *.out
 
-# test source files
-#test*.cpp
-#**/test*
-
-# text files (test support)
+# text files
 *.txt*
 
 # archives

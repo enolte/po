@@ -15,9 +15,10 @@ void test_instantiate_neg_p__minus__c()
       {
         {-14, {0}}
       }));
+
+    PO_LINE;
   }
 
-  PO_LINE;
 }
 
 

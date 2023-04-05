@@ -19,6 +19,8 @@ void test_instantiate_p_plus_p__plus__p()
         { 5.1, { 7, 5, 1}}
       }),
       s);
+
+    PO_LINE;
   }
 
   // LR
@@ -36,7 +38,7 @@ void test_instantiate_p_plus_p__plus__p()
         { 5.1, {10, 5, 1}},
         { 5.1, { 7, 5, 1}}
       }));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

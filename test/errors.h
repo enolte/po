@@ -3,12 +3,18 @@
 
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 
 namespace po_test
 {
   inline bool near_rel(const double& ac, const double& ex, double tol)
   {
     return std::fabs(ac - ex) <= std::fabs(ex) * tol;
+  }
+
+  inline bool near_abs(const double& ac, const double& ex, double tol)
+  {
+    return std::fabs(ac - ex) <= tol;
   }
 
   inline double rel(const double& ac, const double& ex)
@@ -21,18 +27,18 @@ namespace po_test
     return std::fabs(ac - ex);
   }
 
-  inline std::string errors(const double& ac, const double& ex, double tol)
+  inline std::string errors(const double& ac, const double& ex, double tol = 0x1p-52, unsigned int precision = 6)
   {
     const double RE = rel(ac, ex);
     const double AE = abs(ac, ex);
 
     std::stringstream ss;
-    ss<< std::endl
-      << " ac = " << ac << " = " << std::hexfloat << ac << std::endl << std::defaultfloat
-      << " ex = " << ex << " = " << std::hexfloat << ex << std::endl << std::defaultfloat
-      << " RE = " << RE << " = " << std::hexfloat << RE << std::endl << std::defaultfloat
-      << " AE = " << AE << " = " << std::hexfloat << AE << std::endl << std::defaultfloat
-      << " tol= " << tol << " = " << std::hexfloat << tol << std::endl << std::defaultfloat;
+    ss << std::endl
+       << std::setprecision(precision) << " ac = " << ac << " = " << std::hexfloat << ac << std::endl << std::defaultfloat
+       << std::setprecision(precision) << " ex = " << ex << " = " << std::hexfloat << ex << std::endl << std::defaultfloat
+       << std::setprecision(precision) << " RE = " << RE << " = " << std::hexfloat << RE << std::endl << std::defaultfloat
+       << std::setprecision(precision) << " AE = " << AE << " = " << std::hexfloat << AE << std::endl << std::defaultfloat
+       << std::setprecision(precision) << " tol= " << tol << " = " << std::hexfloat << tol << std::endl << std::defaultfloat;
 
     return ss.str();
   }

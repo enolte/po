@@ -10,6 +10,8 @@ void test_evaluate_p__plus__c()
     po::scalar_type c = 5;
 
     assert((p + c + c)(3) == c + c);
+
+    PO_LINE;
   }
 
   {
@@ -17,6 +19,8 @@ void test_evaluate_p__plus__c()
     po::scalar_type c = 5;
 
     assert((p + c + c)(3) == c + c);
+
+    PO_LINE;
   }
 
   {
@@ -24,7 +28,7 @@ void test_evaluate_p__plus__c()
     po::scalar_type c = 5;
 
     assert((p + c + c)(3, 2, 1) == (4 * 1 * 16 * 1) + 5 + 5);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

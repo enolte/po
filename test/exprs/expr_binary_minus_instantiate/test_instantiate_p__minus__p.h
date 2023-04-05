@@ -18,6 +18,8 @@ void test_instantiate_p__minus__p()
         {-6, {3}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -33,6 +35,8 @@ void test_instantiate_p__minus__p()
         {-6, {3, 1, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -48,6 +52,8 @@ void test_instantiate_p__minus__p()
         {-8.3, {3, 1, 1}}
       }),
       r);
+
+    PO_LINE;
   }
 
   {
@@ -67,9 +73,9 @@ void test_instantiate_p__minus__p()
     assert(r.rank() == 3);
     assert(r.degree() == 5);
     assert(compare::equal(r.degrees(), {3, 4, 1}));
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }
 

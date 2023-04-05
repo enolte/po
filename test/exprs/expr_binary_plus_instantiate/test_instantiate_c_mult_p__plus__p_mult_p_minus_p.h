@@ -13,6 +13,8 @@ void test_instantiate_c_mult_p__plus__p_mult_p_minus_p()
       p,
       {}),
       p);
+
+    PO_LINE;
   }
 
   {
@@ -37,6 +39,7 @@ void test_instantiate_c_mult_p__plus__p_mult_p_minus_p()
       }),
       p);
 
+    PO_LINE;
   }
 
   {
@@ -61,6 +64,7 @@ void test_instantiate_c_mult_p__plus__p_mult_p_minus_p()
       }),
       p);
 
+    PO_LINE;
   }
 
   {
@@ -85,7 +89,7 @@ void test_instantiate_c_mult_p__plus__p_mult_p_minus_p()
       }),
       p);
 
+    PO_LINE;
   }
-
-  PO_LINE;
 }
+

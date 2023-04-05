@@ -12,6 +12,8 @@ void test_instantiate_neg_p__plus__c()
       {
         {-10, {0}}
       }));
+
+    PO_LINE;
   }
 
   {
@@ -26,9 +28,9 @@ void test_instantiate_neg_p__plus__c()
         {-4, {0, 0}}
       }),
       r);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 

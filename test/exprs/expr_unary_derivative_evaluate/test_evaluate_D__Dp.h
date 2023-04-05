@@ -12,6 +12,8 @@ void test_evaluate_D__Dp()
 
     PO_ASSERT(dp21(1, 1, 1, 1) == D(D(p, 2), 1)(1, 1, 1, 1),
       po_test::errors(D(D(p, 2), 1)(1, 1, 1, 1), dp21(1, 1, 1, 1), 0x1p-52));
+
+    PO_LINE;
   }
 
   {
@@ -21,7 +23,7 @@ void test_evaluate_D__Dp()
 
     PO_ASSERT(dp21(1, 1, 1, 1) == D(p, 2, 1)(1, 1, 1, 1),
       po_test::errors(D(p, 2, 1)(1, 1, 1, 1), dp21(1, 1, 1, 1), 0x1p-52));
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }

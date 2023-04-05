@@ -112,7 +112,7 @@ void test_ctor_terms_initialization()
     po::polynomial p{{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}};
     po::polynomial copied{p};
 
-    assert(compare::unordered_equal_terms(p, copied.terms));
+    assert(compare::unordered_equal_terms(p, copied));
   }
 
   {

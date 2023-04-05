@@ -17,6 +17,8 @@ void test_instantiate_p__mult__Dp()
       {
         {0, {0, 0}},
       });
+
+    PO_LINE;
   }
 
   {
@@ -32,6 +34,8 @@ void test_instantiate_p__mult__Dp()
         {24, {2, 2}},
         { 6, {1, 2}}
       });
+
+    PO_LINE;
   }
 
   {
@@ -56,10 +60,10 @@ void test_instantiate_p__mult__Dp()
         {12, {2, 2}},
         // { 0, {2, 2}}
       });
+
+    PO_LINE;
   }
 
-
-  PO_LINE;
 }
 
 template<typename Rank>
@@ -67,7 +71,7 @@ void test_instantiate_p__mult__Dp(const po::polynomial& p, const po::polynomial&
 {
   const po::polynomial ac = po::instantiate(q * po::D(p, 0), Rank{});
 
-  PO_ASSERT(compare::unordered_equal_terms(ac, ex.terms), ac);
+  PO_ASSERT(compare::unordered_equal_terms(ac, ex), ac);
 }
 
 

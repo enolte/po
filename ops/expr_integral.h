@@ -20,6 +20,7 @@ namespace po
 #include "expr_integral_unary_minus.h"
 #include "expr_integral_unary_plus.h"
 #include "expr_integral_partial_derivative.h"
+#include "expr_integral_antiderivative.h"
 #include "expr_integral2.h"
 
 namespace po

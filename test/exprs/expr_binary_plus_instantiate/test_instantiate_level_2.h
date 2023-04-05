@@ -41,14 +41,14 @@ namespace expr_binary_plus_instantiate
     test_instantiate_c__plus__neg_p();                //           x0 +     x1
 
     test_instantiate_p__plus__p_plus_p();             //           x0 +     x1
-    test_instantiate_p_plus_p__plus__p();             //           x1 +     x0
     test_instantiate_p__plus__p_plus_c();             //           x0 +     x1
-    test_instantiate_p_plus_p__plus__c();             //           x1 +     x0
     test_instantiate_p__plus__c_plus_p();             //           x0 +     x1
-    test_instantiate_p_plus_c__plus__p();             //           x1 +     x0
-    test_instantiate_p_plus_c__plus__c();             //           x1 +     x0
     test_instantiate_c__plus__c_plus_p();             //           x0 +     x1
     test_instantiate_c__plus__p_plus_p();             //           x0 +     x1
+    test_instantiate_p_plus_p__plus__p();             //           x1 +     x0
+    test_instantiate_p_plus_p__plus__c();             //           x1 +     x0
+    test_instantiate_p_plus_c__plus__p();             //           x1 +     x0
+    test_instantiate_p_plus_c__plus__c();             //           x1 +     x0
     test_instantiate_c_plus_p__plus__p();             //           x1 +     x0
 
     test_instantiate_pos_p__plus__p();                //                        x1 +     x0

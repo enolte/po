@@ -1,4 +1,4 @@
-#include "../../../ostream/valarray_ostream.h"
+#include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../errors.h"
 #include <cassert>
@@ -14,8 +14,6 @@ void test_instantiate_D__IIp()
   test_instantiate_D__IIp_instantiate_case2();
   test_instantiate_D__IIp_instantiate_case3();
   test_instantiate_D__IIp_instantiate_case3_different_interval();
-
-  PO_LINE;
 }
 
 /*
@@ -49,6 +47,8 @@ void test_instantiate_D__IIp_instantiate_case2()
       {4.5, {0}},
     }),
     d0i1i0p_i);
+
+  PO_LINE;
 }
 
 /*
@@ -78,6 +78,8 @@ void test_instantiate_D__IIp_instantiate_case3()
       {225  , {3}}
     }),
     d0iip_i);
+
+  PO_LINE;
 }
 
 
@@ -107,5 +109,7 @@ void test_instantiate_D__IIp_instantiate_case3_different_interval()
       {11200./3, {3}}
     }),
     diip_i);
+
+  PO_LINE;
 }
 

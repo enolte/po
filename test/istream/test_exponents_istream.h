@@ -5,7 +5,7 @@
 #include <cassert>
 
 #include "../macros.h"
-#include "../../ostream/valarray_ostream.h"
+#include "../../ostream/exponents_ostream.h"
 #include "../../istream/exponents_istream.h"
 
 
