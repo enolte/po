@@ -26,18 +26,19 @@ C++23 hobby project.
   * [Quadrature](#quadrature)
   * [Elementary operator algebra](#elementary-operator-algebra)
   * [IO streams adaptation II](#io-streams-adaptation-ii)
-
-
+* [Progress Index Phase II](#progress-index-phase-ii)
 
 
 # Status
 
-(*05 April 2023*) File organization is done for now. Support for variadic differentation and integration is implemented and verified. The remaining piece of Phase I is antiderivatives. This is in progress.
+(*29 April 2023*) Marking Phase I as done. Basic functionality is implemented and verified via unit tests. There are a few smaller clean-up items that remain. Those are coming up soon. Still not using Github issues to track to-do items. I probably should. Also, docs need some work, will get to that when I have time.
 
 Progress continues as time available.
 
 <details>
 <summary><h3>Previous updates</h3></summary>
+
+(*05 April 2023*) File organization is done for now. Support for variadic differentation and integration is implemented and verified. The remaining piece of Phase I is antiderivatives. This is in progress.
 
 (*06 February 2023*) Moved some things to Phase II, including the completion of the prefix tree storage model. The trie is implemented. The interface for the polynomial type is partially implemented.
 
@@ -405,7 +406,7 @@ The type of such an expression is an antiderivative expression type which, when 
 
 The following uses zero-based enumeration of variables.
 
-Given a rank-4 polynomial $p(u, v, w, x) = 2ux - 3v^3w$, with place 0, 1, 2, 3,  if we antidifferentiate with respect to, say, $v$ (place 2), the result is
+Given a rank-4 polynomial $p(u, v, w, x) = 2ux - 3v^3w$, with place numbers 0, 1, 2, 3, if we antidifferentiate with respect to, say, $v$ (place 1), the result is
 
 $$P_2(u, v, w, x) = \int\ p(u, v, w, x) \ dx = 2uvx - \frac 34 v^4w$$
 
@@ -413,7 +414,9 @@ No change of rank is implied ( $rank(P_2) = rank(p)$ ), because the place number
 
 $$P_6(u, v, w, x, \alpha, \beta, \gamma) = \int\ p(u, v, w, x) \ d\gamma = 2ux\gamma - 3v^3w\gamma = \gamma p(u, v, w, x)$$
 
-This repo implements this convention: increase the rank to accommodate the place number. In implementation, $P_6$ is a rank 7 polynomial, with no evaluation-dependence upon places 4 or 5.
+a rank 7 polynomial.
+
+This repo implements this convention: If the place number >= $rank(p)$, then $rank(\int p)$ accommodates the place number. If place < $rank(p)$, then $rank(\int p) = rank(p)$.
 
 
 
@@ -421,18 +424,11 @@ This repo implements this convention: increase the rank to accommodate the place
 
 # Progress Index Phase I
 
+
 ## Done
-
-  * [IO streams adaptation](#io-streams-adaption)
-  * [Evaluation](#evaluation)
-  * [Expression template instantiation](#expression-template-instantiation)
-  * [Ring operations](#ring-operations)
-    * Partial derivatives
-    * Integrals
-
-
-## In progress
-  * Expression grammar [operator](#operators-i) testing. See [expression-testing](./test/exprs) for current details.
+  * [IO streams adaptation](#io-streams-adaptation-i)
+  * [Evaluation](#evaluation-i)
+  * [Operators](#operators-i) testing. See [expression-testing](./test/exprs) for current details.
 
 |                     |scalar       |polynomial   |unary expr   |binary expr  |
 |:-------------------:|:-----------:|:-----------:|:-----------:|:-----------:|
@@ -442,16 +438,22 @@ This repo implements this convention: increase the rank to accommodate the place
 | unary `+`           | Done        | Done        | Done        | Done        |
 | unary `-`           | Done        | Done        | Done        | Done        |
 | differentiation     | Done        | Done        | Done        | Done        |
-| antidifferentiation | Done        | Done        | In progress | In progress |
+| antidifferentiation | Done        | Done        | Done        | Done        |
 | integration         | Done        | Done        | Done        | Done        |
 
+
+  * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
+    * Partial derivatives
+    * Integrals
     * Antiderivatives
 
 
 # Plan Phase II
 
+## Change of rank
 
+Two simple routines: `decrease_rank` and `increase_rank`. These are useful
 
 ## Binding operators
 
@@ -789,3 +791,19 @@ std::cout << po::source << p;
 ...to stdout.
 
 
+# Progress Index Phase II
+
+## Done
+
+## In progress
+
+## Not started
+
+  * [Binding operators](#binding-operators)
+  * [Storage](#storage-ii)
+  * [Operators II](#operators-ii)
+  * [Evaluation II](#evaluation-ii)
+  * [Induction](#induction)
+  * [Quadrature](#quadrature)
+  * [Elementary operator algebra](#elementary-operator-algebra)
+  * [IO streams adaptation II](#io-streams-adaptation-ii)
