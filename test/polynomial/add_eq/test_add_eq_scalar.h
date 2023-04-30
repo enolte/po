@@ -6,18 +6,23 @@
 void test_add_eq_scalar()
 {
   {
-    po::polynomial p{po::rank<5>{}};
+    po::polynomial p = po::polynomial::make_zero(po::rank<5>{});
 
     assert(p.nterms() == 0);
     assert(p.constant() == 0);
-    assert(p.coefficient(0, 0, 0) == 0.);
+    assert(p.coefficient(0, 0, 0, 0, 0) == 0.);
 
     p += 8.;
 
+    assert(compare::unordered_equal_terms(
+      p,
+      {
+        {8., {0, 0, 0, 0, 0}}
+      }));
+
     assert(p.nterms() == 1);
     assert(p.constant() == 8.);
-    assert(p.coefficient(0, 0, 0) == 8.);
-
+    assert(p.coefficient(0, 0, 0, 0, 0) == 8.);
     PO_LINE;
   }
 

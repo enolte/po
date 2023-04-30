@@ -3,24 +3,28 @@
 void test_nterms()
 {
   {
-    po::polynomial p{po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<0>{})};
     assert(p.nterms() == 0);
+    PO_LINE;
   }
 
   {
-    po::polynomial p{0., po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 0.)};
     assert(p.nterms() == 1);
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 7.5)};
     assert(p.nterms() == 1);
+    PO_LINE;
   }
 
   {
     using namespace po;
-    polynomial p(rank<15>{});
+    polynomial p(po::polynomial::make_zero(rank<15>{}));
     assert(p.nterms() == 0);
+    PO_LINE;
   }
 
   {
@@ -33,6 +37,7 @@ void test_nterms()
     };
 
     assert(p.nterms() == 4);
+    PO_LINE;
   }
 
   {
@@ -51,6 +56,7 @@ void test_nterms()
 
     // Non-constant access does not induce a new term when an exponent sequence is not found
     assert(p.nterms() == 3);
+    PO_LINE;
   }
 
   {
@@ -66,8 +72,7 @@ void test_nterms()
     assert(p.coefficient(9, 4, 1, 1, 1, 1, 7) == 0.);
 
     assert(p.nterms() == 3);
+    PO_LINE;
   }
-
-  PO_LINE;
 }
 

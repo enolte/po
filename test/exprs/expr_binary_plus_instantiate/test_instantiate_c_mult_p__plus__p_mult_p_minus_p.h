@@ -5,7 +5,9 @@
 void test_instantiate_c_mult_p__plus__p_mult_p_minus_p()
 {
   {
-    po::polynomial r{po::rank<3>{}}, q{po::rank<3>{}};
+    po::polynomial
+      r{po::polynomial::make_zero(po::rank<3>{})},
+      q{po::polynomial::make_zero(po::rank<3>{})};
 
     po::polynomial p = po::instantiate(2*r + q*(r-q), po::rank<3>{});
 

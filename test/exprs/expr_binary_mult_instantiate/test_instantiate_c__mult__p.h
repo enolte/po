@@ -5,7 +5,7 @@
 void test_instantiate_c__mult__p()
 {
   {
-    po::polynomial r{po::rank<3>{}};
+    po::polynomial r{po::polynomial::make_zero(po::rank<3>{})};
     po::polynomial p = po::instantiate(2*r, po::rank<3>{});
 
     PO_ASSERT(compare::unordered_equal_terms(
@@ -17,7 +17,7 @@ void test_instantiate_c__mult__p()
   }
 
   {
-    po::polynomial r{0., po::rank<3>{}};
+    po::polynomial r = po::polynomial::make_constant(po::rank<3>{}, 0.);
     po::polynomial p = po::instantiate(2*r, po::rank<3>{});
 
     PO_ASSERT(compare::unordered_equal_terms(

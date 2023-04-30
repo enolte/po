@@ -23,7 +23,7 @@ void test_evaluate_c__mult__p()
   }
 
   {
-    po::polynomial p{po::rank<7>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<7>{})};
     auto x = 2*p;
     assert(x(1, 1, 1, 1, 1, 1, 1) == 0.);
     assert(x(0, 3, 2, 3, 7, 0, 2) == 0.);
@@ -32,7 +32,7 @@ void test_evaluate_c__mult__p()
   }
 
   {
-    po::polynomial p{po::rank<7>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<7>{})};
     assert((2*p)(1, 1, 1, 1, 1, 1, 1) == 0.);
     assert((2*p)(0, 3, 2, 3, 7, 0, 2) == 0.);
 

@@ -135,7 +135,7 @@ void test_expr_binary_mult_c_times_p_subexpressions()
   }
 
   {
-    po::polynomial p{po::rank<7>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<7>{})};
     auto x = 2*p;
     static_assert(std::same_as<decltype(x.expr2), const po::polynomial&>);
 
@@ -143,7 +143,7 @@ void test_expr_binary_mult_c_times_p_subexpressions()
   }
 
   {
-    po::polynomial p{po::rank<7>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<7>{})};
     auto x = 2*std::move(p);
     assert(&x.expr2 != &p);
     static_assert(std::same_as<decltype(x.expr2), const po::polynomial>);
@@ -152,7 +152,7 @@ void test_expr_binary_mult_c_times_p_subexpressions()
   }
 
   {
-    po::polynomial p{po::rank<7>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<7>{})};
     static_assert(std::same_as<decltype((2*p).expr2), const po::polynomial&>);
 
     PO_LINE;

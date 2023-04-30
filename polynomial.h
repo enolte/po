@@ -20,6 +20,7 @@
 
 #include <numeric>
 #include <algorithm>
+#include <atomic>
 
 namespace po
 {
@@ -36,9 +37,19 @@ namespace po
    */
   struct polynomial
   {
+    /*
+     * Counts ctor invocations
+     */
+    static std::uint64_t construction_count()
+    {
+      return m_construction_count.load();
+    }
+
     model::storage terms;
 
   private:
+    static std::atomic<std::uint64_t> m_construction_count;
+
     degree_type m_degree;
 
     exponents m_degrees;
@@ -64,7 +75,6 @@ namespace po
     }
 
   public:
-
     /*
      * Make a zero polynomial of the given rank. The resulting
      * polynomial has empty storage.
@@ -76,37 +86,98 @@ namespace po
     }
 
     /*
-     * Construct a zero polynomial of given rank. The resulting
-     * polynomial has empty storage.
-     */
-    polynomial(rank_type rank):
-      terms{},
-      m_degree{0},
-      m_degrees(degree_type{0}, rank),
-      m_rank{rank}
-    {}
-
-    /*
-     * Construct a constant polynomial of given rank. The resulting
+     * Make a constant polynomial of the given rank. The resulting
      * polynomial has one term.
      *
-     * polynomial p(2.12, rank<15>{});
-     * polynomial p{2.12, 15};
      */
-    polynomial(const scalar_type& c, rank_type rank):
+    static polynomial make_constant(rank_type rank, scalar_type constant)
+    {
+      return polynomial(rank, constant);
+    }
+
+  private:
+    polynomial(rank_type rank, const scalar_type& c):
       polynomial(rank)
     {
       accumulate_add(terms, c, exponents(exponent_type{0}, rank));
     }
 
+    polynomial(rank_type rank):
+      terms{},
+      m_degree{0},
+      m_degrees(degree_type{0}, rank),
+      m_rank{rank}
+    {
+      ++m_construction_count;
+    }
+
+  public:
+#if 0
+    // Disabled
+    /*
+     * Construct a zero polynomial with the given rank. The resulting
+     * polynomial has empty storage.
+     */
+    template<rank_type R>
+    polynomial(rank<R>&&):
+      polynomial(R)
+    {
+      ++m_construction_count;
+    }
+#endif
     /*
      * Construct a polynomial from a supported expression type instance.
      */
     template<expression Expr>
     polynomial(Expr&& expr):
       polynomial(instantiate(expr))
-    {}
+    {
+      ++m_construction_count;
+    }
 
+
+    /*
+     * Construct a polynomial from an r-value `std::initializer_list` of tuples.
+     * This typically begins with a "braced-init-list" (which is not a std::initializer_list).
+     *
+     * polynomial p({0.2, {4, 3, 5, 7}});
+     * polynomial p{{0.2, {4, 3, 5, 7}}};
+     * polynomial p({{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}});
+     * polynomial p{{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}};
+     */
+    polynomial(
+      std::initializer_list
+        <
+          std::tuple<scalar_type, std::initializer_list<exponent_type>>
+        >
+        && _ilist)
+    : terms{},
+      m_degree{0},
+      m_degrees(
+        _ilist.size() > 0
+        ? std::get<1>(*_ilist.begin())
+        : std::valarray<std::size_t>()),
+      m_rank{
+        _ilist.size() > 0
+        ? std::get<1>(*_ilist.begin()).size()
+        : 0}
+    {
+      ++m_construction_count;
+      for(auto&& t : _ilist)
+      {
+        m_degree = std::max(m_degree, std::accumulate(std::get<1>(t).begin(), std::get<1>(t).end(), degree_type{0}));
+        std::size_t i = 0;
+        for(auto&& x : std::get<1>(t))
+        {
+          m_degrees[i] = std::max(m_degrees[i], degree_type{x});
+          ++i;
+        }
+
+        terms.emplace_back(std::move(std::get<0>(t)), std::move(std::get<1>(t)));
+      }
+    }
+
+#if 0
     /*
      * Construct a polynomial from an r-value `std::initializer_list` of monomials.
      * This typically begins with a "braced-init-list" (which is not a std::initializer_list).
@@ -142,42 +213,13 @@ namespace po
           m_degrees[i] = std::max(m_degrees[i], t.exponents[i]);
       }
     }
-
-#if 0
-    // Disabled for operator overload resolution
-    /*
-     * Construct from monomial fields
-     *
-     * polynomial p(2.17, {2, 3, 2, 1});
-     * polynomial p{2.17, {2, 3, 2, 1}};
-     */
-    constexpr polynomial(scalar_type&& _coefficient, std::initializer_list<exponent_type>&& _exponents)
-    : terms{{std::move(_coefficient), std::move(_exponents)}},
-      m_degree{0},
-      m_degrees{_exponents},
-      m_rank{_exponents.size()}
-    {
-      for(const auto& t : terms)
-        m_degree = std::max(m_degree, t.degree());
-    }
 #endif
-
-
-#if 0
-    // TODO Verify removal.
-    polynomial(const polynomial&) = default;
-    polynomial(polynomial&&) = default;
-
-    polynomial& operator=(const polynomial&) = default;
-    polynomial& operator=(polynomial&&) = default;
-#endif
-
     /*
-     * Instantiate and expression and assign it. E.g.,
+     * Instantiate an expression and assign it. E.g.,
      * p = 3*p - q*(-4*r + q*q);
      */
     template<expression Expr>
-    polynomial& operator=(Expr&& expr);
+    polynomial& operator=(Expr expr);
 
     // TODO This function does not absorb the monomial.
     polynomial& operator=(monomial&& m)
@@ -546,29 +588,130 @@ namespace po
 namespace po
 {
   template<expression Expr>
-  polynomial& polynomial::operator=(Expr&& expr)
+  polynomial& polynomial::operator=(Expr expr)
   {
+    if constexpr(is_constant<Expr>)
+    {
+      terms.clear();
+      m_degrees.resize(0);
+      m_degree = 0;
+      m_rank = 0;
+      if constexpr(is_scalar<Expr>)
+      {
+        return (*this += expr);
+      }
+      else
+      {
+        return (*this += expr.expr1);
+      }
+    }
+
+    if constexpr(is_polynomial<Expr>)
+    {
+      terms = expr.terms;
+      m_degrees = expr.m_degrees;
+      m_degree = expr.m_degree;
+      m_rank = expr.m_rank;
+      return *this;
+    }
+
     return (*this = instantiate(expr));
   }
+
+  template<typename E>
+  concept is_expr_binary_plus =
+    is_binary_expression<E> &&
+    std::same_as<E, expr_binary_plus<typename E::_E1, typename E::_E2>>;
 
   template<expression Expr>
   polynomial& operator+=(polynomial& p, Expr&& expr)
   {
+    if constexpr(is_constant<Expr>)
+    {
+      return p.operator+=(expr.expr1);
+    }
+
+    if constexpr(is_polynomial<Expr>)
+    {
+      return p.operator+=(expr);
+    }
+
+    if constexpr(is_expr_binary_plus<Expr>)
+    {
+      if constexpr(is_polynomial<typename Expr::_E1> && is_polynomial<typename Expr::_E2>)
+      {
+        if(&p != &expr.expr1 && &p != &expr.expr2)
+        {
+          return p.operator+=(expr.expr1).operator+=(expr.expr2);
+        }
+
+        if(&p == &expr.expr1 && &p != &expr.expr2)
+        {
+          return p.operator*=(2).operator+=(expr.expr2);
+        }
+
+        if(&p != &expr.expr1 && &p == &expr.expr2)
+        {
+          return p.operator*=(2).operator+=(expr.expr1);
+        }
+
+        if(&p == &expr.expr1 && &p == &expr.expr2)
+        {
+          return p.operator*=(3);
+        }
+
+      }
+    }
+
     return p.operator+=(instantiate(expr));
   }
 
   template<expression Expr>
   polynomial& operator-=(polynomial& p, Expr&& expr)
   {
+    if constexpr(is_constant<Expr>)
+    {
+      return p.operator-=(expr.expr1);
+    }
+
+    if constexpr(is_polynomial<Expr>)
+    {
+      return p.operator-=(expr);
+    }
+
     return p.operator-=(instantiate(expr));
   }
 
   template<expression Expr>
   polynomial& operator*=(polynomial& p, Expr&& expr)
   {
+    if constexpr(is_constant<Expr>)
+    {
+      return p.operator*=(expr.expr1);
+    }
+
+    if constexpr(is_polynomial<Expr>)
+    {
+      return p.operator*=(expr);
+    }
+
     return p.operator*=(instantiate(expr));
   }
 
+/*
+  po::polynomial zero(rank_type rank)
+  {
+    return polynomial::make_zero(rank);
+  }
+
+  po::polynomial constant(scalar_type&& c, rank_type rank)
+  {
+    return polynomial::make_constant(rank, std::move(c));
+  }
+*/
+
+
+  std::atomic<std::uint64_t> polynomial::m_construction_count{0};
 }
 
 #endif

@@ -9,15 +9,15 @@ void test_add_eq_binary_expr_level_3()
     po::polynomial p{{2, {1, 1, 1, 1}}, {3, {0, 4, 2, 0}}};
     po::polynomial q{{3, {2, 1, 4, 2}}, {1, {1, 0, 0, 0}}};
 
-    p += q - 8.2*p;
+    p += 3*q - 8.2*p;
 
     PO_ASSERT(compare::unordered_near_rel_terms(
       p,
       {
         {-14.4, {1, 1, 1, 1}},
         {-21.6, {0, 4, 2, 0}},
-        {    3, {2, 1, 4, 2}},
-        {    1, {1, 0, 0, 0}}
+        {    9, {2, 1, 4, 2}},
+        {    3, {1, 0, 0, 0}}
       }),
       p);
 

@@ -6,7 +6,7 @@
 void test_add_eq_polynomial()
 {
   {
-    po::polynomial p{po::rank<6>{}};
+    po::polynomial p = po::polynomial::make_zero(po::rank<6>{});
     po::polynomial q{
       {3.2, {4, 1, 3, 2, 9, 3}},
       {4.2, {4, 1, 4, 2, 9, 3}},
@@ -73,7 +73,7 @@ void test_add_eq_polynomial()
   }
 
   {
-    po::polynomial p{po::rank<6>{}};
+    po::polynomial p = po::polynomial::make_zero(po::rank<6>{});
     po::polynomial q{
       {3.2, {4, 1, 3, 2, 9, 3}},
       {4.2, {4, 1, 4, 2, 9, 3}},

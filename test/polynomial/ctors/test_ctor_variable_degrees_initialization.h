@@ -5,56 +5,53 @@
 void test_ctor_variable_degrees_initialization()
 {
   {
-    po::polynomial p{po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<0>{})};
     assert(compare::equal(p.degrees(), {}));
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 7.5)};
     assert(compare::equal(p.degrees(), {}));
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<6>{}, 7.5)};
     assert(compare::equal(p.degrees(), {0, 0, 0, 0, 0, 0}));
+    PO_LINE;
   }
 
   {
     using namespace po;
-    polynomial p(rank<15>{});
+    polynomial p(po::polynomial::make_zero(rank<15>{}));
     assert(p.degrees().size() == 15);
     assert(compare::equal(p.degrees(), {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+    PO_LINE;
   }
 
   {
     po::polynomial p{{1.4, {2, 3, 2, 1}}};
     assert((compare::equal(p.degrees(), {2, 3, 2, 1})));
+    PO_LINE;
   }
-/*
-  // Disabled for operator overload resolution
-  {
-    po::polynomial p{1.4, {2, 3, 2, 1}};
-    assert((compare::equal(p.degrees(), 2, 3, 2, 1)));
-  }
-*/
+
   {
     po::polynomial p({{1.4, {2, 3, 2, 1}}});
     assert((compare::equal(p.degrees(), {2, 3, 2, 1})));
+    PO_LINE;
   }
-/*
-  {
-    po::polynomial p(1.4, 2, 3, 2, 1);
-    assert((compare::equal(p.degrees(), 2, 3, 2, 1)));
-  }
-*/
+
   {
     po::polynomial p({{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}});
     assert((compare::equal(p.degrees(), {4, 3, 4, 1})));
+    PO_LINE;
   }
 
   {
     po::polynomial p{{1.4, {2, 3, 2, 1}}, {0.5, {4, 1, 4, 1}}};
     assert((compare::equal(p.degrees(), {4, 3, 4, 1})));
+    PO_LINE;
   }
 
   {
@@ -67,7 +64,6 @@ void test_ctor_variable_degrees_initialization()
     };
 
     assert(compare::equal(p.degrees(), {3, 1, 0}));
+    PO_LINE;
   }
-
-  PO_LINE;
 }

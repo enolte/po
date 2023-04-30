@@ -5,7 +5,10 @@
 void test_ctor_exprs()
 {
   {
+    const auto cc_before = po::polynomial::construction_count();
     po::polynomial{};
+    const auto cc_after = po::polynomial::construction_count();
+    assert(cc_after == cc_before + 1);
   }
 
   {
@@ -13,53 +16,28 @@ void test_ctor_exprs()
   }
 
   {
-    po::polynomial{0, po::rank<0>{}};
+    po::polynomial(po::polynomial::make_constant(po::rank<0>{}, 0));
   }
 
   {
-    po::polynomial{-6.5, po::rank<0>{}};
+    po::polynomial{po::polynomial::make_constant(po::rank<0>{}, -6.5)};
   }
 
   {
-    po::polynomial{0, po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<6>{}, 7.5)};
   }
 
   {
-    po::polynomial(0, po::rank<6>{});
+    po::polynomial p(po::polynomial::make_constant(po::rank<6>{}, 7.5));
   }
 
   {
-    po::polynomial p{7.5, po::rank<6>{}};
+    po::polynomial{po::polynomial::make_zero(po::rank<15>{})};
   }
 
   {
-    po::polynomial p(7.5, po::rank<6>{});
+    po::polynomial(po::polynomial::make_zero(po::rank<15>{}));
   }
-
-  {
-    po::polynomial{po::rank<15>{}};
-  }
-
-  {
-    po::polynomial(po::rank<15>{});
-  }
-/*
-  {
-    po::polynomial(7);           // <-- fails concept check, as expected
-  }
-
-  {
-    po::polynomial(7.5);         // <-- fails concept check, as expected
-  }
-
-  {
-    po::polynomial p{'a'};       // <-- fails concept check, as expected
-  }
-
-  {
-    po::polynomial p('a');       // <-- fails concept check, as expected
-  }
-*/
 
 /*
   static_assert(std::same_as<decltype('þ'), int>);
@@ -91,27 +69,7 @@ void test_ctor_exprs()
   {
     po::polynomial p = {{1.4, {2, 3, 2, 1}}};
   }
-/*
-  {
-    po::polynomial p{1.4, {2, 3, 2, 1}};   // Disabled for operator overload resolution
-  }
 
-  {
-    po::polynomial p(1.4, {2, 3, 2, 1});   // Disabled for operator overload resolution
-  }
-
-  {
-    po::polynomial({1.4, {2, 3, 2, 1}});   // Disabled for operator overload resolution
-  }
-
-  {
-    po::polynomial p({1.4, {2, 3, 2, 1}}); // Disabled for operator overload resolution
-  }
-
-  {
-    po::polynomial p({2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}); // Disabled for operator overload resolution
-  }
-*/
   {
     po::polynomial({{1.4, {2, 3, 2, 1}}});
   }

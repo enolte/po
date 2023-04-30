@@ -15,11 +15,31 @@ namespace po_test
 
     };
 
+    static_assert(!po::is_binary_expression<X>);
+
     struct Y
     {
       using expr1 = double;
       using expr2 = float;
     };
+
+    static_assert(!po::is_binary_expression<Y>);
+
+    struct Z1
+    {
+      struct expr1 {};
+      struct expr2 {};
+    };
+
+    static_assert(!po::is_binary_expression<Z1>);
+
+    struct Z3
+    {
+      void* expr1;
+      float t2;
+    };
+
+    static_assert(!po::is_binary_expression<Z3>);
 
     struct Z
     {
@@ -27,44 +47,23 @@ namespace po_test
       struct {} expr2;
     };
 
+    static_assert(po::is_binary_expression<Z>);
+
     struct Z2
     {
       void* expr1;
       float expr2;
     };
 
-    struct Z3
-    {
-      void* expr1;
-      float expr2;
-
-      void operator()(...);
-    };
-
-    struct Z4
-    {
-      void* t1;
-      float t2;
-
-      void operator()(...);
-    };
+    static_assert(po::is_binary_expression<Z2>);
 
     struct α
     {
       Y expr2;
       Z expr1;
-
-      template<typename... T>
-      double operator()(T...);
     };
 
-    static_assert(!po::is_binary_expression<X>);
-    static_assert(!po::is_binary_expression<Y>);
-    static_assert(po::is_binary_expression<Z>);
-    static_assert(po::is_binary_expression<Z2>);
-    static_assert(po::is_binary_expression<Z3>);
-    static_assert(!po::is_binary_expression<Z4>);
-    // static_assert(po::is_binary_expression<α>);
+    static_assert(po::is_binary_expression<α>);
   }
 }
 

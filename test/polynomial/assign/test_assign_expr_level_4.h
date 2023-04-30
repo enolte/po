@@ -9,7 +9,7 @@ void test_assign_expr_level_4()
     po::polynomial u{{4.2, {4, 0, 7, 6, 5}}, { 5.5, {3, 1, 1, 0, 0}}};
     po::polynomial v{{1.2, {2, 2, 2, 2, 0}}, {13  , {3, 1, 1, 0, 0}}};
 
-    po::polynomial q(1.4, po::rank<2>{});
+    po::polynomial q = po::polynomial::make_constant(1.4, po::rank<2>{});
 
     q = u - 3*v*(-u);
 
@@ -29,7 +29,7 @@ void test_assign_expr_level_4()
     PO_ASSERT(q.degree() == 30, q.degree());
     PO_ASSERT(compare::equal(q.degrees(), {7, 3, 9, 8, 5}), q.degrees());
 
-    po::polynomial q2(1.4, po::rank<23>{});
+    po::polynomial q2 = po::polynomial::make_constant(1.4, po::rank<23>{});
 
     q2 = u + 3*v*u;
 

@@ -5,8 +5,7 @@
 #include "expr_antiderivative.h"
 
 #include "is_expression.h"
-
-#include <algorithm>
+#include "change_rank.h"
 
 namespace po
 {
@@ -17,32 +16,23 @@ namespace po
 
     if(expr.place < p.rank())
     {
-      polynomial ap = p;
-      for(auto& t : ap.terms)
+      for(auto& t : p.terms)
       {
         t.coefficient /= t.exponents[expr.place] + 1;
         t.exponents[expr.place] += 1;
       }
 
-      ap.update_degrees();
-
-      p = ap;
+      p.update_degrees();
 
       return p;
     }
     else
     {
-      polynomial ap = polynomial::make_zero(expr.place + 1);
-      for(const auto& t : p.terms)
-      {
-        po::exponents ax(0zu, ap.rank());
-        std::copy_n(std::cbegin(t.exponents), p.rank(), std::begin(ax));
-        ax[expr.place] = 1;
+      detail::increase_rank(p, expr.place + 1);
+      for(auto& t : p.terms)
+        t.exponents[expr.place] = 1;
 
-        ap += {t.coefficient, ax};
-      }
-
-      p = ap;
+      p.update_degrees();
 
       return p;
     }

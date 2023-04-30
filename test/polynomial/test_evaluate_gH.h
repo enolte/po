@@ -9,32 +9,44 @@ void test_evaluate_gH()
     assert(p.rank() == 0);
     po::evaluate_gH(p);
     assert(po::evaluate_gH(p) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<0>{})};
     assert(po::evaluate_gH(p) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{0, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 0)};
     assert(po::evaluate_gH(p, 0) == 0);
+
+    PO_LINE;
   }
 
   {
     const auto p = po::polynomial::make_zero(0);
     assert(p.rank() == 0);
     assert(po::evaluate_gH(p, 0) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<6>{})};
     assert(po::evaluate_gH(p, 3, 2.3, -0.7, 3, 13.65, 5) == 0.);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<6>{}, 7.5)};
     assert(po::evaluate_gH(p, 3, 2.3, -0.7, 3, 13.65, 5) == 7.5);
+
+    PO_LINE;
   }
 
   {
@@ -47,6 +59,7 @@ void test_evaluate_gH()
 
     assert(po::evaluate_gH(p, 3, 2, 1) == 0.);
 
+    PO_LINE;
   }
 
   {
@@ -60,6 +73,7 @@ void test_evaluate_gH()
 
     assert(po::evaluate_gH(p, 3, 2, 1) == 7.5);
 
+    PO_LINE;
   }
 
   {
@@ -76,6 +90,8 @@ void test_evaluate_gH()
       1 * 3.375 * 1 * 1 * 1 * 39.0625 * 2 * 3 * 128   +
      -4 * 1.5   * 1 * 1 * 1 * 39.0625 * 2 * 1 *   1   +
      -3 * 1     * 1 * 1 * 1 *  1      * 8 * 1 *   1);
+
+    PO_LINE;
   }
 
   {
@@ -96,6 +112,8 @@ void test_evaluate_gH()
      -3   *  1 * 1 * 1   +
       2.5 *  3 * 1 * 1,
       p);
+
+    PO_LINE;
   }
 
   {
@@ -117,9 +135,9 @@ void test_evaluate_gH()
       3   *  1 * 1 * 1   +
      -3   *  1 * 1 * 1   +
       2.5 *  3 * 1 * 1);
-  }
 
-  PO_LINE;
+    PO_LINE;
+  }
 }
 
 

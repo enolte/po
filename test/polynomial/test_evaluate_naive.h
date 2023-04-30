@@ -5,31 +5,43 @@ void test_evaluate_naive()
   {
     po::polynomial p{};
     assert(po::evaluate_naive(p) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<0>{})};
     assert(po::evaluate_naive(p) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{0, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 0)};
     assert(po::evaluate_naive(p) == 0);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 7.5)};
     assert(po::evaluate_naive(p) == 7.5);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<6>{})};
     assert(po::evaluate_naive(p, 3, 2.3, -0.7, 3, 13.65, 5) == 0.);
+
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<6>{}, 7.5)};
     assert(po::evaluate_naive(p, 3, 2.3, -0.7, 3, 13.65, 5) == 7.5);
+
+    PO_LINE;
   }
 
   {
@@ -41,6 +53,8 @@ void test_evaluate_naive()
     });
 
     PO_ASSERT(po::evaluate_naive(p, 3,2,1) == 0., po::evaluate_naive(p, 3, 2, 1));
+
+    PO_LINE;
   }
 
   {
@@ -53,6 +67,8 @@ void test_evaluate_naive()
     });
 
     PO_ASSERT(po::evaluate_naive(p, 3,2,1) == 7.5, p(3,2,1));
+
+    PO_LINE;
   }
 
   {
@@ -70,6 +86,8 @@ void test_evaluate_naive()
      -4 * 1.5   * 1 * 1 * 1 * 39.0625 * 2 * 1 *   1   +
      -3 * 1     * 1 * 1 * 1 *  1      * 8 * 1 *   1,
      po::evaluate_naive(p, 1.5,  1,  2,  1,   2.5,     2,  3,    2));
+
+    PO_LINE;
   }
 
   {
@@ -89,6 +107,8 @@ void test_evaluate_naive()
      -3   *  1 * 1 * 1   +
       2.5 *  3 * 1 * 1,
       p);
+
+    PO_LINE;
   }
 
   {
@@ -109,10 +129,9 @@ void test_evaluate_naive()
       3   *  1 * 1 * 1   +
      -3   *  1 * 1 * 1   +
       2.5 *  3 * 1 * 1);
+
+    PO_LINE;
   }
-
-  PO_LINE;
-
 }
 
 

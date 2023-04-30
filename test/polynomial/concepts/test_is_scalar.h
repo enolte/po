@@ -1,3 +1,4 @@
+#include "../../../ops/is_unary_expression.h"
 #include "../../../ops/is_scalar.h"
 #include "../../../types/scalar.h"
 
@@ -8,6 +9,7 @@ void test_is_scalar()
 
 namespace static_asserts
 {
+  static_assert(!po::is_unary_expression<po::scalar_type>);
   static_assert(po::is_scalar<po::scalar_type>);
 
   static_assert(po::is_scalar<int>);

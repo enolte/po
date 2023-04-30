@@ -25,6 +25,7 @@ using namespace po_test;
 #include "test_mult_eq.h"
 
 #include "test_constant_term.h"
+#include "test_change_rank.h"
 
 namespace po_test
 {
@@ -45,5 +46,6 @@ namespace po_test
     test_mult_eq();
 
     test_constant_term();
+    test_change_rank();
  }
 }

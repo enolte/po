@@ -4,15 +4,13 @@
 namespace static_asserts
 {
   po::polynomial p{};
-  po::expr_constant c{};
-  po::scalar_type s{};
+  po::expr_constant c;
+  po::scalar_type s;
 
-  const po::expr_constant cc{};
   const po::polynomial cp{};
+  const po::expr_constant cc;
   const po::scalar_type cs{};
 
-
-  // For brevity below
   using P = po::polynomial;
   using C = po::expr_constant;
   using S = po::scalar_type;

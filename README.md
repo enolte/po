@@ -1,4 +1,4 @@
-# po
+# [po](https://github.com/enolte/po)
 
 Elementary computations in the real polynomial ring $\mathbb{R}[x_1, ..., x_r]$.
 
@@ -18,6 +18,7 @@ C++23 hobby project.
   * [Ring operations](#ring-operations)
 * [Progress Index Phase I](#progress-index-phase-i)
 * [Plan Phase II](#plan-phase-ii)
+  * [Changing rank](#changing-rank)
   * [Binding operators](#binding-operators)
   * [Storage](#storage-ii)
   * [Operators II](#operators-ii)
@@ -144,7 +145,7 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 772 indexed unit test sets, a few of which include multiple specific test cases.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 870 indexed unit tests, plus a few which are not yet indexed.
 
 
 
@@ -428,32 +429,15 @@ This repo implements this convention: If the place number >= $rank(p)$, then $ra
 ## Done
   * [IO streams adaptation](#io-streams-adaptation-i)
   * [Evaluation](#evaluation-i)
-  * [Operators](#operators-i) testing. See [expression-testing](./test/exprs) for current details.
-
-|                     |scalar       |polynomial   |unary expr   |binary expr  |
-|:-------------------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| binary `*`          | Done        | Done        | Done        | Done        |
-| binary `+`          | Done        | Done        | Done        | Done        |
-| binary `-`          | Done        | Done        | Done        | Done        |
-| unary `+`           | Done        | Done        | Done        | Done        |
-| unary `-`           | Done        | Done        | Done        | Done        |
-| differentiation     | Done        | Done        | Done        | Done        |
-| antidifferentiation | Done        | Done        | Done        | Done        |
-| integration         | Done        | Done        | Done        | Done        |
-
-
+  * [Operators](#operators-i). See [expression-testing](./test/exprs) for current details.
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
-    * Partial derivatives
-    * Integrals
-    * Antiderivatives
-
 
 # Plan Phase II
 
-## Change of rank
+## Changing rank
 
-Two simple routines: `decrease_rank` and `increase_rank`. These are useful
+Two simple routines: `decrease_rank` and `increase_rank`. These are implementation-internal operations that unconditionally increase or decrease the rank of a polynomial object. It's probably faster to implement change-of-rank "inline" where it's used, but these may be useful later.
 
 ## Binding operators
 
@@ -797,6 +781,8 @@ std::cout << po::source << p;
 
 ## In progress
 
+  * [Changing rank](#changing-rank)
+
 ## Not started
 
   * [Binding operators](#binding-operators)
@@ -807,3 +793,7 @@ std::cout << po::source << p;
   * [Quadrature](#quadrature)
   * [Elementary operator algebra](#elementary-operator-algebra)
   * [IO streams adaptation II](#io-streams-adaptation-ii)
+
+
+
+

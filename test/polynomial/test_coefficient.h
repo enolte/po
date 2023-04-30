@@ -3,26 +3,30 @@
 void test_coefficient()
 {
   {
-    po::polynomial p{po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<0>{})};
     assert(p.coefficient() == 0);
+    PO_LINE;
   }
 
   {
-    po::polynomial p{0., po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 0.)};
     assert(p.coefficient() == 0);
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<0>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<0>{}, 7.5)};
     assert(p.coefficient() == 7.5);
+    PO_LINE;
   }
 
   {
-    po::polynomial p{7.5, po::rank<6>{}};
+    po::polynomial p{po::polynomial::make_constant(po::rank<6>{},7.5)};
     assert(compare::equal(p.degrees(), {0, 0, 0, 0, 0, 0}));
 
     assert(p.coefficient(0, 0, 0, 0, 0, 0) == 7.5);
     assert(p.coefficient(0, 3, 0, 0, 0, 0) == 0.0);
+    PO_LINE;
   }
 
   {
@@ -36,6 +40,7 @@ void test_coefficient()
     assert(p.coefficient(1, 0, 0) == 2.5);
     assert(p.coefficient(0, 5, 0) == 0.);
     PO_ASSERT(p.coefficient(2, 2, 2) == -3.5, p);
+    PO_LINE;
   }
 
   {
@@ -48,6 +53,7 @@ void test_coefficient()
 
     assert(p.coefficient(8, 2, 0, 4, 0, 3, 3) == -1.9);
     assert(p.coefficient(9, 4, 1, 1, 1, 1, 7) == 0.);
+    PO_LINE;
   }
 
   {
@@ -60,6 +66,7 @@ void test_coefficient()
 
     assert(p.coefficient(8, 2, 0, 4, 0, 3, 3) == -1.9);
     assert(p.coefficient(9, 4, 1, 1, 1, 1, 7) == 0.);
+    PO_LINE;
   }
 
   {
@@ -72,8 +79,7 @@ void test_coefficient()
     };
 
     assert(p.coefficient(1, 0, 0) == 2.5);
+    PO_LINE;
   }
-
-  PO_LINE;
 }
 

@@ -8,7 +8,7 @@ void test_assign_expr_unary_minus_level_1()
   {
     po::polynomial u{{4.2, {4, 0, 7, 6, 5}}, { 5.5, {3, 1, 1, 0, 0}}};
 
-    po::polynomial q(1.4, po::rank<9>{});
+    po::polynomial q = po::polynomial::make_constant(po::rank<9>{}, 1.4);
 
     PO_ASSERT(compare::unordered_equal_terms(
       q,

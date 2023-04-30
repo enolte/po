@@ -6,7 +6,7 @@
 void test_sub_eq_scalar()
 {
   {
-    po::polynomial p{po::rank<5>{}};
+    po::polynomial p{po::polynomial::make_zero(po::rank<5>{})};
 
     assert(p.nterms() == 0);
     assert(p.constant() == 0);

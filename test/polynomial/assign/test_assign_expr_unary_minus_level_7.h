@@ -9,7 +9,7 @@ void test_assign_expr_unary_minus_level_7()
     po::polynomial q{{4.2, {4, 0, 7, 6, 5}}, { 5.5, {3, 1, 1, 0, 0}}};
     po::polynomial r{{1.2, {2, 2, 2, 2, 0}}, {13  , {3, 1, 1, 0, 0}}};
 
-    po::polynomial p(1.4, po::rank<2>{});
+    po::polynomial p = po::polynomial::make_constant(1.4, po::rank<2>{});
 
     p = -(2*(r-3)*r*r - 3.2*q);
 

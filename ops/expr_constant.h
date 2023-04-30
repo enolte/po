@@ -9,12 +9,12 @@ namespace po
   {
     using F1 = const scalar_type;
 
-    const scalar_type expr1;
+    const scalar_type expr1{scalar_type(0)};
 
     template<scalar Scalar = scalar_type>
     constexpr expr_constant(Scalar _c): expr1(scalar_type(_c)) {}
 
-    constexpr expr_constant(): expr1(scalar_type(0)) {}
+    constexpr expr_constant() = default;
 
     scalar_type operator()(...) const
     {

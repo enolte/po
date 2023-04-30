@@ -2,7 +2,25 @@
 |||
 |--------------|--------------------|
 | created      | 24 July 2022       |
-| last updated | 18 February 2023   |
+| last updated | 01 May 2023        |
+
+# Status
+
+
+|                     |scalar       |polynomial   |unary expr   |binary expr  |
+|:-------------------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| binary `*`          | Done        | Done        | Done        | Done        |
+| binary `+`          | Done        | Done        | Done        | Done        |
+| binary `-`          | Done        | Done        | Done        | Done        |
+| unary `+`           | Done        | Done        | Done        | Done        |
+| unary `-`           | Done        | Done        | Done        | Done        |
+| differentiation     | Done        | Done        | Done        | Done        |
+| antidifferentiation | Done        | Done        | Done        | Done        |
+| integration         | Done        | Done        | Done        | Done        |
+
+For unary ops, column entries refer to that column only. For binary ops, column entries refer to all pairs of columns which include the referenced column.
+
+
 
 # Expression Grammar Testing
 

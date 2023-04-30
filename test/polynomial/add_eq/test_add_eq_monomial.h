@@ -112,7 +112,7 @@ void test_add_eq_monomial()
   }
 
   {
-    po::polynomial k{po::rank<7>{}};
+    po::polynomial k = po::polynomial::make_zero(po::rank<7>{});
     for(std::size_t i = 0; i < 4; ++i)
       k += {double(3*i + 1), {i, i, i, 2*i, 0, 0, i}};
 
