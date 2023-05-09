@@ -1,9 +1,9 @@
 #ifndef PO_EXPR_ANTIDERIVATIVE_POLYNOMIAL_H
 #define PO_EXPR_ANTIDERIVATIVE_POLYNOMIAL_H
 
-#include "../utils/pow.h"
 #include "../utils/nan.h"
-#include "../ostream/monomial_ostream.h"
+#include "../utils/nan.h"
+
 namespace po
 {
   namespace detail

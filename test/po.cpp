@@ -13,7 +13,29 @@ int main()
   test();
 
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 2455, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 2285, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2261, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2246, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2234, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2232, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2233, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2197, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2183, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2182, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2175, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2177, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2168, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2113, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2108, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2237, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2269, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2263, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2260, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2259, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2272, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2320, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2462, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2455, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2451, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2453, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2447, po::polynomial::construction_count());

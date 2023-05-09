@@ -6,6 +6,74 @@
 void test_sub_eq_polynomial()
 {
   {
+    po::polynomial p
+    {
+      {-3.2, {4, 1, 3, 2, 9, 3}},
+      {-4.2, {4, 1, 4, 2, 9, 3}},
+      {-5.2, {4, 1, 5, 2, 9, 3}},
+      {-6.2, {4, 1, 6, 2, 9, 3}}
+    };
+
+    assert(p.nterms() == 4);
+
+    p -= p;
+
+    assert(compare::unordered_equal_terms(
+      p,
+      {
+        {0, {4, 1, 3, 2, 9, 3}},
+        {0, {4, 1, 4, 2, 9, 3}},
+        {0, {4, 1, 5, 2, 9, 3}},
+        {0, {4, 1, 6, 2, 9, 3}}
+      }));
+
+    assert(p.constant() == 0.);
+    assert(p.rank() == 6);
+
+    assert(p.degree() == 25);
+
+    PO_ASSERT(p.nterms() == 4, p);
+    assert(p.constant() == 0.);
+    assert(p.coefficient(0, 0, 0, 0, 0, 0) == 0.);
+
+    PO_LINE;
+  }
+
+  {
+    po::polynomial p
+    {
+      {-3.2, {4, 1, 3, 2, 9, 3}},
+      {-4.2, {4, 1, 4, 2, 9, 3}},
+      {-5.2, {4, 1, 5, 2, 9, 3}},
+      {-6.2, {4, 1, 6, 2, 9, 3}}
+    };
+
+    assert(p.nterms() == 4);
+
+    (p -= p) -= p;
+
+    assert(compare::unordered_equal_terms(
+      p,
+      {
+        {0, {4, 1, 3, 2, 9, 3}},
+        {0, {4, 1, 4, 2, 9, 3}},
+        {0, {4, 1, 5, 2, 9, 3}},
+        {0, {4, 1, 6, 2, 9, 3}}
+      }));
+
+    assert(p.constant() == 0.);
+    assert(p.rank() == 6);
+
+    assert(p.degree() == 25);
+
+    PO_ASSERT(p.nterms() == 4, p);
+    assert(p.constant() == 0.);
+    assert(p.coefficient(0, 0, 0, 0, 0, 0) == 0.);
+
+    PO_LINE;
+  }
+
+  {
     po::polynomial p{po::polynomial::make_zero(po::rank<6>{})};
     po::polynomial q
     {
@@ -28,12 +96,13 @@ void test_sub_eq_polynomial()
         {6.2, {4, 1, 6, 2, 9, 3}}
       }));
 
-    assert(p.constant() == q.constant() && p.constant() == 0.);
-    assert(p.rank() == q.rank() && p.rank() == 6);
+    assert(p.constant() == q.constant());
+    assert(p.rank() == q.rank());
 
     assert(p.degree() == q.degree());
     assert(compare::equal(p.degrees(), q.degrees()));
 
+    assert(p.rank() == 6);
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));
@@ -112,12 +181,13 @@ void test_sub_eq_polynomial()
         {-6.2, {4, 1, 6, 2, 9, 3}}
       }));
 
-    assert(p.constant() == q.constant() && p.constant() == 0.);
-    assert(p.rank() == q.rank() && p.rank() == 6);
+    assert(p.constant() == q.constant());
+    assert(p.rank() == q.rank());
 
     PO_ASSERT(p.degree() == 25, p.degree());
     assert(compare::equal(p.degrees(), q.degrees()));
 
+    assert(p.rank() == 6);
     PO_ASSERT(p.nterms() == 4, p);
     assert(p.constant() == 0.);
     PO_ASSERT(p.coefficient(0, 0, 0) == 0., p.coefficient(0, 0, 0));

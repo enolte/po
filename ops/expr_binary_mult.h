@@ -20,10 +20,19 @@ namespace po
     F1 expr1;
     F2 expr2;
 
-    template<typename ...X>
+    template<scalar ...X>
+    scalar_type eval(X... x) const
+    {
+      return expr1.eval(x...) * expr2.eval(x...);
+    }
+
+    template<scalar ...X>
     scalar_type operator()(X... x) const
     {
-      return expr1(x...) * expr2(x...);
+      if(!ranks_compatible(expr1, expr2))
+        return nan;
+
+      return eval(x...);
     }
   };
 

@@ -12,7 +12,13 @@ namespace po
     using F1 = subexpr_type<E1>;
     F1 expr1;
 
-    template<typename ...X>
+    template<scalar... X>
+    scalar_type eval(X... x) const
+    {
+      return expr1(x...);
+    }
+
+    template<scalar... X>
     scalar_type operator()(X... x) const
     {
       return expr1(x...);

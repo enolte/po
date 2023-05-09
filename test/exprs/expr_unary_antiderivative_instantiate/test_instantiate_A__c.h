@@ -10,6 +10,8 @@ void test_instantiate_A__c()
     const auto x = po::antiderivative(po::expr_constant{6.7}, 5);
 
     static_assert((std::same_as<decltype(x), const po::expr_antiderivative<po::expr_constant>>));
+    static_assert((std::same_as<decltype(x.expr1), const po::expr_constant>));
+    static_assert((std::same_as<decltype(x.expr1.expr1), const po::scalar_type>));
 
     assert(x.place == 5);
     assert(x.expr1.expr1 == 6.7);

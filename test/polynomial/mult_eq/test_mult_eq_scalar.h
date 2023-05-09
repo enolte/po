@@ -5,6 +5,68 @@
 
 void test_mult_eq_scalar()
 {
+
+  // Multiplying an empty zero-polynomial by a constant does not change polynomial storage.
+  {
+    po::polynomial p = po::polynomial::make_zero(po::rank<4>{});
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    static_assert(po::is_scalar<decltype(2)>);
+
+    p *= 2;
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    PO_LINE;
+  }
+
+  // Multiplying an empty zero-polynomial by a constant does not change polynomial storage.
+  {
+    po::polynomial p = po::polynomial::make_zero(po::rank<4>{});
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    static_assert(po::is_scalar<decltype(2.)>);
+
+    p *= 2.;
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    PO_LINE;
+  }
+
+  // Multiplying an empty zero-polynomial by a constant does not change polynomial storage.
+  {
+    po::polynomial p = po::polynomial::make_zero(po::rank<4>{});
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    p *= 0.5;
+
+    assert(p.nterms() == 0);
+    assert(p.coefficient(0, 0, 0, 0) == 0.);
+    assert(compare::equal(p.degrees(), {0, 0, 0, 0}));
+    assert(p.constant() == 0.);
+
+    PO_LINE;
+  }
+
   {
     po::polynomial p
     ({
@@ -86,6 +148,7 @@ void test_mult_eq_scalar()
     assert(compare::equal(p.degrees(), {3, 1, 0, 7}));
 
     p *= {0.5};
+
     PO_ASSERT(compare::unordered_equal_terms(
       p,
       {

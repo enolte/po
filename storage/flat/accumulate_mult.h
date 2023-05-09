@@ -19,12 +19,12 @@ namespace po
     /*
      * Accumulate a monomial, implements multiplication.
      */
-    static void accumulate_mult(storage& terms, const scalar_type& c, const po::exponents& exponents)
+    static void accumulate_mult(storage& terms, const scalar_type& s, const po::exponents& exponents)
     {
       for(auto& term : terms)
       {
         term.exponents += exponents;
-        term.coefficient *= c;
+        term.coefficient *= s;
       }
     }
 

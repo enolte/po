@@ -42,25 +42,27 @@ namespace po
      */
     static std::uint64_t construction_count()
     {
-      return m_construction_count.load();
+      return s_construction_count.load();
     }
 
     model::storage terms;
 
   private:
-    static std::atomic<std::uint64_t> m_construction_count;
+    static std::atomic<std::uint64_t> s_construction_count;
 
-    degree_type m_degree;
+    degree_type m_degree{0};
 
-    exponents m_degrees;
+    exponents m_degrees{};
 
-    rank_type m_rank;
+    rank_type m_rank{0};
 
   public:
     constexpr void update_degrees()
     {
       m_degree = 0;
 
+      // TODO Maybe.
+      // m_degrees = 0;
       for(auto i{0zu}; i < m_rank; ++i)
         m_degrees[i] = 0;
 
@@ -108,10 +110,19 @@ namespace po
       m_degrees(degree_type{0}, rank),
       m_rank{rank}
     {
-      ++m_construction_count;
+      ++s_construction_count;
     }
 
   public:
+
+    /*
+     * Constructs a constant zero polynomial of rank zero, with no storage terms.
+     */
+    polynomial()
+    {
+      ++s_construction_count;
+    }
+
 #if 0
     // Disabled
     /*
@@ -122,9 +133,10 @@ namespace po
     polynomial(rank<R>&&):
       polynomial(R)
     {
-      ++m_construction_count;
+      ++s_construction_count;
     }
 #endif
+
     /*
      * Construct a polynomial from a supported expression type instance.
      */
@@ -132,7 +144,7 @@ namespace po
     polynomial(Expr&& expr):
       polynomial(instantiate(expr))
     {
-      ++m_construction_count;
+      ++s_construction_count;
     }
 
 
@@ -162,7 +174,7 @@ namespace po
         ? std::get<1>(*_ilist.begin()).size()
         : 0}
     {
-      ++m_construction_count;
+      ++s_construction_count;
       for(auto&& t : _ilist)
       {
         m_degree = std::max(m_degree, std::accumulate(std::get<1>(t).begin(), std::get<1>(t).end(), degree_type{0}));
@@ -177,57 +189,56 @@ namespace po
       }
     }
 
-#if 0
-    /*
-     * Construct a polynomial from an r-value `std::initializer_list` of monomials.
-     * This typically begins with a "braced-init-list" (which is not a std::initializer_list).
-     *
-     * polynomial p({0.2, {4, 3, 5, 7}});
-     * polynomial p{{0.2, {4, 3, 5, 7}}};
-     * polynomial p({{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}});
-     * polynomial p{{2.4, {3, 2, 3, 2}}, {-0.6, {1, 1, 1, 1}}};
-     */
-    polynomial(std::initializer_list<monomial>&& _ilist)
-    : terms{std::forward<decltype(_ilist)>(_ilist)},
-      m_degree{0},
-      m_degrees(
-        _ilist.size() > 0
-        ? _ilist.begin()->exponents
-        : std::valarray<std::size_t>()),
-      m_rank{
-        _ilist.size() > 0
-        ? _ilist.begin()->rank()
-        : 0}
-    {
-      for(const auto& t : terms)
-      {
-        m_degree = std::max(m_degree, t.degree());
-/*
-        // g++ 11.2: probable bug in std::valarray, causes seg fault here if the predicate is false for every
-        // component, which produces a zero-length mask array, which is unchecked before assignment in
-        // std::valarray ctor
-        m_degrees[m_degrees < t.exponents] = t.exponents;
-*/
-
-        for(auto i{0zu}; i < t.rank(); ++i)
-          m_degrees[i] = std::max(m_degrees[i], t.exponents[i]);
-      }
-    }
-#endif
     /*
      * Instantiate an expression and assign it. E.g.,
      * p = 3*p - q*(-4*r + q*q);
      */
     template<expression Expr>
-    polynomial& operator=(Expr expr);
+    polynomial& operator=(Expr&&);
 
-    // TODO This function does not absorb the monomial.
+    polynomial& operator=(
+      std::initializer_list
+        <
+          std::tuple<scalar_type, std::initializer_list<exponent_type>>
+        >
+        && _ilist)
+    {
+      m_rank = _ilist.size() > 0 ? std::get<1>(*_ilist.begin()).size() : 0;
+      zero(m_rank);
+
+      for(auto&& t : _ilist)
+      {
+        m_degree = std::max(m_degree, std::accumulate(std::get<1>(t).begin(), std::get<1>(t).end(), degree_type{0}));
+        std::size_t i = 0;
+        for(auto&& x : std::get<1>(t))
+        {
+          m_degrees[i] = std::max(m_degrees[i], degree_type{x});
+          ++i;
+        }
+
+        terms.emplace_back(std::move(std::get<0>(t)), std::move(std::get<1>(t)));
+      }
+
+      return *this;
+    }
+#if 0
+    // TODO
+    polynomial& operator=(std::tuple<scalar_type, std::initializer_list<exponent_type>>&& m)
+    {
+      zero();
+      m_rank = std::get<1>(m).size();
+      m_degrees.resize(m_rank);
+      accumulate_add(terms, std::get<0>(m), std::get<1>(m));
+      update_degrees();
+      return *this;
+    }
+#endif
     polynomial& operator=(monomial&& m)
     {
       zero();
       m_rank = m.rank();
       m_degrees.resize(m_rank);
-      accumulate_add(terms, m.coefficient, m.exponents);
+      accumulate_add(terms, m.coefficient, std::move(m.exponents));
       update_degrees();
       return *this;
     }
@@ -252,6 +263,19 @@ namespace po
       terms.clear();
       m_degree = 0;
       m_degrees = 0;
+    }
+
+
+    /*
+     * Set this polynomial to be the zero polynomial,
+     * with the given rank.
+     */
+    void zero(rank_type rank)
+    {
+      terms.clear();
+      m_rank = rank;
+      m_degree = 0;
+      m_degrees.resize(rank, rank_type(0));
     }
 
     /*
@@ -322,6 +346,12 @@ namespace po
         return evaluate(*this, S(x)...);
     }
 
+    template<scalar ...X>
+    scalar_type eval(X&&... x) const
+    {
+      return (*this)(x...);
+    }
+
     /*
      * Get the coefficient of the term with the given exponents.
      */
@@ -345,9 +375,9 @@ namespace po
      * p += 6;
      * p += {6};
      */
-    polynomial& operator+=(scalar_type c)
+    constexpr polynomial& operator+=(scalar_type s)
     {
-      accumulate_add(terms, std::forward<scalar_type>(c), exponents(exponent_type{0}, rank()));
+      accumulate_add(terms, std::forward<scalar_type>(s), exponents(exponent_type{0}, rank()));
 
       return *this;
     }
@@ -393,7 +423,7 @@ namespace po
     }
 
     /*
-     * Add a polynomial.
+     * Add a polynomial. If rank(*this) != rank(q), the result is undefined.
      *
      * p += std::move(q);
      */
@@ -409,11 +439,11 @@ namespace po
     }
 
     /*
-     * Add a polynomial.
+     * Add a polynomial. If rank(*this) != rank(q), the result is undefined.
      *
      * p += q;
      */
-    polynomial& operator+=(const polynomial& q)
+    constexpr polynomial& operator+=(const polynomial& q)
     {
       for(const auto& s : q.terms)
         accumulate_add(terms, s.coefficient, s.exponents);
@@ -514,9 +544,10 @@ namespace po
      * Multiply by a scalar constant.
      *
      */
-    polynomial& operator*=(scalar_type c)
+    // polynomial& operator*=(scalar auto s)
+    polynomial& operator*=(scalar_type s)
     {
-      accumulate_mult(terms, std::move(c));
+      accumulate_mult(terms, scalar_type(s));
       return *this;
     }
 
@@ -577,18 +608,39 @@ namespace po
     }
   };
 
+  po::polynomial zero(rank_type rank)
+  {
+    return polynomial::make_zero(rank);
+  }
+
+  po::polynomial make_constant(scalar_type&& c, rank_type rank)
+  {
+    return polynomial::make_constant(rank, std::move(c));
+  }
+
+  po::polynomial make_constant(const scalar_type& c, rank_type rank)
+  {
+    return polynomial::make_constant(rank, std::move(c));
+  }
+
+  std::atomic<std::uint64_t> polynomial::s_construction_count{0};
 }
 
 #include "ops/expr_partial_derivative.h"
 #include "ops/expr_integral.h"
 #include "ops/expr_antiderivative.h"
+#include "ops/expr_extend.h"
 
 #include "ops/instantiate.h"
+
+#include "ops/accumulate_add.h"
+#include "ops/accumulate_sub.h"
+#include "ops/accumulate_mult.h"
 
 namespace po
 {
   template<expression Expr>
-  polynomial& polynomial::operator=(Expr expr)
+  polynomial& polynomial::operator=(Expr&& expr)
   {
     if constexpr(is_constant<Expr>)
     {
@@ -608,6 +660,8 @@ namespace po
 
     if constexpr(is_polynomial<Expr>)
     {
+      static_assert(std::is_lvalue_reference_v<decltype(expr)>);
+
       terms = expr.terms;
       m_degrees = expr.m_degrees;
       m_degree = expr.m_degree;
@@ -618,100 +672,23 @@ namespace po
     return (*this = instantiate(expr));
   }
 
-  template<typename E>
-  concept is_expr_binary_plus =
-    is_binary_expression<E> &&
-    std::same_as<E, expr_binary_plus<typename E::_E1, typename E::_E2>>;
-
-  template<expression Expr>
+  template<expression Expr> requires (!scalar<Expr>)
   polynomial& operator+=(polynomial& p, Expr&& expr)
   {
-    if constexpr(is_constant<Expr>)
-    {
-      return p.operator+=(expr.expr1);
-    }
-
-    if constexpr(is_polynomial<Expr>)
-    {
-      return p.operator+=(expr);
-    }
-
-    if constexpr(is_expr_binary_plus<Expr>)
-    {
-      if constexpr(is_polynomial<typename Expr::_E1> && is_polynomial<typename Expr::_E2>)
-      {
-        if(&p != &expr.expr1 && &p != &expr.expr2)
-        {
-          return p.operator+=(expr.expr1).operator+=(expr.expr2);
-        }
-
-        if(&p == &expr.expr1 && &p != &expr.expr2)
-        {
-          return p.operator*=(2).operator+=(expr.expr2);
-        }
-
-        if(&p != &expr.expr1 && &p == &expr.expr2)
-        {
-          return p.operator*=(2).operator+=(expr.expr1);
-        }
-
-        if(&p == &expr.expr1 && &p == &expr.expr2)
-        {
-          return p.operator*=(3);
-        }
-
-      }
-    }
-
-    return p.operator+=(instantiate(expr));
+    return accumulate_add(p, std::forward<Expr>(expr));
   }
 
   template<expression Expr>
   polynomial& operator-=(polynomial& p, Expr&& expr)
   {
-    if constexpr(is_constant<Expr>)
-    {
-      return p.operator-=(expr.expr1);
-    }
-
-    if constexpr(is_polynomial<Expr>)
-    {
-      return p.operator-=(expr);
-    }
-
-    return p.operator-=(instantiate(expr));
+    return accumulate_sub(p, std::forward<Expr>(expr));
   }
 
-  template<expression Expr>
+  template<expression Expr> requires (!scalar<Expr>)
   polynomial& operator*=(polynomial& p, Expr&& expr)
   {
-    if constexpr(is_constant<Expr>)
-    {
-      return p.operator*=(expr.expr1);
-    }
-
-    if constexpr(is_polynomial<Expr>)
-    {
-      return p.operator*=(expr);
-    }
-
-    return p.operator*=(instantiate(expr));
+    return accumulate_mult(p, std::forward<Expr>(expr));
   }
-
-/*
-  po::polynomial zero(rank_type rank)
-  {
-    return polynomial::make_zero(rank);
-  }
-
-  po::polynomial constant(scalar_type&& c, rank_type rank)
-  {
-    return polynomial::make_constant(rank, std::move(c));
-  }
-*/
-
-
-  std::atomic<std::uint64_t> polynomial::m_construction_count{0};
 }
 
 #endif

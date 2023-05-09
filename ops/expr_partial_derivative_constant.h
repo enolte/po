@@ -16,7 +16,13 @@ namespace po
       const F1 expr1;
       const rank_type place;
 
-      template<typename ...X>
+      template<scalar ...X>
+      scalar_type eval(X... x) const
+      {
+        return scalar_type{0};
+      }
+
+      template<scalar ...X>
       scalar_type operator()(X... x) const
       {
         return scalar_type{0};

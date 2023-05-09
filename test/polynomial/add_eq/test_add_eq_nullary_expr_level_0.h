@@ -27,7 +27,7 @@ void test_add_eq_nullary_expr_level_0()
     assert(p.constant() == 0);
     assert(p.coefficient(0, 0, 0, 0, 0) == 0.);
 
-    p += po::expr_constant{8.};
+    p += po::expr_constant{8.f};
 
     PO_ASSERT(p.nterms() == 3, p);
     assert(p.constant() == 8.);

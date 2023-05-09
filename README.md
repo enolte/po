@@ -10,34 +10,36 @@ C++23 hobby project.
 * [Design Limitations](#design-limitations)
 * [Running Unit Tests](#running-unit-tests)
 * [Demo/Example](#example)
-* [Plan Phase I](#plan-phase-i)
+* [Plan Phase I (Done)](#plan-phase-i) ([Progress Index](#progress-index-phase-i))
   * [IO streams adaptation I](#io-streams-adaptation-i)
   * [Evaluation I](#evaluation-i)
   * [Operators I](#operators-i)
   * [Expression template instantiation](#expression-template-instantiation)
   * [Ring operations](#ring-operations)
-* [Progress Index Phase I](#progress-index-phase-i)
-* [Plan Phase II](#plan-phase-ii)
+* [Plan Phase II](#plan-phase-ii) ([Progress Index](#progress-index-phase-ii))
   * [Changing rank](#changing-rank)
-  * [Binding operators](#binding-operators)
+  * [Signature extension (polynomials)](#signature-extension-polynomials)
   * [Storage](#storage-ii)
   * [Operators II](#operators-ii)
   * [Evaluation II](#evaluation-ii)
+  * [IO streams adaptation II](#io-streams-adaptation-ii)
+* [Plan Phase III](#plan-phase-iii) ([Progress Index](#progress-index-phase-iii))
   * [Induction](#induction)
   * [Quadrature](#quadrature)
   * [Elementary operator algebra](#elementary-operator-algebra)
-  * [IO streams adaptation II](#io-streams-adaptation-ii)
-* [Progress Index Phase II](#progress-index-phase-ii)
+  * [Signature extension (expressions)](#signature-extension-expressions)
 
 
 # Status
 
-(*29 April 2023*) Marking Phase I as done. Basic functionality is implemented and verified via unit tests. There are a few smaller clean-up items that remain. Those are coming up soon. Still not using Github issues to track to-do items. I probably should. Also, docs need some work, will get to that when I have time.
+(*02 July 2023*) Moved some things to Phase III. For Phase II, signature extension will be done only for polynomials, not for general expressions. (The general expression case may not be a real use case anyway.) Applied some minor docs clean up; more of that is coming when I have time. Unit tests for changes to expression accumulation are probably done, for now. Some further organization for expression unit tests is also needed. Will get to that when I have time.
 
 Progress continues as time available.
 
 <details>
 <summary><h3>Previous updates</h3></summary>
+
+(*29 April 2023*) Marking Phase I as done. Basic functionality is implemented and verified via unit tests. There are a few smaller clean-up items that remain. Those are coming up soon. Still not using Github issues to track to-do items. I probably should. Also, docs need some work, will get to that when I have time.
 
 (*05 April 2023*) File organization is done for now. Support for variadic differentation and integration is implemented and verified. The remaining piece of Phase I is antiderivatives. This is in progress.
 
@@ -86,7 +88,7 @@ The currently implemented storage is a flat model, consisting of a sequence of i
 
 An rvalue subexpression is copied into its parent expression instance. This happens because there is no implemented mechanism for rvalue-referencing an rvalue constructed by a subexpression type instance.
 
-This implies that an rvalue polynomial is copied into every superior expression type instance. This is a to-do.
+This implies that an rvalue polynomial is copied into every superior subexpression type instance in a given expression. This is a to-do.
 
 ## Operators
 
@@ -94,17 +96,15 @@ For Phase I, arithmetic operators and assignment operators are implemented only 
   * p(x, y, z) = 3xz - 2y
   * q(x, y) = 15y<sup>2</sup>
 
-then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined.
+then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined behavior.
 
-This is also the subject of [binding operators](#binding-operators) for Phase II.
+This is the subject of [signature extension](#signature-extension-polynomials) for Phase II.
 
 ## Partial evaluation
 
-A partial evaluations compiles and deterministically executes, but the result is undefined for Phase I.
+A partial evaluation compiles and deterministically executes, but the result is undefined for Phase I.
 
-E.g.,
-
-```
+```c++
 po::polynomial p{7.5, po::rank<6>{}};
 assert(compare::equal(p.variable_degrees, 0, 0, 0, 0, 0, 0));
 
@@ -116,8 +116,7 @@ assert(p.coefficient(0, 3, 0, 0) == 0.0);
 This is a problem because (a) there is no guaranteed term storage order, and (b) the result
 is ambiguous, even with a guaranteed storage order.
 
-E.g.,
-```
+```c++
 po::polynomial p{
   { 7.5, 0, 0, 0, 0, 0, 0},
   { 7.5, 1, 1, 1, 1, 0, 0},
@@ -130,7 +129,7 @@ assert(p.coefficient(1, 1, 1) == 7.5);
 The above gives 7.5, but with a different order in the terms list above, -7.5 would
 be expected instead.
 
-This is also the subject of [binding operators](#binding-operators) for Phase II.
+This is the subject of [partial evaluation](#partial-evaluation-rank-decreasing) for Phase II.
 
 
 # Running Unit Tests
@@ -139,17 +138,20 @@ As mentioned under [Status](#status), all unit tests are implemented by a simple
 
 From the repo root, a typical command line to compile and link all polynomial UTs is
 
-```
+```sh
 g++ --std=c++23 test/po.cpp
 ```
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 870 indexed unit tests, plus a few which are not yet indexed.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 1024 indexed unit tests, plus a few which are not yet indexed.
 
+```sh
+$ ./a | wc -l
+1024
+```
 
-
-
+ Some of these are probably not necessary; they will remain anyway, for now.
 
 # Example
 
@@ -182,7 +184,7 @@ q = 1[0,1]+22.4[3,1]+-5.1[7,1]
 error = 0x1.ecp-15
 ```
 
-(This output was generated using [dense generalized Horner evaluation](#generalized-horner). [Naïve evaluation](#naïve) gives an identical result.)
+(This output was generated using [dense generalized Horner evaluation](#generalized-horner-dense). [Naïve evaluation](#naïve) gives an identical result.)
 
 The file [demos/00/demo.cpp](./demos/00/demo.cpp) contains the above program source. Other [demos](./demos) will be added when time available, as new features are implemented.
 
@@ -212,11 +214,7 @@ emits
 1.4[2, 3, 2, 1] + 0.5[4, 1, 4, 1]
 ```
 
-to stdout, which serializes the polynomial
-
-p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup>4</sup>*yz*<sup>4</sup>*w*
-
-for named variables *x, y, z, w*.
+to stdout, which serializes the polynomial $p(x, y, z, w) = 1.4x^2y^3z^2w + 0.5x^4yz^4w$, for named variables $x, y, z, w$.
 
 ### Basic `std::basic_istream<char>` support
 
@@ -228,11 +226,7 @@ po::polynomial p{};
 ss >> p;
 ```
 
-should produce the polynomial
-
-p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup>4</sup>*yz*<sup>4</sup>*w*
-
-for named variables *x, y, z, w*.
+should produce the polynomial $p$ above.
 
 
 ## Evaluation I
@@ -247,17 +241,17 @@ For the usual additive form. Does what you think it does. Iterates each additive
 
 A generalization of Horner to `rank` many variables.
 
-Compositional form: Given p(x, y) in two variables, there are polynomials q<sub>k</sub> s.t.
+Compositional form: Given $p(x, y)$ in two variables, there are polynomials $q_k$ s.t.
 
-* p = q<sub>0</sub>(y) + xq<sub>1</sub>(y) + ∙∙∙ + x<sup>d</sup>q<sub>d</sub>(y),
+$$p = q_0(y) + xq_1(y) + \dots + x^dq_d(y)$$
 
-where d = deg(x, p). Each of polynomials q<sub>k</sub> has a compositional form, and the compositional form of p is
+where $d = deg(x, p)$. Each $q_k$ has a compositional form, and the compositional form of $p$ is
 
-* p = q<sub>0</sub>(y) + x(q<sub>1</sub>(y) + x(q<sub>2</sub>(y) + x(∙∙∙(xq<sub>d</sub>(y))∙∙∙)))
+$$p = q_0(y) + x(q_1(y) + x(q_2(y) + x( \cdots (xq_d(y)) \cdots )))$$
 
-Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary `rank` p(x<sub>1</sub>, ..., x<sub>r</sub>).
+Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary rank $p(x_1, ..., x_r)$.
 
-Evaluation recursively iterates every exponent sequence. This does not require storing temporary polynomials, nor does it use `std::bind`. This can be very slow on the typical case of term-wise-sparse polynomials.
+Evaluation recursively iterates every exponent sequence. This does not require storing temporary polynomials, nor does it use `std::bind`. This can be very slow on the typical case of term-wise-sparse polynomials. A sparse version of this is part of [Phase II](#generalized-horner-sparse).
 
 
 
@@ -388,20 +382,20 @@ which implies that $rank(P_1) = 2$, because $v$ was "integrated out".
 
 If instead $p$ is integrated from a to b with respect to some out-of-range place, say place 7, then
 
-$$P_7(u, v, w, \alpha, \beta, \gamma, \delta, \epsilon) = \int\limits_a^b p(u, v, w) \ d\epsilon = (b-a)p(u, v, w)$$
+$$P_7(u, v, w) = P_7(u, v, w, \alpha, \beta, \gamma, \delta, \epsilon) = \int\limits_a^b p(u, v, w) \ d\epsilon = (b-a)p(u, v, w)$$
 
 with no explicit dependence upon $\alpha, \beta, \gamma$, or $\delta$.
 
-For integration, this repo implements both of these conventions: to increase $rank(\int\limits_a^b p)$ to accommodate the given place of integration whenever place $\ge rank(p)$, and to reduce $rank(\int\limits_a^b p)$ by one when the place number $\lt rank(p)$.
+For integration, this repo implements the following conventions: $rank(\int\limits_a^b p) = rank(p)$ if place number $\ge rank(p)$, and $rank(\int\limits_a^b p) = rank(p) - 1$ if the place number $\lt rank(p)$.
 
 
 ### Antiderivatives
 
-Only integral primitives are supported ("zero gauge").
+Only integral primitives are supported.
 
-Given a expression `x`, expressions such as `antiderivative(x, 1, 0, 2)` are supported. Each argument after `x` refers to a place with respect to which to integrate. Integration is applied in parameter order, left to right.
+Given an expression `X`, expressions such as `antiderivative(X, 1, 0, 2)` are supported. Each argument after `X` refers to a place with respect to which to integrate. Integration is applied in parameter order, left to right.
 
-The type of such an expression is an antiderivative expression type which, when instantiated, is a unique polynomial $P$ with $rank(P) \ge rank(x)$
+The type of such an expression is an antiderivative expression type which, when instantiated, is a unique polynomial $P$ with $rank(P) \ge rank(X)$
 
 #### Change of rank
 
@@ -409,15 +403,15 @@ The following uses zero-based enumeration of variables.
 
 Given a rank-4 polynomial $p(u, v, w, x) = 2ux - 3v^3w$, with place numbers 0, 1, 2, 3, if we antidifferentiate with respect to, say, $v$ (place 1), the result is
 
-$$P_2(u, v, w, x) = \int\ p(u, v, w, x) \ dx = 2uvx - \frac 34 v^4w$$
+$$P_1(u, v, w, x) = \int\ p(u, v, w, x) \ dx = 2uvx - \frac 34 v^4w$$
 
-No change of rank is implied ( $rank(P_2) = rank(p)$ ), because the place number is less than $rank(p)$. Antidifferentiating $p$ with respect a hypothetical place 6 yields
+No change of rank is implied ( $rank(P_1) = rank(p)$ ), because the place number is less than $rank(p)$. Antidifferentiating $p$ with respect a hypothetical place 6 yields
 
 $$P_6(u, v, w, x, \alpha, \beta, \gamma) = \int\ p(u, v, w, x) \ d\gamma = 2ux\gamma - 3v^3w\gamma = \gamma p(u, v, w, x)$$
 
 a rank 7 polynomial.
 
-This repo implements this convention: If the place number >= $rank(p)$, then $rank(\int p)$ accommodates the place number. If place < $rank(p)$, then $rank(\int p) = rank(p)$.
+This repo implements this convention: If the place number $\gt rank(p)$, then $rank(\int p)$ accommodates the place number. If place < $rank(p)$, then $rank(\int p) = rank(p)$.
 
 
 
@@ -439,44 +433,41 @@ This repo implements this convention: If the place number >= $rank(p)$, then $ra
 
 Two simple routines: `decrease_rank` and `increase_rank`. These are implementation-internal operations that unconditionally increase or decrease the rank of a polynomial object. It's probably faster to implement change-of-rank "inline" where it's used, but these may be useful later.
 
-## Binding operators
+## Signature extension (polynomials)
 
-To multiply two polynomials of different rank, a parameter map must be specified. E.g., for named variables *x*,*y*,*z*, an expression which is evaluation-equivalent to p(x, y, z) * q(y) may look like
-
-```
-p * po::bind(q, 2);
-```
-
-or for p(x, y, z) * r(x, z),
+To multiply two polynomials of different rank, a parameter map must be specified. E.g., for named variables $x, y, z$, an expression which is evaluation-equivalent to $p(x, y, z)q(y)$ may look like
 
 ```
-p * po::bind(r, 1, 3);
+(p * po::extend(q, 1))(x, y, z);
 ```
 
-with the result of `po::bind` imputed by the rank of the polynomial `p`.
-
-This also is the implementing mechanism for [partial evaluation](#partial-evaluation).
-
-Why not `std::bind`? For basic evaluation, the result of `std::bind` does the right thing (a la `q = std::bind(p, 2, 0.5, _1, _2)`), but using only `std::bind` has two problems.
-
-* It requires that the expression grammar depend upon implementation details of `std::bind`.
-* It requires that instantiation of the resulting bind-expression be implemented in terms of `std::bind`.
-
-
-To facilitate instantiation, a better approach is to define a custom bind operation, something like
+or for $p(x, y, z)r(x, z)$,
 
 ```
-expr_bind bind(Expr&& expr, X&&... x)
+(p * po::extend(r, 0, 2))(x, y, z);
+```
+
+with rank of the result type of `extend` imputed by the rank of `p`.
+
+The convention is that the arguments to $r$ are selected from the augmented signature (0 and 2 in the above example). So `po::extend(r, 0, 2)` has rank 3, and `po::extend(r, 0, 2)(x, y, z)` has an identical value to `r(x, z)` for any x, y, z.
+
+If the number of positional args does not equal the rank of the expression, the result is undefined.
+
+`po::extend` looks like
+```
+expr_extend extend(Expr&& expr, X&&... x)
 ```
 
 When paired with
-
 ```
-polynomial instantiate(expr_bind&&)
+polynomial instantiate(expr_extend&&)
 ```
 
-a partial evaluation may be instantiated, with expression grammar support.
-
+a partial evaluation may be instantiated, with expression grammar support, supporting statements like
+```
+polynomial xr = extend(r, 1, 3);
+```
+This Phase implements this only for polynomials.
 
 
 
@@ -494,7 +485,7 @@ This is the currently implemented model.
 
 Stores a prefix tree of exponent sequences, with coefficients as leaf data. This is asymptotically more space-efficient, but some algorithms may have greater asymptotic time than with a flat model.
 
-The trie is implemented. The goal is to implement an evaluation algorithm which this repo calls "sparse [generalized Horner](#generalized-horner)". This algorithm may be faster than a naïve evaluation on a flat storage model.
+The trie is implemented. The goal is to implement an evaluation algorithm which this repo calls "[sparse generalized Horner](#generalized-horner-sparse)". This algorithm may be faster than a naïve evaluation on a flat storage model.
 
 A prefix tree representation can not benefit from pre-generated multiindices.
 
@@ -554,34 +545,6 @@ This extension is not currently implemented, and it may not be.
 
 
 
-
-## Induction
-
-* point fitting
-* multivariate Lagrange interpolants
-* solver for simplex basis
-* Orthonormal basis polynomials. Start with an n-dimensional rectangular domain.
-* "Multinomial Bernstein" basis
-* series induction
-  * begins with Taylor and orthonormal Taylor
-* Lagrange basis
-* Bernstein-Bezier approximation for piecewise continuous functions
-
-
-
-
-
-## Quadrature
-
-For the inner product of a polynomial operator and any suitable function : R<sup>n</sup> → R.
-
-* Simpson
-* Dormand-Prince
-* Some others
-
-
-
-
 ## Evaluation II
 
 ### Generalized Horner (sparse)
@@ -590,13 +553,13 @@ A generalization of Horner to `rank` many variables.
 
 Compositional form: Given p(x, y) in two variables, there are polynomials q<sub>k</sub> s.t.
 
-* p = q<sub>0</sub>(y) + xq<sub>1</sub>(y) + ∙∙∙ + x<sup>d</sup>q<sub>d</sub>(y),
+$$p = q_0(y) + xq_1(y) + \cdots + x^dq_d(y)$$
 
 where d = deg(x, p). Each of polynomials q<sub>k</sub> has a compositional form, and the compositional form of p is
 
-* p = q<sub>0</sub>(y) + x(q<sub>1</sub>(y) + x(q<sub>2</sub>(y) + x(∙∙∙(xq<sub>d</sub>(y))∙∙∙)))
+$$p = q_0(y) + x(q_1(y) + x(q_2(y) + x(\cdots(xq_d(y))\cdots)))$$
 
-Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary `rank` p(x<sub>1</sub>, ..., x<sub>r</sub>).
+Generalized Horner evaluates this expression in the general case of all compositional subexpressions, for a polynomial of arbitrary rank.
 
 A prefix tree is a natural storage model for this. The trie is implemented. The algorithm is not.
 
@@ -604,89 +567,58 @@ A prefix tree is a natural storage model for this. The trie is implemented. The 
 
 TODO details here
 
-### Partial evaluation
+### Partial evaluation (rank-decreasing)
+
+For Phase II, this applies only to polynomials, not to general supported expressions.
 
 If p has rank R, and if fewer than R numeric arguments are specified, the result is an instantiable bind-expression.
 
-The polynomial constructed from a bind-expression returned by a [binding operator](#binding-operators) is a polynomial defined by a partial evaluation of p.
+The polynomial constructed from a bind-expression is the polynomial defined by a partial evaluation of p.
 
-E.g., if
-
-p(x, y, z, w) = 1.4*x*<sup>2</sup>*y*<sup>3</sup>*z*<sup>2</sup>*w* + 0.5*x*<sup>4</sup>*yz*<sup>4</sup>*w*
-
-is evaluated with *x* = 2 and *y* = 0.5, the result when instantiated is
-
-q(z, w) = p(2, 0.5, z, w) = 0.7*z*<sup>2</sup>*w* + 4*z*<sup>4</sup>*w*
-
-for named variables *x, y, z, w*.
-
-
-
-
-## Elementary operator algebra
-
-### Differential operators
-
-The intent is to support expressions such as
+As a special case, given $rank(p) = 4$, implementing $r(z, w) = p(1.7, -4, w, z)$ would look like
 
 ```
-D(0) + 1.8*D(4)*D(1)
+po::polynomial r = p(1.7, -4);
+```
+which is equivalent to
+```
+po::expr_bind x = po::bind(p, {0, 1.7}, {1, -4});
+po::polynomial q = x;
 ```
 
-where the expression type is a partial differential operator type.
+This special case will be first. For a typical general case, if
 
-Applying such an expression to an expression, e.g.,
+$$p(x, y, z, w) = 1.4x^2y^3z^2w + \frac 12 x^4yz^4w$$
 
-```
-(D(0) + 1.8*D(4)*D(1))((p - 3) * q)
-```
+is evaluated with $x = 2$ and $w = 0.5$, the result when instantiated is
 
-gives an appropriate expression type as the result.
+$$q(y, z) = p(2, y, z, 0.5) = 2.8y^3x^2 + 4yz^4$$
 
-
-
-
-### Integral operators
-
-Only integral primitives are supported ("zero gauge").
-
-The intent is to support expressions such as `integral(1, {0, 1}) - 2*integral(3, {-2, 2})`, or maybe `integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})` if given some polynomial `q`. The type of such an expression is an integral operator type.
-
-This is applied to a polynomial `p` (or some other expression type). The result looks like
+This may look like
 
 ```
-(integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})(p)
+po::polynomial q = po::bind(p, {1, 2}, {3, 0.5});
+```
+which is equivalent to
+```
+po::expr_bind x = po::bind(p, {1, 2}, {3, 0.5});
+po::polynomial q = x;
 ```
 
-and the resulting expression type is identical to the type of
+This general case may come later, or not at all.
+
+The special case
 
 ```
-integral(p, 3, {2, 4}} + 3*q*q*integral(p, 2, {0, 1})
+po::polynomial r = p(1.7, -4);
+```
+is equivalent to
+```
+po::expr_bind x = po::bind(p, {0, 1.7}, {1, -4});
+po::polynomial q = x;
 ```
 
-When yhe above is instantiated for a `p` of rank R, the result is a rank R-1 polynomial if R > 2, else it has rank 2.
-
-For `integral(3, {2, 4})(p)`, if p has rank R < 4, the result is a rank R expression, else it is a rank R-1 expression.
-
-### Antiderivative operators
-
-Only integral primitives are supported ("zero gauge").
-
-The intent is to support expressions such as `antiderivative(1)`, or maybe `antiderivative(3) + 3*q*q*antiderivative(2)` if given some polynomial `q`. The type of such an  expression is an antiderivative operator type.
-
-Evaluation on an expression *X* of rank R looks like `(antiderivative(3) + 3*q*q*antiderivative(2))(X)`. The result is an expression which, when instantiated, is a unique rank R+1 polynomial.
-
-The expression
-
-```
-(antiderivative(3) + 3*q*q*antiderivative(2))(X)
-```
-
-has identical type to
-
-```
-antiderivative(3)(X) + 3*q*q*antiderivative(2)(X)
-```
+Why not use `std::bind`? Doing so would require implementing conversion from `expr_bind` to polynomial (instantiation) in terms of the implementation details of `std::bind`; those details are not standardized.
 
 
 
@@ -733,12 +665,11 @@ polynomial{{coefficient:"7.1", exponents{4, 2, 3}},{coefficient:"2.4", exponents
 This might be useful for validation.
 
 Given
+$$p(x, y, z) = 7.1x^4y^2z^{15} + 2.4x^4y^3 - 4.5x^6y^2 + 13x$$
 
-* p(x, y) = 7.1x<sup>4</sup>y<sup>2</sup>z<sup>15</sup> + 2.4x<sup>4</sup>y<sup>3</sup> - 4.5x<sup>6</sup>y<sup>2</sup> + 13x
+A left-to-right compositional form (there are seveal) is
 
-In left-to-right compositional form,
-
-* p(x, y) = x(13) + x<sup>4</sup>( y<sup>2</sup>(z<sup>15</sup>(7.1)) + y<sup>3</sup>(2.4) ) + x<sup>6</sup>(y<sup>2</sup>(-4.5))
+$$p(x, y, z) = x^4(y^2(z^{15}(7.1)) + y^3(2.4)) + x^6(y^2(-4.5)) + x(13)$$
 
 For stdout, this tree could be serialized with this code fragment:
 
@@ -779,21 +710,121 @@ std::cout << po::source << p;
 
 ## Done
 
+  * [Changing rank](#changing-rank)
+  * [Signature extension (polynomials)](#signature-extension-polynomials)
+
 ## In progress
 
-  * [Changing rank](#changing-rank)
+  * [Storage](#storage-ii)
 
 ## Not started
 
-  * [Binding operators](#binding-operators)
-  * [Storage](#storage-ii)
   * [Operators II](#operators-ii)
   * [Evaluation II](#evaluation-ii)
-  * [Induction](#induction)
-  * [Quadrature](#quadrature)
-  * [Elementary operator algebra](#elementary-operator-algebra)
   * [IO streams adaptation II](#io-streams-adaptation-ii)
 
 
+
+
+# Plan Phase III
+
+## Induction
+
+* point fitting
+* multivariate Lagrange interpolants
+* solver for simplex basis
+* Orthonormal basis. Start with an n-dimensional rectangular domain.
+* "Multinomial Bernstein" basis
+* series induction
+  * begins with Taylor and orthonormal Taylor
+* Multivariate Lagrange basis
+* Bernstein-Bezier approximation for piecewise continuous functions
+
+
+
+## Quadrature
+
+For the inner product of a polynomial operator and any suitable function : $\mathbb{R}^n → \mathbb{R}$.
+
+* Simpson
+* Dormand-Prince
+* Some others
+
+
+
+## Elementary operator algebra
+
+### Differential operators
+
+The intent is to support expressions such as
+
+```
+D(0) + 1.8*D(4)*D(1)
+```
+
+where the expression type is a partial differential operator type.
+
+Applying such an expression to an expression, e.g.,
+
+```
+(D(0) + 1.8*D(4)*D(1))((p - 3) * q)
+```
+
+gives an appropriate expression type as the result.
+
+### Integral operators
+
+The intent is to support expressions such as `integral(1, {0, 1}) - 2*integral(3, {-2, 2})`, or maybe `integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})` if given some polynomial `q`. The type of such an expression is an integral operator type.
+
+When applied to an expression `X`, the result looks like
+
+```
+(integral(3, {2, 4}) + 3*q*q*integral(2, {0, 1})(X)
+```
+
+and the resulting expression type is identical to the type of
+
+```
+integral(X, 3, {2, 4}) + 3*q*q*integral(X, 2, {0, 1})
+```
+
+### Antiderivative operators
+
+Only integral primitives are supported.
+
+The intent is to support expressions such as `antiderivative(1)`, or maybe `antiderivative(3) + 3*q*q*antiderivative(2)` (given polynomial `q`). The type of such an expression is an antiderivative operator type.
+
+When applied to an expression `X`, the result is an expression which, when instantiated, is a unique polynomial $P$ with $rank(P) \ge rank(X)$.
+
+The expression
+
+```
+(antiderivative(3) + 3*q*q*antiderivative(2))(X)
+```
+
+has identical type to
+
+```
+antiderivative(3)(X) + 3*q*q*antiderivative(2)(X)
+```
+
+## Signature Extension (expressions)
+
+TODO Description here.
+
+
+# Progress Index Phase III
+
+## Done
+
+## In progress
+
+
+## Not started
+
+  * [Induction](#induction)
+  * [Quadrature](#quadrature)
+  * [Elementary operator algebra](#elementary-operator-algebra)
+  * [Signature extension (expressions)](#signature-extension-expressions)
 
 

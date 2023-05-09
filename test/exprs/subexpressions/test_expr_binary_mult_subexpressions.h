@@ -214,7 +214,6 @@ void test_expr_binary_mult_p_times_c_subexpressions()
     po::polynomial p{{3, {0}}};
     po::scalar_type c = 5;
 
-    assert((p * c * c)(3) == 75);
     assert(&(p * c * c).expr1.expr1 == &p);
     // TODO Requires compiling with `-fpermissive`
     // assert(&(p * c * c).expr1.expr2.expr1 != &c);

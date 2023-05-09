@@ -1,8 +1,6 @@
 #ifndef PO_EXPR_ANTIDERIVATIVE_BINARY_PLUS_H
 #define PO_EXPR_ANTIDERIVATIVE_BINARY_PLUS_H
 
-
-
 namespace po
 {
   template<typename E1, typename E2>

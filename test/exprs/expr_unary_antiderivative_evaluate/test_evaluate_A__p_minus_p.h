@@ -3,6 +3,8 @@
 #include "../../errors.h"
 #include <cassert>
 
+void test_evaluate_A__p_minus_p_different_ranks();
+
 void test_evaluate_A__p_minus_p()
 {
   // lvalues, difference == 0, place in range, test 1
@@ -190,6 +192,33 @@ void test_evaluate_A__p_minus_p()
 
     PO_LINE;
   }
+
+  test_evaluate_A__p_minus_p_different_ranks();
 }
 
 
+void test_evaluate_A__p_minus_p_different_ranks()
+{
+  // subexprs with incompatble ranks
+  {
+    po::polynomial p
+    {
+      { 3, {1, 1, 7}},
+    };
+
+    po::polynomial q
+    {
+      { 3, {1, 1}},
+    };
+
+    double ac;
+    ac = po::antiderivative(p - q, 0)(16, -14.5411, 3.4);
+    assert(ac != ac);
+    ac = po::antiderivative(p - q, 0)(-2.015, 11.04, -0.0015);
+    assert(ac != ac);
+    ac = po::antiderivative(p - q, 0)(-77.450, .3564, 12.50685);
+    assert(ac != ac);
+
+    PO_LINE;
+  }
+}

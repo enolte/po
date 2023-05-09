@@ -7,17 +7,16 @@ namespace po
 {
   polynomial& instantiate(polynomial& p, const expr_constant& expr, rank_type rank)
   {
-    p = polynomial::make_zero(rank);
-    p += expr.expr1;
-    return p;
+    p.zero(rank);
+    return p += expr.expr1;
   }
 
   polynomial& instantiate(polynomial& p, const scalar_type& expr, rank_type rank)
   {
-    p = polynomial::make_zero(rank);
-    p += expr;
-    return p;
+    p.zero(rank);
+    return p += expr;
   }
 }
 
 #endif
+

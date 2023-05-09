@@ -12,6 +12,8 @@ using namespace po_test;
 
 #include "test_concepts.h"
 
+#include "test_construction_counts.h"
+
 #include "test_ctors.h"
 
 #include "test_coefficient.h"
@@ -34,6 +36,8 @@ namespace po_test
     test_concepts();
 
     test_ctors();
+
+    test_construction_counts();
 
     test_coefficient();
     test_nterms();

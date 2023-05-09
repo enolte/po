@@ -2,13 +2,14 @@
 #define PO_EXPR_PARTIAL_DERIVATIVE_POLYNOMIAL_H
 
 #include "../utils/pow.h"
+#include "../utils/nan.h"
 
 namespace po
 {
   namespace detail
   {
-    template<is_polynomial P, typename ...X>
-    scalar_type evaluate(const P& expr1, rank_type place, X... x);
+    template<is_polynomial P, scalar ...X>
+    scalar_type evaluate_derivative(const P& expr1, rank_type place, X... x);
 
     template<is_polynomial E1>
     struct expr_partial_derivative_polynomial
@@ -19,14 +20,20 @@ namespace po
       const F1 expr1;
       const rank_type place;
 
+      template<scalar ...X>
+      constexpr scalar_type eval(X... x) const
+      {
+        return detail::evaluate_derivative(expr1, place, x...);
+      }
+
       /*
        * Naive implementation. Evaluate a partial derivative of this polynomial. Compute the result as a `double`, then
        * return the static cast to `scalar_type`.
        */
-      template<typename ...X>
+      template<scalar ...X>
       constexpr scalar_type operator()(X... x) const
       {
-        return detail::evaluate(expr1, place, x...);
+        return detail::evaluate_derivative(expr1, place, x...);
       }
     };
   }
@@ -53,11 +60,11 @@ namespace po
 
   namespace detail
   {
-    template<typename ...X>
-    scalar_type evaluate(const monomial& m, rank_type place, X... x);
+    template<scalar ...X>
+    scalar_type evaluate_derivative(const monomial& m, rank_type place, X... x);
 
-    template<is_polynomial P, typename ...X>
-    scalar_type evaluate(const P& expr1, rank_type place, X... x)
+    template<is_polynomial P, scalar ...X>
+    scalar_type evaluate_derivative(const P& expr1, rank_type place, X... x)
     {
       if(sizeof ...(X) != expr1.rank())
         return nan;
@@ -67,13 +74,13 @@ namespace po
 
       double acc = 0.;
       for(const auto& t : expr1.terms)
-        acc += evaluate(t, place, x...);
+        acc += evaluate_derivative(t, place, x...);
 
       return scalar_type{acc};
     }
 
-    template<typename ...X>
-    scalar_type evaluate(const monomial& m, rank_type place, X... x)
+    template<scalar ...X>
+    scalar_type evaluate_derivative(const monomial& m, rank_type place, X... x)
     {
       if(sizeof ...(X) != m.rank())
         return nan;

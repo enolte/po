@@ -3,7 +3,7 @@
 #include "../../compare.h"
 #include <cassert>
 
-void test_mult_eq_nullary_expr_level_0()
+void test_mult_eq_expr_level_0()
 {
   // Multiplying an empty zero-polynomial by a constant does not change polynomial storage.
   {
@@ -90,5 +90,6 @@ void test_mult_eq_nullary_expr_level_0()
 
     PO_LINE;
   }
+
 }
 

@@ -3,6 +3,8 @@
 #include "../../compare.h"
 #include <cassert>
 
+void test_evaluate_Dp__plus__p__different_ranks();
+
 void test_evaluate_Dp__plus__p()
 {
   {
@@ -49,4 +51,20 @@ void test_evaluate_Dp__plus__p()
 
     PO_LINE;
   }
+
+  test_evaluate_Dp__plus__p__different_ranks();
+}
+
+void test_evaluate_Dp__plus__p__different_ranks()
+{
+  {
+    po::polynomial p{{2, {1, 1, 1}}}, q{{3 ,{4}}};
+
+    auto x = D(p, 0) + q;
+    const po::scalar_type y = x(0, 0, 0);
+    assert(y != y);
+
+    PO_LINE;
+  }
+
 }

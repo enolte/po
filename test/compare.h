@@ -25,6 +25,17 @@ namespace po_test
       return std::ranges::equal(xa, xb);
     }
 
+    bool equal(const std::vector<po::rank_type>& xa, std::initializer_list<po::rank_type>&& xb)
+    {
+      return std::ranges::equal(xa, xb);
+    }
+
+    template<std::size_t n>
+    bool equal(const std::array<po::rank_type, n>& xa, std::initializer_list<po::rank_type>&& xb)
+    {
+      return std::ranges::equal(xa, xb);
+    }
+
     bool equal(const po::exponents& xa, std::initializer_list<po::exponent_type>&& xb)
     {
       return std::ranges::equal(xa, xb);

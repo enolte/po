@@ -50,6 +50,38 @@ namespace po
     }
 
     /*
+     * Partial evaluation. Evaluate with the values in x..., which are
+     * designated by the given offsets / places.
+     * This can be done better.
+     */
+    template<is_scalar ...X, typename Places>
+      requires std::incrementable<decltype(std::declval<Places>().cbegin())>
+    scalar_type operator()(const Places& places, X... x) const
+    {
+      if(places.size() != exponents.size())
+        // Error condition
+        return nan;
+
+      double acc = 1.;
+      std::size_t i = 0; // counts ...x
+      std::size_t j = 0; // counts places
+
+      const auto accumulate = [this, &places, &acc, &i, &j](double x)
+      {
+        if(j < places.size() && i == places[j])
+        {
+          acc *= utils::pow(x, exponents[j]);
+          ++j;
+        }
+        ++i;
+      };
+
+      (accumulate(x), ...);
+
+      return scalar_type{acc * coefficient};
+    }
+
+    /*
      * Determine whether this is a zero term.
      */
     bool is_zero() const

@@ -8,8 +8,7 @@ void test_assignment()
 {
   test_assign_expr();
   test_assign_init_list();
-  test_assign_monomial_lvalue();
-  test_assign_monomial_rvalue();
+  test_assign_monomial();
   test_assign_scalar();
   test_assign_polynomial();
 }

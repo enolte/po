@@ -3,13 +3,13 @@
 
 #include "../utils/pow.h"
 #include "../utils/nan.h"
-#include "../ostream/monomial_ostream.h"
+
 namespace po
 {
   namespace detail
   {
     template<is_polynomial P, typename ...X>
-    scalar_type evaluate(const P& expr1, rank_type place, scalar_type a, scalar_type b, X... x);
+    scalar_type evaluate_integral(const P& expr1, rank_type place, scalar_type a, scalar_type b, X... x);
 
     template<is_polynomial E1>
     struct expr_integral
@@ -24,7 +24,7 @@ namespace po
       template<typename ...X>
       constexpr scalar_type operator()(X... x) const
       {
-        return detail::evaluate(expr1, place, a, b, x...);
+        return detail::evaluate_integral(expr1, place, a, b, x...);
       }
     };
   }
@@ -52,10 +52,10 @@ namespace po
   namespace detail
   {
     template<typename ...X>
-    scalar_type evaluate(const monomial& m, rank_type place, scalar_type a, scalar_type b, X... x);
+    scalar_type evaluate_integral(const monomial& m, rank_type place, scalar_type a, scalar_type b, X... x);
 
     template<is_polynomial P, typename ...X>
-    scalar_type evaluate(const P& expr1, rank_type place, scalar_type a, scalar_type b, X... x)
+    scalar_type evaluate_integral(const P& expr1, rank_type place, scalar_type a, scalar_type b, X... x)
     {
       if(place >= expr1.rank())
       {
@@ -71,14 +71,14 @@ namespace po
 
         double acc = 0.;
         for(const auto& t : expr1.terms)
-          acc += evaluate(t, place, a, b, x...);
+          acc += evaluate_integral(t, place, a, b, x...);
 
         return scalar_type{acc};
       }
     }
 
     template<typename ...X>
-    scalar_type evaluate(const monomial& m, rank_type place, scalar_type a, scalar_type b, X... x)
+    scalar_type evaluate_integral(const monomial& m, rank_type place, scalar_type a, scalar_type b, X... x)
     {
       double acc = 1.;
       std::size_t i = 0;

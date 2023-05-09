@@ -16,7 +16,12 @@ namespace po
 
     constexpr expr_constant() = default;
 
-    scalar_type operator()(...) const
+    constexpr scalar_type eval(...) const
+    {
+      return expr1;
+    }
+
+    constexpr scalar_type operator()(...) const
     {
       return expr1;
     }

@@ -10,7 +10,6 @@ namespace po
     using F1 = subexpr_type<expr_binary_mult<E1, E2>>;
 
     const F1 expr1;
-
     const rank_type place;
 
     template<typename ...X>
@@ -20,11 +19,6 @@ namespace po
         expr_partial_derivative<E1>{expr1.expr1, place}(x...) * expr1.expr2(x...)
         +
         expr_partial_derivative<E2>{expr1.expr2, place}(x...) * expr1.expr1(x...);
-
-      // return
-        // D{expr1.expr1, place}(x...) * expr1.expr2(x...)
-        // +
-        // D{expr1.expr2, place}(x...) * expr1.expr1(x...);
     }
   };
 

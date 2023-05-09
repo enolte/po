@@ -10,7 +10,6 @@ namespace po
     using F1 = subexpr_type<expr_binary_plus<E1, E2>>;
 
     const F1 expr1;
-
     const rank_type place;
 
     template<typename ...X>

@@ -6,6 +6,7 @@
 #include "expr_binary_minus_instantiate/test_instantiate_level_1.h"
 #include "expr_binary_mult_instantiate/test_instantiate_level_1.h"
 #include "expr_binary_plus_instantiate/test_instantiate_level_1.h"
+#include "expr_unary_extend_instantiate/test_instantiate_level_1.h"
 
 void test_instantiate_level_1()
 {
@@ -17,4 +18,5 @@ void test_instantiate_level_1()
   expr_binary_minus_instantiate::test_instantiate_level_1();
   expr_binary_mult_instantiate::test_instantiate_level_1();
   expr_binary_plus_instantiate::test_instantiate_level_1();
+  expr_unary_extend_instantiate::test_instantiate_level_1();
 }

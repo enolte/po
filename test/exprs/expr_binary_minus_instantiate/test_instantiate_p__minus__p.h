@@ -19,6 +19,10 @@ void test_instantiate_p__minus__p()
       }),
       r);
 
+    assert(r.rank() == 1);
+    assert(r.degree() == 3);
+    assert(compare::equal(r.degrees(), {3}));
+
     PO_LINE;
   }
 
@@ -36,6 +40,10 @@ void test_instantiate_p__minus__p()
       }),
       r);
 
+    assert(r.rank() == 3);
+    assert(r.degree() == 5);
+    assert(compare::equal(r.degrees(), {3, 4, 1}));
+
     PO_LINE;
   }
 
@@ -52,6 +60,10 @@ void test_instantiate_p__minus__p()
         {-8.3, {3, 1, 1}}
       }),
       r);
+
+    assert(r.rank() == 3);
+    assert(r.degree() == 5);
+    assert(compare::equal(r.degrees(), {3, 4, 1}));
 
     PO_LINE;
   }
@@ -77,5 +89,38 @@ void test_instantiate_p__minus__p()
     PO_LINE;
   }
 
+  // Construction count
+  {
+    po::polynomial p{{6, {0, 4, 1}}, {-2.3, {3, 1, 1}}};
+    po::polynomial q{{6, {3, 1, 1}}};
+
+    const std::uint64_t count_before = po::polynomial::construction_count();
+
+    po::polynomial r = po::instantiate(q - p, po::rank<3>{});
+
+    const std::uint64_t count_after = po::polynomial::construction_count();
+    const std::uint64_t count_diff = count_after - count_before;
+
+    PO_ASSERT(count_diff == 1, count_diff);
+
+    PO_LINE;
+  }
+
+  // Construction count
+  {
+    po::polynomial p{{6, {0, 4, 1}}, {-2.3, {3, 1, 1}}};
+    po::polynomial q{{6, {3, 1, 1}}};
+
+    const std::uint64_t count_before = po::polynomial::construction_count();
+
+    po::instantiate(q - p, po::rank<3>{});
+
+    const std::uint64_t count_after = po::polynomial::construction_count();
+    const std::uint64_t count_diff = count_after - count_before;
+
+    PO_ASSERT(count_diff == 1, count_diff);
+
+    PO_LINE;
+  }
 }
 

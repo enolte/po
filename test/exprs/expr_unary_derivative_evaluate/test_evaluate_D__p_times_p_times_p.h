@@ -16,4 +16,15 @@ void test_evaluate_D__p_times_p_times_p()
 
     PO_LINE;
   }
+
+  // incompatible ranks
+  {
+    po::polynomial p{{1, {3, 3}}}, q{{2, {2, 1, 4}}};
+
+    const po::scalar_type y = D(q*p*p, 0)(2, 4.3);
+
+    assert(y != y);
+
+    PO_LINE;
+  }
 }
