@@ -3,8 +3,8 @@
 
 // If not defined at command line or elsewhere previously, then set a default here.
 #ifndef PO_EVALUATION_IMPL
-// #define PO_EVALUATION_IMPL evaluate_naive
-#define PO_EVALUATION_IMPL evaluate_gH
+#define PO_EVALUATION_IMPL evaluate_naive
+// #define PO_EVALUATION_IMPL evaluate_gH
 #endif
 
 #include "evaluate_naive.h"
