@@ -11,7 +11,9 @@
 #include "instantiate_partial_derivative.h"
 #include "instantiate_integral.h"
 #include "instantiate_antiderivative.h"
-#include "instantiate_extend.h"
+
+// TODO
+// #include "instantiate_extend.h"
 
 namespace po
 {

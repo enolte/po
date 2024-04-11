@@ -4,6 +4,8 @@ Elementary computations in the real polynomial ring $\mathbb{R}[x_1, ..., x_r]$.
 
 C++23 hobby project.
 
+Mono-repo: *No submodules*.
+
 # Contents
 * [Status](#status)
 * [Terminology](#terminology)
@@ -40,12 +42,15 @@ C++23 hobby project.
 | III    | in progress |
 | IV     | not started |
 
-(*09 March 2024*) Moved Phase I and II details to separate docs in docs/ folder, because those are done. Added Phase IV, which essentially splits what was Phase III. Looking at doing induction next. The code is already written and tested. Just need to import it here. It's not a great topic for a self-contained mono-repo like this one, but it's interesting to do in the same repo anyway. It's essentially least-squares and subset iteration, in addition to multivariate polynomials.
+(*04 May 2024*) Lagrange basis induction is in progress. All of the internals are implemented, with basic test coverage for some low-compute cases. More unit tests are coming, and probably some minor improvements to test organization. The docs for Lagrange need to be improved, too. Also, the solver is not conditioned in any way; this will probably have to change, depending upon further testing.
 
 Progress continues as time available.
 
 <details>
 <summary><h3>Previous updates</h3></summary>
+
+(*09 March 2024*) Moved Phase I and II details to separate docs in docs/ folder, because those are done. Added Phase IV, which essentially splits what was Phase III. Looking at doing induction next. The code is already written and tested. Just need to import it here. It's not a great topic for a self-contained mono-repo like this one, but it's interesting to do in the same repo anyway. It's essentially least-squares and subset iteration, in addition to multivariate polynomials.
+
 
 (*23 January 2024*) It's been about 6 months since I've touched this repo, so moving some things to Phase IV, and marking Phase II as Done. Cleaned up the docs a bit, more of that coming next. Maybe need to add some examples, too.
 
@@ -106,29 +111,13 @@ This implies that an rvalue polynomial is copied into every superior subexpressi
 
 ## Operators
 
-For Phase I, arithmetic operators and assignment operators are implemented only for polynomials of the same rank. E.g., if
-  * p(x, y, z) = 3xz - 2y
-  * q(x, y) = 15y<sup>2</sup>
+For Phase I, arithmetic operators and assignment operators are implemented only for polynomials of the same rank. E.g., if $p(x, y, z) = 3xz - 2y$ and $q(x, y) = 15y^2$, then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined behavior.
 
-then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined behavior.
-
-This is the subject of [signature extension](#signature-extension-polynomials) for Phase II.
+This is the subject of [signature extension](./docs/Phase-II.md#signature-extension-polynomials) for Phase II.
 
 ## Partial evaluation
 
-A partial evaluation compiles and deterministically executes, but the result is undefined for Phase I.
-
-```c++
-po::polynomial p{7.5, po::rank<6>{}};
-assert(compare::equal(p.variable_degrees, 0, 0, 0, 0, 0, 0));
-
-// Partial matches
-assert(p.coefficient(0, 0, 0, 0) == 7.5);
-assert(p.coefficient(0, 3, 0, 0) == 0.0);
-```
-
-This is a problem because (a) there is no guaranteed term storage order, and (b) the result
-is ambiguous, even with a guaranteed storage order.
+A partial evaluation compiles and deterministically executes, but the result is undefined for Phase I. This is a problem because (a) there is no guaranteed term storage order, and (b) the result is ambiguous, even with a guaranteed storage order.
 
 ```c++
 po::polynomial p{
@@ -140,8 +129,7 @@ po::polynomial p{
 assert(p.coefficient(1, 1, 1) == 7.5);
 ```
 
-The above gives 7.5, but with a different order in the terms list above, -7.5 would
-be expected instead.
+The above gives 7.5, but with a different order in the terms list above, -7.5 would be expected instead.
 
 This is the subject of [partial evaluation](#partial-evaluation-rank-decreasing) for Phase II.
 
@@ -158,20 +146,25 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. There are currently 1024 indexed unit tests, plus a few which are not yet indexed.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~7.4s on my host. There are currently 1340 indexed unit tests, plus a few which are not yet indexed.
 
 ```sh
-$ ./a | wc -l
-1024
+$ time ./a | grep ^po: | wc -l
+1340
+
+real    0m7.377s
+user    0m0.000s
+sys     0m0.030s
 ```
 
- Some of these are probably not necessary; they will remain anyway, for now.
+Some of these UTs are probably not necessary; they will remain anyway, for now.
 
 # Example
 
 The following program file ...
 
 ```c++
+// g++ --std=c++23 demo.cpp
 #include "../../polynomial.h"
 #include "../../ostream/polynomial_ostream.h"
 #include <iostream>
@@ -198,7 +191,7 @@ q = 1[0,1]+22.4[3,1]+-5.1[7,1]
 error = 0x1.ecp-15
 ```
 
-(This output was generated using [dense generalized Horner evaluation](#generalized-horner-dense). [Naïve evaluation](#naïve) gives an identical result.)
+(This output was generated using [dense generalized Horner evaluation](#./docs/Phase-I.md#generalized-horner-dense). [Naïve evaluation](./docs/Phase-I.md#naïve) gives an identical result.)
 
 The file [demos/00/demo.cpp](./demos/00/demo.cpp) contains the above program source. Other [demos](./demos) will be added when time available, as new features are implemented.
 
@@ -208,12 +201,123 @@ The file [demos/00/demo.cpp](./demos/00/demo.cpp) contains the above program sou
 
 # Plan Phase III
 
+
 ## Induction
 
-* point fitting
-* multivariate Lagrange interpolants
-* solver for simplex basis
-* Orthonormal basis. Start with an n-dimensional rectangular domain.
+### Lagrange interpolation: interface
+
+For a given set of points in $\mathbb{R}^n$, this looks something like
+
+```c++
+std::vector basis = po::lagrange_basis(f, n, degree);
+```
+
+where `degree` > 0 is chosen.
+
+`f` is a function (functor) of two indices. This repo uses the convention that `f(i,j)` is the ith component value of the jth point in the point set. As a matrix, with `n` = 2, `f` would represents the points (0, 0), (1, 1), (2, 3), as column vectors:
+
+$$
+\left[f\right] =
+\begin{bmatrix}
+0 & 1 & 2\\
+0 & 1 & 3
+\end{bmatrix}
+$$
+
+so $f( \cdot, j)$ is the $j^{th}$ knot point.
+
+With this convention, `basis` is a std::vector of polynomials, one polynomial for each column in the matrix of `f`. The ith polynomial $p_i$ and the jth knot point $x_j$ satisfy $p_i(x_j) = \delta_{ij}$. With `degree` = 1, and the above points, the resulting polynomials are
+
+$$
+\begin{array}{l}
+p_1(x, y) = 1 - 2x + y\\
+p_2(x, y) = 3x - 2y\\
+p_3(x, y) = -x + y
+\end{array}
+$$
+
+This program...
+
+```c++
+// g++ --std=c++23 demo.cpp
+#include "../../polynomial.h"
+#include "../../ostream/polynomial_ostream.h"
+#include "../../induction/lagrange_basis.h"
+#include <iostream>
+
+int main()
+{
+  static constexpr double points[3][2]
+  {
+    {0, 0},
+    {1, 1},
+    {2, 3},
+  };
+
+  // Select knot points by column
+  auto f = [](std::size_t r, std::size_t c) { return points[c][r]; };
+
+  auto basis = po::lagrange_basis(f, 2, 1);
+
+  for(auto i{0zu}; i < basis.size(); ++i)
+    std::cout << "basis[" << i << "] = " << basis[i] << std::endl;
+
+  return 0;
+}
+```
+...prints this to stdout:
+
+```
+$ ./a
+basis[0] = 1[0,0]+-2[1,0]+1[0,1]
+basis[1] = 0[0,0]+3[1,0]+-2[0,1]
+basis[2] = 0[0,0]+-1[1,0]+1[0,1]
+```
+
+These are the polynomials listed above. The file [demos/01/demo.cpp](./demos/01/demo.cpp) contains the above program source. This is also a unit test case for Lagrange(rank=2, degree=1).
+
+The interface for Lagrange interpolation on knot points in a simplex is similar.
+```c++
+std::vector basis = po::lagrange_basis(f, n, degree, simplex_dimension);
+```
+The resulting polynomials $p_i$ satisfying $p_i(x_j) = \delta_{ij}$ as above. The difference here is that only the simplex vertices and a degree are provided; the knot points are generated from these in a natural way. More info on this is pending.
+
+### Lagrange interpolation: general point set
+
+The goal is to invert the square Vandermonde matrix, $V$, for any number of variables, to solve for a set of separating polynomials for a point collection $S = \left\\{x_0, ..., x_{n-1}\right\\}$. This repo assumes $V$ for the point collection $S$ is invertible.
+
+In one variable, the Lagrange basis polynomials for $S$ are $\lambda_{k}(x) = \prod_i' \left(\frac{x - x_i}{x_{k} - x_i}\right)$, where the prime denotes $i \neq k$. $\lambda_i$ separates the $i^{th}$ point from the others: $\lambda_i(x_j)=\delta_{ij}$, $i = 0, ..., n-1$. The termwise coefficients of $\lambda_i$ are the ith-row entries of $V^{-1}$ for one variable. Each of these polynomials has degree $\leq n - 1$.
+
+This repo sets the ones across the top row. (Others define $V$ with ones down the first column instead.) So the $(k,j)$-term in $V$ is $x_j^k$ for $j, k = 0, ..., n-1$.
+
+For $n$ variables, and for a chosen degree $d$, there are $R = \binom{n+d}{d}$ many knot points for $R$ many polynomials, so we need a set of $R$ many points in $\mathbb{R}^n$. The polynomial terms are enumerated by the sequence of all multiindices $\alpha$ with length $\lvert \alpha \rvert \leq d$, in a natural order. Enumerating rows (terms) in $V$, in the $j^{th}$ column by this order, the $(\alpha, j)$-term in $V$ is $x_j^{\alpha}$, where each $x_j$ is an $n$-dimensional vector, and $V$ is $R \times R$.
+
+$V$ is assumed invertible, so there is a $P$ such that $PV=I$. The $i^{th}$ row of $P$ is the coefficients of $\lambda_i$, in iteration order. That is, $\lambda_i(x_j) = \delta_{ij}$ for each knot point $x_j$.
+
+A natural formula for the multivariate case is $\lambda_i(x) = \frac{det(V_i(x))}{det(V)}$, where $V_i(x)$ is $V$ with the $i^{th}$ column generated by the components of $x$ instead of the knot point $x_i$. Then, $det(V_i(x_i)) = det(V)$, and $det(V_i(x_j)) = 0$ for $i \neq j$. That is, $\lambda_i(x_j) = \delta_{ij}$.
+
+To implement this, this repo uses a QR decomposition and right-triangular linear solver to compute a direct numeric solution to the equation $PV = I$. This repo doesn't compute determinants explicitly, because there is a also a generalization to tall, non-square $V$ included for the case that the knots points in $\mathbb{R}^n$ lie in a $k$-dimensional simplex, with $k \leq n$.
+
+
+### Lagrange interpolation: simplex points
+
+To guarantee that $V$ has full rank, knot points may be generated from the vertex points of a non-degenerate $k$-simplex $K \subset \mathbb{R}^n$, and a degree $d > 0$.
+
+We can choose $C = \binom{k+d}{d}$ many knot points in $K$. (These points are chosen "isotropically". There is no preferred relative orientation of points in $K$.) Knot points are convex combinations of the vertex points, so $C$ is the number of _knot multiindices_ $\beta$ of $k+1$ items, with length $\lvert \beta \rvert = d$, and $K$ spans a $k$-dimensional linear space.
+
+An interpolating polynomial in $n$ variables of degree $d$ has $R = \binom{n+d}{d}$ additive terms, so that $V$ is $R \times C$. The $(\alpha, \beta)$-entry of $V$ is $(k_{\beta})^{\alpha}$, for knot point $k_{\beta} \in K$ generating a single column in $V$.
+
+With a non-degenerate $K$, $V$ has full rank, so there is a matrix $P$ of polynomial coefficients that satisfies $PV = I_{C \times C}$. Each row in $P$ defines the coefficients of a separating polynomial. $P$ is a least-squares solution, generally one member of an affine space of solutions. The QR decomposition chooses the solution given by the minimal number of non-zero entries in $R$. That is, the basis with the affine zero component is selected.
+
+If $k=n$, then $V$ and $P$ are square, and we have the usual Lagrange interpolation, with a specific point arrangement that guarantees a unique solution. Generally, $k \leq n$, so that $V$ is tall and $P$ is wide.
+
+As with the general case, this is directly, numerically solved with a simple QR-based solver.
+
+
+### Orthonormal basis.
+
+Start with an n-dimensional rectangular domain.
+
 * "Multinomial Bernstein" basis
 * series induction
   * begins with Taylor and orthonormal Taylor
@@ -296,9 +400,10 @@ antiderivative(3)(X) + 3*q*q*antiderivative(2)(X)
 
 ## In progress
 
+  * [Induction](#induction)
+
 ## Not started
 
-  * [Induction](#induction)
   * [Quadrature](#quadrature)
   * [Elementary operator algebra](#elementary-operator-algebra)
 

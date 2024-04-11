@@ -1,0 +1,109 @@
+#include <iostream>
+#include <cassert>
+#include "../../macros.h"
+
+#include "../timed_construct.h"
+
+namespace po_test
+{
+  namespace rank3_degree2_dim3_simplex_vandermonde
+  {
+    void test1();
+    void test2();
+  }
+
+  void test_vandermonde_rank3_degree2_dim3_simplex()
+  {
+    using namespace rank3_degree2_dim3_simplex_vandermonde;
+
+    test1();
+    test2();
+  }
+
+  namespace rank3_degree2_dim3_simplex_vandermonde
+  {
+
+    void test1()
+    {
+      // Simplex vertex knot points, stored in rows here
+      static constexpr double p[][3]
+      {
+        {0, 0, 0},
+        {1, 1, 1},
+        {2, 2, 2},
+        {3, 3, 3},
+      };
+
+      // Select knot points by column
+      static constexpr auto f = [](std::size_t r, std::size_t c) { return p[c][r]; };
+
+      auto v = po_test::vandermonde::timed_construct(f, 3, 2, 3);
+
+      PO_ASSERT(v.nrows == 10, v.nrows);
+      PO_ASSERT(v.ncols == 10, v.ncols);
+      PO_ASSERT(
+        equal(
+          v.data,
+          {
+        //  column multiindices
+        //  2 0 0 0   1 1 0 0   0 2 0 0   1 0 1 0   0 1 1 0   0 0 2 0   1 0 0 1   0 1 0 1   0 0 1 1   0 0 0 2       row multiindices
+            1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,        // 0 0 0
+            0.,       0.5,      1.,       1.,       1.5,      2.,       1.5,      2.,       2.5,      3.,        // 1 0 0
+            0.,       0.5,      1.,       1.,       1.5,      2.,       1.5,      2.,       2.5,      3.,        // 0 1 0
+            0.,       0.5,      1.,       1.,       1.5,      2.,       1.5,      2.,       2.5,      3.,        // 0 0 1
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 2 0 0
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 1 1 0
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 0 2 0
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 1 0 1
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 0 1 1
+            0.,       0.25,     1.,       1.,       2.25,     4.,       2.25,     4.,       6.25,     9.,        // 0 0 2
+          }),
+        v);
+
+      PO_LINE;
+    }
+
+    void test2()
+    {
+      // Simplex vertex knot points, stored in rows here
+      static constexpr double p[][3]
+      {
+        {0, 0, 0},
+        {1, 0, 0},
+        {0, 1, 0},
+        {0, 0, 1},
+      };
+
+      // Select knot points by column
+      static constexpr auto f = [](std::size_t r, std::size_t c) { return p[c][r]; };
+
+      auto v = po_test::vandermonde::timed_construct(f, 3, 2, 3);
+
+      PO_ASSERT(v.nrows == 10, v.nrows);
+      PO_ASSERT(v.ncols == 10, v.ncols);
+      PO_ASSERT(
+        equal(
+          v.data,
+          {
+        //  column multiindices
+        //  2 0 0 0   1 1 0 0   0 2 0 0   1 0 1 0   0 1 1 0   0 0 2 0   1 0 0 1   0 1 0 1   0 0 1 1   0 0 0 2       row multiindices
+            1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,       1.,        // 0 0 0
+            0.,       0.5,      1.,       0.,       0.5,      0.,       0.,       0.5,      0.,       0.,        // 1 0 0
+            0.,       0.,       0.,       0.5,      0.5,      1.,       0.,       0.,       0.5,      0.,        // 0 1 0
+            0.,       0.,       0.,       0.,       0.,       0.,       0.5,      0.5,      0.5,      1.,        // 0 0 1
+            0.,       0.25,     1.,       0.,       0.25,     0.,       0.,       0.25,     0.,       0.,        // 2 0 0
+            0.,       0.,       0.,       0.,       0.25,     0.,       0.,       0.,       0.,       0.,        // 1 1 0
+            0.,       0.,       0.,       0.25,     0.25,     1.,       0.,       0.,       0.25,     0.,        // 0 2 0
+            0.,       0.,       0.,       0.,       0.,       0.,       0.,       0.25,     0.,       0.,        // 1 0 1
+            0.,       0.,       0.,       0.,       0.,       0.,       0.,       0.,       0.25,     0.,        // 0 1 1
+            0.,       0.,       0.,       0.,       0.,       0.,       0.25,     0.25,     0.25,     1.,        // 0 0 2
+          }),
+        v);
+
+      PO_LINE;
+    }
+
+
+  }
+}
+

@@ -30,6 +30,15 @@ namespace po_test
       return std::ranges::equal(xa, xb);
     }
 
+    template<typename T>
+    concept numeric = std::is_arithmetic<std::remove_cvref_t<T>>::value;
+
+    template<numeric T>
+    bool equal(const std::valarray<double>& xa, std::initializer_list<T>&& xb)
+    {
+      return std::ranges::equal(xa, xb);
+    }
+
     template<std::size_t n>
     bool equal(const std::array<po::rank_type, n>& xa, std::initializer_list<po::rank_type>&& xb)
     {

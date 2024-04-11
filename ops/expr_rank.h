@@ -26,6 +26,11 @@ namespace po
           return expr_rank(e.expr1);
       else if constexpr(is_extend<E>)
         return e.rank;
+// TODO
+/*
+      else if constexpr(is_bind<E>)
+        return expr_rank(e.expr1) - 1;
+*/
       else
         return expr_rank(e.expr1);
     }

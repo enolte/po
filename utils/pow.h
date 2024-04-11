@@ -19,7 +19,7 @@ namespace po
           (n == 7) * a*a*a*a*a*a*a;
       else
       {
-        const double a0 = pow(a, n/8);
+        const double a0 = pow(a, n>>3);
         return
           (n%8 == 0) * a0*a0*a0*a0*a0*a0*a0*a0 +
           (n%8 == 1) * a0*a0*a0*a0*a0*a0*a0*a0 * a +

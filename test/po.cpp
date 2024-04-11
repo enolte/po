@@ -3,6 +3,7 @@
 #include "ostream/all_ostream_tests.h"
 #include "istream/all_istream_tests.h"
 #include "exprs/all_expr_tests.h"
+#include "induction/all_induction_tests.h"
 
 using namespace po_test;
 
@@ -13,7 +14,12 @@ int main()
   test();
 
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 2285, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 2525, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2370, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2363, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2352, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2277, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 2271, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2261, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2246, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2234, po::polynomial::construction_count());
@@ -58,8 +64,9 @@ void test()
   all_istream_tests();
   all_ostream_tests();
   all_monomial_tests();
-  all_expr_tests();
   all_polynomial_tests();
+  all_expr_tests();
+  all_induction_tests();
 }
 
 

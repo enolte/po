@@ -1,3 +1,5 @@
+// g++ --std=c++23 demo.cpp
+
 #include "../../polynomial.h"
 #include "../../ostream/polynomial_ostream.h"
 #include <iostream>
