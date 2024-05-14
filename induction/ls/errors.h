@@ -35,8 +35,8 @@ namespace po
       return o << "errors: {Q: " << e.Q_error << ", R: " << e.R_error << ", QR: " << e.QR_error << ", WR: " << e.WR_error << ", W: " << e.W_error << ", PV: " << e.PV_error << "}";
     }
 
-    double compute_Q_error (const po::matrix auto& Q);
-    double compute_R_error (const po::matrix auto& R);
+    double compute_Q_error(const po::matrix auto& Q);
+    double compute_R_error(const po::matrix auto& R);
 
     template<typename M>
       requires (po::matrix<M> || po::matrix_functor<M>)

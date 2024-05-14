@@ -32,7 +32,7 @@ namespace po_test
 
   namespace rank3_degree1_dim2_lagrange_simplex_basis
   {
-    // Simplex vertices, stored in rows in rows for fixed zeroth index
+    // Simplex vertices, stored in rows for fixed zeroth index
     static constexpr double vertices[][simplex_dim+1][rank]
     {
       {

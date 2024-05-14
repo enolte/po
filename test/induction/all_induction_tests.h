@@ -8,16 +8,14 @@ namespace po_test
   template<typename T>
   concept numeric = std::is_arithmetic<std::remove_cvref_t<T>>::value;
 
-  template<numeric T>
-  bool equal(const std::valarray<double>& xa, std::initializer_list<T>&& xb)
+  bool equal(const std::valarray<double>& xa, std::initializer_list<numeric auto>&& xb)
   {
     return std::ranges::equal(xa, xb);
   }
 
-  template<numeric T>
-  bool abs_near(const std::valarray<double>& xa, std::initializer_list<T>&& xb, double tol = 0x1p-52)
+  bool abs_near(const std::valarray<double>& xa, std::initializer_list<numeric auto>&& xb, double tol = 0x1p-52)
   {
-    return std::ranges::equal(xa, xb, [&xa, &xb, tol](double aa, T bb) { return std::fabs(aa - bb) <= tol; });
+    return std::ranges::equal(xa, xb, [tol](double aa, numeric auto bb) { return std::fabs(aa - bb) <= tol; });
   }
 }
 
@@ -28,6 +26,7 @@ namespace po_test
 #include "test_QR.h"
 #include "test_pseudoinverse.h"
 #include "test_lagrange_basis.h"
+// #include "test_orthnormalization.h"
 
 namespace po_test
 {
@@ -39,6 +38,9 @@ namespace po_test
     test_QR();
     test_pseudoinverse();
     test_lagrange_basis();
+
+    // TODO
+    // test_orthnormalization();
 
     PO_LINE;
   }

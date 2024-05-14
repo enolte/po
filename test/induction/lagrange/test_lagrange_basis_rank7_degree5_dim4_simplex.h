@@ -6,49 +6,56 @@
 
 #include "../../../induction/lagrange_basis.h"
 
+#include "../timed_construct.h"
 #include "verify_lagrange_basis.h"
 
 namespace po_test
 {
-  namespace rank3_degree3_dim2_lagrange_simplex_basis
+  namespace rank7_degree5_dim4_lagrange_simplex_basis
   {
-    static constexpr std::uint64_t rank = 3;
-    static constexpr std::uint64_t degree = 3;
-    static constexpr std::uint64_t simplex_dim = 2;
+    static constexpr std::uint64_t rank = 7;
+    static constexpr std::uint64_t degree = 5;
+    static constexpr std::uint64_t simplex_dim = 4;
 
     void test1();
     void test2();
     void test3();
   }
 
-  void test_lagrange_basis_rank3_degree3_dim2_simplex()
+  void test_lagrange_basis_rank7_degree5_dim4_simplex()
   {
-    using namespace rank3_degree3_dim2_lagrange_simplex_basis;
+    using namespace rank7_degree5_dim4_lagrange_simplex_basis;
 
     test1();
     test2();
     test3();
   }
 
-  namespace rank3_degree3_dim2_lagrange_simplex_basis
+  namespace rank7_degree5_dim4_lagrange_simplex_basis
   {
     // Simplex vertices, stored in rows for fixed zeroth index
     static constexpr double vertices[][simplex_dim+1][rank]
     {
       {
-        {-2, 0, 0},
-        {3, 1, 1},
-        {3, 0, 2}
+        {-2,  0,   0,   7, 0, 0, 0},
+        { 3,  1,   1, 0, 0, 0, 14},
+        { 3,  0, 0, 0, 0,  2,  -7},
+        {-7, 0, 0, 0, 7,  -7, -14},
+        {0, 0, 0, -7,  8, 9.9, -14},
       },
       {
-        {0, -1.1, 0},
-        {1, 0.78, 1.3},
-        {0, 14.7, 2}
+        {0  , -1.1 ,  0  , -5.5, 0, 0, 0},
+        {1  ,  0.78,  1.3, 0, 0, 0,  0.},
+        {0  , 14.7 , 0, 0, 0, 2  ,  3},
+        {0.1, 0, 0, 0, 22.1 ,  3.5, -10.},
+        {0, 0, 0, 2.1, 22.01, 13.5,  31.47}
       },
       {
-        {12.7, -9.4, 30.4},
-        {1.06, -5.1, 1.3},
-        {-14.5, 0.147, 2.2}
+        { 12.7 ,  -9.4  , 30.4,  4.05, 0, 0, 0},
+        {  1.06,  -5.1  ,  1.3, 0, 0, 0, 14.05},
+        {  9.11, -61.1  , 0, 0, 0, 70.9,  4.99},
+        {-14.5 , 0, 0, 0,  0.147,  2.2, -6.616},
+        {0, 0, 0,  5.2 ,   5.6  ,  5.8,  7.2}
       },
     };
 
@@ -66,15 +73,16 @@ namespace po_test
       auto f = [vertices](std::size_t r, std::size_t c) { return vertices[c][r]; };
 
       po::ls::errors errors;
-      auto basis = po::lagrange_basis_for_simplex(f, rank, degree, simplex_dim, &errors);
+      // auto basis = po::lagrange_basis_for_simplex(f, rank, degree, simplex_dim, &errors);
+      auto basis = lagrange_basis::timed_construct(f, rank, degree, simplex_dim, errors);
 
       // for(auto i{0zu}; i < basis.size(); ++i)
         // PO_TRACE(" basis[" << i << "] = " << basis[i]);
 
-      PO_ASSERT(basis.size() == 10, basis.size());
+      PO_ASSERT(basis.size() == 126, basis.size());
 
       // Just a basic sanity check
-      static constexpr double tol = 0x1p-37;
+      static constexpr double tol = 0x1p-09;
       PO_ASSERT(errors.max() <= tol, errors << ", " << std::hexfloat << errors << std::defaultfloat);
 
       verify_lagrange_simplex_basis(basis, vertices, degree, simplex_dim, tol);
@@ -86,4 +94,5 @@ namespace po_test
   }
 
 }
+
 

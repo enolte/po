@@ -126,6 +126,10 @@ namespace po_test
           px = p(x[0], x[1]);
         if constexpr(N == 3)
           px = p(x[0], x[1], x[2]);
+        if constexpr(N == 4)
+          px = p(x[0], x[1], x[2], x[3]);
+        if constexpr(N == 7)
+          px = p(x[0], x[1], x[2], x[3], x[4], x[5], x[6]);
 
         const double px_error = std::fabs(px - (i == j));
 
@@ -140,8 +144,8 @@ namespace po_test
 
           std::string format_str{"p[{0}]"};
           format_str += "(";
-          for(auto i{0zu}; i < N-1; ++i)
-            format_str += arg_format_str(i+1) + ", ";
+          for(auto i{1zu}; i < N; ++i)
+            format_str += arg_format_str(i) + ", ";
           format_str += arg_format_str(N);
           format_str += ")";
           format_str += " = " + arg_format_str(N+1);
@@ -153,6 +157,10 @@ namespace po_test
             // msg = std::format(std::runtime_format(format_str), i, x[0], x[1], px);
           if constexpr(N == 3)
             msg = std::vformat(format_str, std::make_format_args(i, x[0], x[1], x[2], px));
+          if constexpr(N == 4)
+            msg = std::vformat(format_str, std::make_format_args(i, x[0], x[1], x[2], x[3], px));
+          if constexpr(N == 7)
+            msg = std::vformat(format_str, std::make_format_args(i, x[0], x[1], x[2], x[3], x[4], x[5], x[6], px));
 
           PO_ASSERT(success, msg);
         }

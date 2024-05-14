@@ -13,6 +13,11 @@
 
 #include "lagrange/test_lagrange_basis_rank3_degree3_dim3_simplex.h"
 
+#include "lagrange/test_lagrange_basis_rank4_degree5_dim4_simplex.h"
+#include "lagrange/test_lagrange_basis_rank4_degree8_dim4_simplex.h"
+
+#include "lagrange/test_lagrange_basis_rank7_degree5_dim4_simplex.h"
+
 namespace po_test
 {
   void test_lagrange_basis()
@@ -32,6 +37,13 @@ namespace po_test
     test_lagrange_basis_rank3_degree3_dim2_simplex();
 
     test_lagrange_basis_rank3_degree3_dim3_simplex();
+
+    test_lagrange_basis_rank4_degree5_dim4_simplex();
+
+    // TODO
+    // test_lagrange_basis_rank4_degree8_dim4_simplex();
+
+    test_lagrange_basis_rank7_degree5_dim4_simplex();
   }
 
 }
