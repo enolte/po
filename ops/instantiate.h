@@ -11,6 +11,7 @@
 #include "instantiate_partial_derivative.h"
 #include "instantiate_integral.h"
 #include "instantiate_antiderivative.h"
+#include "instantiate_divide_by_constant.h"
 
 // TODO
 // #include "instantiate_extend.h"
@@ -18,7 +19,7 @@
 namespace po
 {
   template<expression Expr>
-  polynomial instantiate(Expr&& expr, rank_type rank)
+  static polynomial instantiate(Expr&& expr, rank_type rank)
   {
     polynomial p = zero(rank);
     instantiate(p, std::move(expr), rank);
@@ -26,7 +27,7 @@ namespace po
   }
 
   template<expression Expr>
-  polynomial instantiate(Expr&& expr)
+  static polynomial instantiate(Expr&& expr)
   {
     const rank_type rank = expr_rank(expr);
     return instantiate(std::move(expr), rank);

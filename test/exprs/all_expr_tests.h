@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../test/macros.h"
+#include "../macros.h"
 #include "../../polynomial.h"
 
 #include "../../ostream/polynomial_ostream.h"
@@ -14,6 +14,7 @@ using namespace po_test;
 #include "test_expr_subexpressions.h"
 #include "test_expr_evaluate.h"
 #include "test_expr_instantiate.h"
+#include "test_instance_counts.h"
 
 namespace po_test
 {
@@ -24,6 +25,7 @@ namespace po_test
     test_expr_subexpressions();
     test_expr_evaluate();
     test_expr_instantiate();
+    test_instance_counts();
   }
 
 }

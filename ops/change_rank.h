@@ -14,7 +14,7 @@ namespace po
      * assumes: rank > p.rank()
      */
     // TODO This is very inefficient.
-    void increase_rank(polynomial& p, rank_type rank)
+    static void increase_rank(polynomial& p, rank_type rank)
     {
       polynomial newp = polynomial::make_zero(rank);
 
@@ -34,7 +34,7 @@ namespace po
      * assumes: place_to_remove < p.rank()
      */
     // TODO This is very inefficient.
-    void decrease_rank(polynomial& p, rank_type place_to_remove)
+    static void decrease_rank(polynomial& p, rank_type place_to_remove)
     {
       polynomial newp = polynomial::make_zero(p.rank() - 1);
 

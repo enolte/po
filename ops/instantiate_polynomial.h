@@ -5,7 +5,7 @@
 
 namespace po
 {
-  polynomial& instantiate(polynomial& p, const polynomial& expr, rank_type)
+  static polynomial& instantiate(polynomial& p, const polynomial& expr, rank_type)
   {
     p = expr;
     return p;

@@ -15,8 +15,10 @@
 #include "ops/expr_binary_plus.h"
 #include "ops/expr_binary_minus.h"
 #include "ops/expr_binary_mult.h"
+#include "ops/expr_binary_divide_by_constant.h"
 
 #include "ops/is_exponent.h"
+#include "ops/is_constant.h"
 
 #include <numeric>
 #include <algorithm>
@@ -48,7 +50,7 @@ namespace po
     model::storage terms;
 
   private:
-    static std::atomic<std::uint64_t> s_construction_count;
+    static inline std::atomic<std::uint64_t> s_construction_count{0};
 
     degree_type m_degree{0};
 
@@ -606,24 +608,36 @@ namespace po
 
       return *this;
     }
+
+    /*
+     * Multiply by a scalar constant.
+     *
+     */
+    // polynomial& operator/=(constant auto&& s)
+    polynomial& operator/=(scalar_type s)
+    {
+      accumulate_mult(terms, 1./scalar_type(s));
+      return *this;
+    }
+
   };
 
-  po::polynomial zero(rank_type rank)
+  static po::polynomial zero(rank_type rank)
   {
     return polynomial::make_zero(rank);
   }
 
-  po::polynomial make_constant(scalar_type&& c, rank_type rank)
+  static po::polynomial make_constant(scalar_type&& c, rank_type rank)
   {
     return polynomial::make_constant(rank, std::move(c));
   }
 
-  po::polynomial make_constant(const scalar_type& c, rank_type rank)
+  static po::polynomial make_constant(const scalar_type& c, rank_type rank)
   {
     return polynomial::make_constant(rank, std::move(c));
   }
 
-  std::atomic<std::uint64_t> polynomial::s_construction_count{0};
+  // static bool operator==(const polynomial& p, const polynomial& q) = default;
 }
 
 #include "ops/expr_partial_derivative.h"

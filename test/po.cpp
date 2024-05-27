@@ -9,12 +9,31 @@ using namespace po_test;
 
 void test();
 
+
 int main()
 {
   test();
+  return 0;
+}
 
+void instance_count();
+
+void test()
+{
+  all_istream_tests();
+  all_ostream_tests();
+  all_monomial_tests();
+  all_polynomial_tests();
+  all_expr_tests();
+  all_induction_tests();
+  instance_count();
+}
+
+void instance_count()
+{
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 3303, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2906, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2525, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2370, po::polynomial::construction_count());
@@ -58,19 +77,6 @@ int main()
   // PO_ASSERT(po::polynomial::construction_count() == 2387, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2499, po::polynomial::construction_count());
 
-  return 0;
 }
-
-void test()
-{
-  all_istream_tests();
-  all_ostream_tests();
-  all_monomial_tests();
-  all_polynomial_tests();
-  all_expr_tests();
-  all_induction_tests();
-}
-
-
 
 
