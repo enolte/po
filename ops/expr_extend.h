@@ -37,6 +37,8 @@ namespace po
 // #include "expr_extend_integral.h"
 // #include "expr_extend2.h"
 
+#include "is_constant.h"
+
 namespace po
 {
   /*
@@ -57,10 +59,30 @@ namespace po
     requires ( ... && std::integral<std::remove_cvref_t<Places>>)
   constexpr auto extend(E1&& expr, rank_type rank, Places... places)
   {
-    return expr_extend{
-      std::forward<E1>(expr),
-      rank,
-      (rank_type)places...};
+    // Handle FP numeric expr type and expr_constant type as special cases.
+    if constexpr(is_constant<E1> && !is_scalar<E1>)
+    {
+      return expr_extend{
+        (po::scalar_type)expr.expr1,
+        rank,
+        (rank_type)places...};
+    }
+    else if constexpr(is_scalar<E1>)
+    {
+PO_LINE;
+std::cout << PO_MARKER << rank << ", " << sizeof ...(places) << ", " << expr << std::endl;
+      return expr_extend{
+        (po::scalar_type)expr,
+        rank,
+        (rank_type)places...};
+    }
+    else
+    {
+      return expr_extend{
+        std::forward<E1>(expr),
+        rank,
+        (rank_type)places...};
+    }
   }
 
   // TODO Test

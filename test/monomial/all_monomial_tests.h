@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <compare>
 
-#include "../errors.h"
+#include "../compare.h"
 #include "../macros.h"
 
 #include "../../types/monomial.h"

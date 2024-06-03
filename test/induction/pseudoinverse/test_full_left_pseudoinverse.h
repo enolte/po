@@ -113,7 +113,7 @@ namespace po_test
     assert(P.ncols == V.nrows);
 
     // Just a basic sanity check for the test cases above.
-    static constexpr double tol = 0x1p-15;
+    static constexpr double tol = 0x1p-14;
     // const bool success = max(errors) <= tol;
     const bool success = errors.max() <= tol;
     // PO_TRACE(" " << format << errors << " = " << std::hexfloat << errors << unformat);

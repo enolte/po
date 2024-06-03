@@ -1,5 +1,5 @@
 #include "../../../ops/expr_constant.h"
-#include "../../errors.h"
+#include "../../compare.h"
 #include <cassert>
 
 void test_evaluate_expr_nullary_constant()

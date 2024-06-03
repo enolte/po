@@ -42,12 +42,21 @@ Mono-repo: *No submodules*.
 | III    | in progress |
 | IV     | not started |
 
-(*04 May 2024*) Lagrange basis induction is in progress. All of the internals are implemented, with basic test coverage for some low-compute cases. More unit tests are coming, and probably some minor improvements to test organization. The docs for Lagrange need to be improved, too. Also, the solver is not conditioned in any way; this will probably have to change, depending upon further testing.
+(_20:09 Saturday, May 30, 2026_)
+
+Fixed a bug introduced by a previous commit, which was preventing correct QR decomposition for rank-deficient knot point matrices. All Lagrange basis induction unit tests pass again now.
+
+For the the basis induction test cases included here, compiling with `-O3` may cause one bit of precision loss, where compiling without optimizations incurs no precision loss. This caused some unit tests for pseudoinverse to report as specious failures. This is fixed now with a default tolerance of one double-precision machine epsilon. All unit tests now correctly pass with or without the optimizer.
+
+Also improved organization of test utils. This is in progress.
 
 Progress continues as time available.
 
 <details>
 <summary><h3>Previous updates</h3></summary>
+
+(*04 May 2024*) Lagrange basis induction is in progress. All of the internals are implemented, with basic test coverage for some low-compute cases. More unit tests are coming, and probably some minor improvements to test organization. The docs for Lagrange need to be improved, too. Also, the solver is not conditioned in any way; this will probably have to change, depending upon further testing.
+
 
 (*09 March 2024*) Moved Phase I and II details to separate docs in docs/ folder, because those are done. Added Phase IV, which essentially splits what was Phase III. Looking at doing induction next. The code is already written and tested. Just need to import it here. It's not a great topic for a self-contained mono-repo like this one, but it's interesting to do in the same repo anyway. It's essentially least-squares and subset iteration, in addition to multivariate polynomials.
 
@@ -146,19 +155,19 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~1min24s on my host. There are currently 1350 indexed unit tests, plus a few which are not yet indexed.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~1min10s on my host. There are currently 1350 indexed unit tests, plus a few which are not yet indexed.
 
 ```sh
 $ time ./a | grep ^po: | wc -l
-1349
+1350
 
-real    1m22.943s
-user    0m0.015s
-sys     0m0.046s
+real    1m9.374s
+user    0m0.000s
+sys     0m0.076s
 
 ```
 
-The Lagrange basis tests for [rank 7, degree 5, simplex dim 4] take ~70s on my host. Most of the rest of the time is for the lower-order Lagrange basis tests.
+The Lagrange basis tests for [rank 7, degree 5, simplex dim 4] take ~55s on my host. Most of the rest of the time is for the lower-order Lagrange basis tests.
 
 In general, some of these UTs are probably not necessary; they will remain anyway, for now.
 

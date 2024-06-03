@@ -80,7 +80,7 @@ namespace po_test
       PO_ASSERT(basis.size() == 126, basis.size());
 
       // Just a basic sanity check
-      static constexpr double tol = 0x1p-09;
+      static constexpr double tol = 0x1p-08;
       PO_ASSERT(errors.max() <= tol, errors << ", " << std::hexfloat << errors << std::defaultfloat);
 
       verify_lagrange_simplex_basis(basis, vertices, degree, simplex_dim, tol);

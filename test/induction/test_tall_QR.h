@@ -27,12 +27,15 @@ namespace po_test
     [](std::size_t r, std::size_t c) { return (r + c) /(1. + r + c); },
   };
 
-  void test_tall_QR(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int = -1);
+  void test_tall_QR(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int, bool expect_success);
 
   template<std::size_t nr, std::size_t nc>
   void test_tall_QR()
   {
     static_assert(nc <= nr);
+
+    static constinit bool EXPECT_SUCCESS{true};
+    static constinit bool EXPECT_FAILURE{false};
 
     if constexpr(nr == 3 && nc == 2)
     {
@@ -48,19 +51,42 @@ namespace po_test
           };
 
           return m[r][c];
-        }, nr, nc
+        },
+        nr,
+        nc,
+        -2, // (just a counter value)
+        EXPECT_SUCCESS
+      );
+
+      test_tall_QR
+      (
+        [](std::size_t r, std::size_t c)
+        {
+          static constexpr double m[3][2]
+          {
+            {1, 1},
+            {2, 3},
+            {-.07, 0},
+          };
+
+          return m[r][c];
+        },
+        nr,
+        nc,
+        -1, // (just a counter value)
+        EXPECT_SUCCESS
       );
     }
 
     int k = -1;
     for(auto f : test_functors)
     {
-      test_tall_QR(f, nr, nc, ++k);
+      test_tall_QR(f, nr, nc, ++k, EXPECT_SUCCESS);
     }
   }
 
 
-  void test_tall_QR(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int k)
+  void test_tall_QR(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int k, bool expect_success)
   {
     po::ls::matrix Q(nrows, nrows);
     po::ls::matrix R(nrows, ncols);
@@ -78,13 +104,18 @@ namespace po_test
     {
       PO_TRACE("[" << k << "] " << nrows << " x " << ncols);
 
+      // PO_TRACE("m = " << m);
+      std::cout << "m =\n";
+      write(std::cout, m, nrows, ncols);
+      std::cout << "R =\n" << R;
+      std::cout << "Q =\n" << Q;
       PO_TRACE("tol     = " << tol      << " = " << std::hexfloat << tol      << std::defaultfloat);
       PO_TRACE("R_error = " << R_error  << " = " << std::hexfloat << R_error  << std::defaultfloat);
       PO_TRACE("Q_error = " << Q_error  << " = " << std::hexfloat << Q_error  << std::defaultfloat);
       PO_TRACE("QR_error= " << QR_error << " = " << std::hexfloat << QR_error << std::defaultfloat);
     }
 
-    PO_ASSERT(success, success);
+    PO_ASSERT(success == expect_success, success);
 
     PO_TRACE(PO_MARKER << " " << __func__ << " [" << nrows << " x " << ncols << "] [" << k << "]");
   }

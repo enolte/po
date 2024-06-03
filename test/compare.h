@@ -3,8 +3,6 @@
 
 #include "../types/exponents.h"
 
-#include "errors.h"
-
 #include <vector>
 #include <algorithm>
 #include <ranges>
@@ -12,11 +10,59 @@
 #include <functional>
 #include <concepts>
 #include <tuple>
+#include <cmath>
+#include <sstream>
+#include <iomanip>
 
 namespace po_test
 {
   namespace compare
   {
+    inline bool near_rel(const double& ac, const double& ex, double tol)
+    {
+      return std::fabs(ac - ex) <= std::fabs(ex) * tol;
+    }
+
+    inline bool near_abs(const double& ac, const double& ex, double tol)
+    {
+      return std::fabs(ac - ex) <= tol;
+    }
+
+    inline double rel(const double& ac, const double& ex)
+    {
+      return std::fabs(ac - ex) / std::fabs(ex);
+    }
+
+    inline double abs(const double& ac, const double& ex)
+    {
+      return std::fabs(ac - ex);
+    }
+
+    inline std::string errors(const double& ac, const double& ex, double tol = 0x1p-52, unsigned int precision = 6)
+    {
+      using namespace compare;
+
+      const double RE = po_test::compare::rel(ac, ex);
+      const double AE = po_test::compare::abs(ac, ex);
+
+      std::stringstream ss;
+      ss << std::endl
+        << std::setprecision(precision) << " ac = " << ac << " = " << std::hexfloat << ac << std::endl << std::defaultfloat
+        << std::setprecision(precision) << " ex = " << ex << " = " << std::hexfloat << ex << std::endl << std::defaultfloat
+        << std::setprecision(precision) << " RE = " << RE << " = " << std::hexfloat << RE << std::endl << std::defaultfloat
+        << std::setprecision(precision) << " AE = " << AE << " = " << std::hexfloat << AE << std::endl << std::defaultfloat
+        << std::setprecision(precision) << " tol= " << tol << " = " << std::hexfloat << tol << std::endl << std::defaultfloat;
+
+      return ss.str();
+    }
+  }
+
+  using compare::near_rel;
+  using compare::errors;
+
+  namespace compare
+  {
+
     using term = std::tuple<po::scalar_type, std::initializer_list<po::exponent_type>>;
     using term_list = std::initializer_list<term>;
 
@@ -37,6 +83,13 @@ namespace po_test
     bool equal(const std::valarray<double>& xa, std::initializer_list<T>&& xb)
     {
       return std::ranges::equal(xa, xb);
+    }
+
+    template<numeric T>
+    bool abs_near(const std::valarray<double>& xa, std::initializer_list<T>&& xb, double tolerance = 0x1p-52)
+    {
+      return std::ranges::all_of(std::views::zip(xa, xb),
+        [tolerance](auto&& pair) { return near_abs(std::get<0>(pair), std::get<1>(pair), tolerance); });
     }
 
     template<std::size_t n>
@@ -71,7 +124,7 @@ namespace po_test
         [coefficient_rel_tolerance](const po::monomial& a, const term& b)
           {
             return
-              po_test::near_rel(a.coefficient, std::get<0>(b), coefficient_rel_tolerance) &&
+              near_rel(a.coefficient, std::get<0>(b), coefficient_rel_tolerance) &&
               compare::equal(a.exponents, std::get<1>(b));
           };
     }

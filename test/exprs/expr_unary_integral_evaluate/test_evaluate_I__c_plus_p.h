@@ -1,6 +1,6 @@
 #include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
-#include "../../errors.h"
+#include "../../compare.h"
 #include <cassert>
 
 void test_evaluate_I__c_plus_p()

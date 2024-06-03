@@ -47,7 +47,7 @@ namespace po_test
       PO_ASSERT(errors.max() <= tol, errors);
 
       PO_ASSERT(
-        equal(
+        compare::abs_near(
           p.data,
           {
             1, -2,  1,
@@ -84,7 +84,7 @@ namespace po_test
       PO_ASSERT(errors.max() <= tol, errors);
 
       PO_ASSERT(
-        equal(
+        compare::abs_near(
           p.data,
           {
             1,  0, -1,

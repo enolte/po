@@ -27,6 +27,8 @@ void test()
   all_expr_tests();
   all_induction_tests();
   instance_count();
+
+  PO_LINE;
 }
 
 void instance_count()

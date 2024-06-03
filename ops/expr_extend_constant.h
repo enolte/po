@@ -86,16 +86,6 @@ namespace po
   }
 
   template<typename Places>
-  struct expr_extend<const scalar_type&, Places>
-  : detail::expr_extend_scalar<const scalar_type&, Places>
-  {};
-
-  template<typename Places>
-  struct expr_extend<scalar_type&, Places>
-  : detail::expr_extend_scalar<scalar_type&, Places>
-  {};
-
-  template<typename Places>
   struct expr_extend<scalar_type, Places>
   : detail::expr_extend_scalar<scalar_type, Places>
   {};

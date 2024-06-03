@@ -1,6 +1,6 @@
 #include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
-#include "../../errors.h"
+#include "../../compare.h"
 #include <cassert>
 
 #include "../expr_unary_integral_evaluate/I.h"
