@@ -74,7 +74,7 @@ namespace po
       for(std::size_t c = 0; c < W.nrows; ++c)
         for(std::size_t r = c+1; r < W.nrows; ++r)
         {
-          const double cur_error = std::fabs(W[r][c]);
+          const double cur_error = std::fabs(W[r, c]);
           if(!(max_error >= cur_error))
           {
             max_error = cur_error;
@@ -97,10 +97,10 @@ namespace po
         {
           double acc = 0.;
           for(std::size_t i = 0; i < QR_nrows; ++i)
-            acc += Q[i][r] * R[i][c];
+            acc += Q[i, r] * R[i, c];
 
           if constexpr(po::matrix<M>)
-            acc -= V[r][c];
+            acc -= V[r, c];
           else
             acc -= V(r, c);
 
@@ -120,7 +120,7 @@ namespace po
         {
           double acc = 0.;
           for(std::size_t i = 0; i < R.nrows; ++i)
-            acc += W[r][i] * R[i][c];
+            acc += W[r, i] * R[i, c];
           acc -= r == c;
           WR_error = std::max(WR_error, std::fabs(acc));
         }
@@ -141,9 +141,9 @@ namespace po
           double acc = 0.;
           for(std::size_t i = 0; i < V.nrows; ++i)
             if constexpr (po::matrix<M>)
-              acc += P[r][i] * V[i][c];
+              acc += P[r, i] * V[i, c];
             else
-              acc += P[r][i] * V(i, c);
+              acc += P[r, i] * V(i, c);
 
           acc -= r == c;
           PV_error = std::max(PV_error, std::fabs(acc));
@@ -161,7 +161,7 @@ namespace po
         {
           double acc = 0.;
           for(std::size_t i = 0; i < Q.ncols; ++i)
-            acc += Q[r][i] * Q[c][i];
+            acc += Q[r, i] * Q[c, i];
           acc -= (r == c);
 
           if(max_error < std::fabs(acc))
@@ -177,7 +177,7 @@ namespace po
       for(std::size_t c = 0; c < R.ncols; ++c)
         for(std::size_t r = c+1; r < R.nrows; ++r)
         {
-          const double cur_error = std::fabs(R[r][c]);
+          const double cur_error = std::fabs(R[r, c]);
           if(max_error < cur_error)
             max_error = cur_error;
         }

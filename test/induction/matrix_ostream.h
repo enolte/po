@@ -40,14 +40,14 @@ namespace po_test
           if constexpr(po::matrix_functor<M>)
             o << format << f(r, c) << ", ";
           else
-            o << format << f[r][c] << ", ";
+            o << format << f[r, c] << ", ";
 
 
         if constexpr(po::matrix_functor<M>)
           o << format << f(r, ncols - 1)
             << std::endl;
         else
-          o << format << f[r][ncols - 1]
+          o << format << f[r, ncols - 1]
             << std::endl;
       }
 

@@ -146,19 +146,19 @@ g++ --std=c++23 test/po.cpp
 
 `./a` then runs the unit tests from the repo root.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~1min24s on my host. There are currently 1350 indexed unit tests, plus a few which are not yet indexed.
+The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~1min10s on my host. There are currently 1350 indexed unit tests, plus a few which are not yet indexed.
 
 ```sh
 $ time ./a | grep ^po: | wc -l
-1349
+1350
 
-real    1m22.943s
-user    0m0.015s
-sys     0m0.046s
+real    1m9.374s
+user    0m0.000s
+sys     0m0.076s
 
 ```
 
-The Lagrange basis tests for [rank 7, degree 5, simplex dim 4] take ~70s on my host. Most of the rest of the time is for the lower-order Lagrange basis tests.
+The Lagrange basis tests for [rank 7, degree 5, simplex dim 4] take ~55s on my host. Most of the rest of the time is for the lower-order Lagrange basis tests.
 
 In general, some of these UTs are probably not necessary; they will remain anyway, for now.
 

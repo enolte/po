@@ -21,12 +21,12 @@ namespace po
        *
        * assumes: Each column of f is an n-dimensional point. n = `dim`.
        */
-      static ls::matrix construct(const matrix_functor auto& f, std::size_t dim, std::size_t degree)
+      static matrix construct(const matrix_functor auto& f, std::size_t dim, std::size_t degree)
       {
         const std::uint64_t nrows{utils::C(dim + degree, degree)};
         const std::uint64_t ncols{utils::C(dim + degree, degree)};
 
-        ls::matrix v(nrows, ncols);
+        matrix v(nrows, ncols);
 
         point knot(dim);
 
@@ -48,12 +48,12 @@ namespace po
        *
        * assumes: Each column of f is an n-dimensional vertex of a k-dimensional simplex.
        */
-      static ls::matrix construct_for_simplex(const matrix_functor auto& f, std::size_t dim, std::size_t degree, std::size_t simplex_dim)
+      static matrix construct_for_simplex(const matrix_functor auto& f, std::size_t dim, std::size_t degree, std::size_t simplex_dim)
       {
         const std::uint64_t nrows{utils::C(dim + degree, degree)};
         const std::uint64_t ncols{utils::C(simplex_dim + degree, degree)};
 
-        ls::matrix v(nrows, ncols);
+        matrix v(nrows, ncols);
 
         point knot(dim);
 

@@ -85,9 +85,9 @@ namespace po
             double acc = 0.;
             for(std::size_t i = 0; i < x.ncols; ++i)
               // acc += x.data[i + r * x.ncols] * y.data[c + i * y.ncols];
-              acc += x[r][i] * y[i][c];
+              acc += x[r, i] * y[i, c];
             // xy.data[c + r * xy.ncols] = acc;
-            xy[r][c] = acc;
+            xy[r, c] = acc;
           }
 
         return xy;
@@ -111,9 +111,9 @@ namespace po
           acc = y(c);
           for(std::size_t r = 0; r < c; ++r)
           {
-            acc -= x[r] * R[r][c];
+            acc -= x[r] * R[r, c];
           }
-          x[c] = acc / R[c][c];
+          x[c] = acc / R[c, c];
         }
 
         return x;
@@ -135,7 +135,7 @@ namespace po
           const auto x = rt_left_solve([c](std::size_t c0) { return c0 == c; }, R);
           for(std::size_t r = 0; r < R.nrows; ++r)
           {
-            W[c][r] = x[r];
+            W[c, r] = x[r];
           }
 
         }

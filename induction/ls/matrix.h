@@ -22,6 +22,16 @@ namespace po
         nrows{_nrows}
       {}
 
+      double& operator[](std::size_t r, std::size_t c)
+      {
+        return data[r*ncols + c];
+      }
+
+      double operator[](std::size_t r, std::size_t c) const
+      {
+        return data[r*ncols + c];
+      }
+
       struct row_reference
       {
         const std::size_t r;
