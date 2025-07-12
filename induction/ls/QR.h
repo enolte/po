@@ -33,9 +33,9 @@ namespace po
 
       for(std::size_t c = 0; c < nc; ++c)
       {
+        const double mcc = R[c, c];
         for(std::size_t r = c+1; r < nr; ++r)
         {
-          const double mcc = R[c, c];
           const double mrc = R[r, c];
 
           if(mrc == 0. || mrc == -0.)

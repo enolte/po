@@ -78,6 +78,10 @@ namespace po_test
     {
       PO_TRACE("[" << k << "] " << nrows << " x " << ncols);
 
+      // PO_TRACE("m = " << m);
+      std::cout << "m =\n";
+      write(std::cout, m, nrows, ncols);
+      std::cout << "R =\n" << R;
       PO_TRACE("tol     = " << tol      << " = " << std::hexfloat << tol      << std::defaultfloat);
       PO_TRACE("R_error = " << R_error  << " = " << std::hexfloat << R_error  << std::defaultfloat);
       PO_TRACE("Q_error = " << Q_error  << " = " << std::hexfloat << Q_error  << std::defaultfloat);
