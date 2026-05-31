@@ -1,3 +1,20 @@
+/*
+
+From the repo root, build with
+
+  g++ --std=c++23 test/po.cpp
+
+  or
+
+  g++ --std=c++23 -O3 test/po.cpp
+
+Expected run times:
+
+without -O3: ~1m45s
+with -O3: ~8s
+
+*/
+
 #include "polynomial/all_polynomial_tests.h"
 #include "monomial/all_monomial_tests.h"
 #include "ostream/all_ostream_tests.h"
@@ -34,7 +51,8 @@ void test()
 void instance_count()
 {
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 3303, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 3310, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 3303, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2906, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2525, po::polynomial::construction_count());

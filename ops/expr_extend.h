@@ -69,8 +69,6 @@ namespace po
     }
     else if constexpr(is_scalar<E1>)
     {
-PO_LINE;
-std::cout << PO_MARKER << rank << ", " << sizeof ...(places) << ", " << expr << std::endl;
       return expr_extend{
         (po::scalar_type)expr,
         rank,

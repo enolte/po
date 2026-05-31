@@ -1,3 +1,4 @@
+
 # [po](https://github.com/enolte/po)
 
 Elementary computations in the real polynomial ring $\mathbb{R}[x_1, ..., x_r]$.
@@ -44,9 +45,9 @@ Mono-repo: *No submodules*.
 
 (_20:09 Saturday, May 30, 2026_)
 
-Fixed a bug introduced by a previous commit, which was preventing correct QR decomposition for rank-deficient knot point matrices. All Lagrange basis induction unit tests pass again now.
+Fixed a bug from a previous commit, which prevented correct QR decomposition of rank-deficient knot point matrices. All Lagrange basis induction unit tests pass again now.
 
-For the the basis induction test cases included here, compiling with `-O3` may cause one bit of precision loss, where compiling without optimizations incurs no precision loss. This caused some unit tests for pseudoinverse to report as specious failures. This is fixed now with a default tolerance of one double-precision machine epsilon. All unit tests now correctly pass with or without the optimizer.
+For the the basis induction test cases included here, compiling with `-O3` may cause one additional bit of precision loss, compard to compiling with optimizations. This caused some unit tests for pseudoinverse to report as specious failures. This is fixed now with a default tolerance of one double-precision machine epsilon and one additional bit of loss tolerance. All unit tests now correctly pass with or without the optimizer.
 
 Also improved organization of test utils. This is in progress.
 
@@ -152,26 +153,37 @@ From the repo root, a typical command line to compile and link all polynomial UT
 ```sh
 g++ --std=c++23 test/po.cpp
 ```
+`./a.out` then runs the unit tests from the repo root.
 
-`./a` then runs the unit tests from the repo root.
+The resulting program implements every polynomial unit test in this repo. This includes the expression template tests for numerical evaluation and polynomial instantiation, the general-case and simplex-case basis solvers, and others.
 
-The resulting program implements every polynomial UT, which includes the expression template tests for numerical evaluation and polynomial instantiation. The entire test suite runs in ~1min10s on my host. There are currently 1350 indexed unit tests, plus a few which are not yet indexed.
+On my development host, the entire test suite runs in ~1min45s without `-O3`, and ~7.2s with `-O3`.
 
 ```sh
-$ time ./a | grep ^po: | wc -l
-1350
+$ g++ --std=c++23 test/po.cpp
+$ time ./a.out | grep ^po: | wc -l
+1353
 
-real    1m9.374s
-user    0m0.000s
-sys     0m0.076s
+real    1m44.415s
+user    1m44.397s
+sys     0m0.023s
 
+$ g++ --std=c++23 -O3 test/po.cpp
+$ time ./a.out | grep ^po: | wc -l
+1353
+
+real    0m7.211s
+user    0m7.204s
+sys     0m0.012s
 ```
 
-The Lagrange basis tests for [rank 7, degree 5, simplex dim 4] take ~55s on my host. Most of the rest of the time is for the lower-order Lagrange basis tests.
+There are currently 1353 indexed unit tests, plus a few which are not yet indexed.
 
-In general, some of these UTs are probably not necessary; they will remain anyway, for now.
+In general, some of these UTs are probably not necessary; they will remain anyway for now.
 
 # Example
+
+## numerics
 
 The following program file ...
 
@@ -226,7 +238,7 @@ std::vector basis = po::lagrange_basis(f, n, degree);
 
 where `degree` > 0 is chosen.
 
-`f` is a function (functor) of two indices. This repo uses the convention that `f(i,j)` is the ith component value of the jth point in the point set. As a matrix, with `n` = 2, `f` would represents the points (0, 0), (1, 1), (2, 3), as column vectors:
+`f` is a function (functor) of two indices. This repo uses the convention that `f(i,j)` is the ith component value of the jth point in the point set. As a matrix with `n` = 2, `f` would represents the points (0, 0), (1, 1), (2, 3), as column vectors:
 
 $$
 \left[f\right] =
@@ -238,7 +250,18 @@ $$
 
 so $f( \cdot, j)$ is the $j^{th}$ knot point.
 
-With this convention, `basis` is a std::vector of polynomials, one polynomial for each column in the matrix of `f`. The ith polynomial $p_i$ and the jth knot point $x_j$ satisfy $p_i(x_j) = \delta_{ij}$. With `degree` = 1, and the above points, the resulting polynomials are
+With this convention, `basis` is a std::vector of polynomials, one polynomial for each column in the matrix of `f`. The ith polynomial $p_i$ and the jth knot point $x_j$ satisfy $p_i(x_j) = \delta_{ij}$.
+
+The interface for Lagrange interpolation on knot points in a simplex is similar.
+```c++
+std::vector basis = po::lagrange_basis(f, n, degree, simplex_dimension);
+```
+The resulting polynomials $p_i$ satisfying $p_i(x_j) = \delta_{ij}$ as above. The difference here is that only the simplex vertices and a degree are provided; the knot points are generated from these in a natural way. More info on this is pending.
+
+
+### Lagrange interpolation: affine polynomials example
+
+With `degree` = 1, and the above points, the resulting polynomials are
 
 $$
 \begin{array}{l}
@@ -288,11 +311,103 @@ basis[2] = 0[0,0]+-1[1,0]+1[0,1]
 
 These are the polynomials listed above. The file [demos/01/demo.cpp](./demos/01/demo.cpp) contains the above program source. This is also a unit test case for Lagrange(rank=2, degree=1).
 
-The interface for Lagrange interpolation on knot points in a simplex is similar.
-```c++
-std::vector basis = po::lagrange_basis(f, n, degree, simplex_dimension);
+
+
+
+### Lagrange interpolation: quadratic polynomials example
+
+
+With `degree` = 2, and these points:
+
+$$
+\left[f\right] =
+\begin{bmatrix}
+0 & 1 & 2 & \frac{1}{2} & \frac{3}{2} & 1\\
+0 & 1 & 3 & \frac{1}{2} & 2 & \frac{3}{2}
+\end{bmatrix}
+$$
+
+the separating polynomials are these:
+
+$$
+\begin{array}{l}
+p_{\binom{0}{0}}(x, y) = 1 - 6x + 3y + 8y^2 - 8xy + 2y^2\\
+p_{\binom{\frac{1}{2}}{\frac{1}{2}}}(x, y) = 12x - 8y - 24x^2 + 28xy + 8y^2\\
+p_{\binom{1}{1}}(x, y) = -3x + 2y + 18x^2 - 24xy + 8y^2 \\
+p_{\binom{\frac{3}{2}}{2}}(x, y) = - 12x^2 + 20xy - 8y^2 \\
+p_{\binom{2}{3}}(x, y) = x - y + 2x^2 - 4xy + 2y^2 \\
+p_{\binom{1}{\frac{3}{2}}}(x, y) = -4x + 4y + 8x^2 - 12xy + 4y^2
+\end{array}
+$$
+
+The polynomials returned from `po::lagrange_basis` are these, in this offset order:
+
+$$
+\begin{array}{l}
+p_{\binom{0}{0}}(x, y) = 1 - 6x + 3y + 8y^2 - 8xy + 2y^2\\
+p_{\binom{\frac{1}{2}}{\frac{1}{2}}}(x, y) = 12x - 8y - 24x^2 + 28xy + 8y^2\\
+p_{\binom{1}{1}}(x, y) = -3x + 2y + 18x^2 - 24xy + 8y^2 \\
+p_{\binom{\frac{3}{2}}{2}}(x, y) = -1.77636\cdot10^{-15}x + 2.66454\cdot10^{-15}y - 12x^2 + 20xy - 8y^2 \\
+p_{\binom{2}{3}}(x, y) = x - y + 2x^2 - 4xy + 2y^2 \\
+p_{\binom{1}{\frac{3}{2}}}(x, y) = -4x + 4y + 8x^2 - 12xy + 4y^2
+\end{array}
+$$
+
+The maximum abs. numeric evaluation error is exactly $2^{-44} = 64\epsilon_{machine}$.
+The maximum abs. coefficient error is exactly $1.5 \cdot 2^{-49} = 12\epsilon_{machine}$.
+
+The file [demos/02/demo.cpp](./demos/02/demo.cpp) contains the program source that computes the above. Its output is:
 ```
-The resulting polynomials $p_i$ satisfying $p_i(x_j) = \delta_{ij}$ as above. The difference here is that only the simplex vertices and a degree are provided; the knot points are generated from these in a natural way. More info on this is pending.
+$ ./a.out
+                 basis polynomial                                               error
+─────────────────────────────────────────────────────                     ─────────────────
+basis[0] = 1[0,0]+-6[1,0]+3[0,1]+8[2,0]+-8[1,1]+2[0,2]
+  b(0.00, 0.00) =                         1                                  0p+0 = 0ε
+  b(0.50, 0.50) =    1.1102230246251565e-16                                 1p-53 = 0.5ε
+  b(1.00, 1.00) =     4.440892098500626e-16                                 1p-51 = 2ε
+  b(1.50, 2.00) =   -1.7763568394002505e-15                                -1p-49 = -8ε
+  b(2.00, 3.00) =    -7.105427357601002e-15                                -1p-47 = -32ε
+  b(1.00, 1.50) =   -1.7763568394002505e-15                                -1p-49 = -8ε
+basis[1] = 0[0,0]+12[1,0]+-8[0,1]+-24[2,0]+28[1,1]+-8[0,2]
+  b(0.00, 0.00) =                         0                                  0p+0 = 0ε
+  b(0.50, 0.50) =        0.9999999999999989                              -1.4p-50 = -5ε
+  b(1.00, 1.00) =    -4.440892098500626e-15                              -1.4p-48 = -20ε
+  b(1.50, 2.00) =    -3.552713678800501e-15                                -1p-48 = -16ε
+  b(2.00, 3.00) =    1.4210854715202004e-14                                 1p-46 = 64ε
+  b(1.00, 1.50) =     3.552713678800501e-15                                 1p-48 = 16ε
+basis[2] = 0[0,0]+-3[1,0]+2[0,1]+18[2,0]+-24[1,1]+8[0,2]
+  b(0.00, 0.00) =                         0                                  0p+0 = 0ε
+  b(0.50, 0.50) =     4.440892098500626e-16                                 1p-51 = 2ε
+  b(1.00, 1.00) =        1.0000000000000053                               1.8p-48 = 24ε
+  b(1.50, 2.00) =    -7.105427357601002e-15                                -1p-47 = -32ε
+  b(2.00, 3.00) =   -1.4210854715202004e-14                                -1p-46 = -64ε
+  b(1.00, 1.50) =    -7.105427357601002e-15                                -1p-47 = -32ε
+basis[3] = 0[0,0]+-1.77636e-15[1,0]+2.66454e-15[0,1]+-12[2,0]+20[1,1]+-8[0,2]
+  b(0.00, 0.00) =                         0                                  0p+0 = 0ε
+  b(0.50, 0.50) =   -1.1102230246251565e-15                              -1.4p-50 = -5ε
+  b(1.00, 1.00) =    -6.217248937900877e-15                              -1.cp-48 = -28ε
+  b(1.50, 2.00) =        0.9999999999999964                                -1p-48 = -16ε
+  b(2.00, 3.00) =    1.4210854715202004e-14                                 1p-46 = 64ε
+  b(1.00, 1.50) =     3.552713678800501e-15                                 1p-48 = 16ε
+basis[4] = 0[0,0]+1[1,0]+-1[0,1]+2[2,0]+-4[1,1]+2[0,2]
+  b(0.00, 0.00) =                         0                                  0p+0 = 0ε
+  b(0.50, 0.50) =                         0                                  0p+0 = 0ε
+  b(1.00, 1.00) =                         0                                  0p+0 = 0ε
+  b(1.50, 2.00) =   -1.7763568394002505e-15                                -1p-49 = -8ε
+  b(2.00, 3.00) =        0.9999999999999929                                -1p-47 = -32ε
+  b(1.00, 1.50) =   -1.7763568394002505e-15                                -1p-49 = -8ε
+basis[5] = 0[0,0]+-4[1,0]+4[0,1]+8[2,0]+-12[1,1]+4[0,2]
+  b(0.00, 0.00) =                         0                                  0p+0 = 0ε
+  b(0.50, 0.50) =                         0                                  0p+0 = 0ε
+  b(1.00, 1.00) =    1.7763568394002505e-15                                 1p-49 = 8ε
+  b(1.50, 2.00) =    -7.105427357601002e-15                                -1p-47 = -32ε
+  b(2.00, 3.00) =   -1.4210854715202004e-14                                -1p-46 = -64ε
+  b(1.00, 1.50) =        0.9999999999999947                              -1.8p-48 = -24ε
+```
+
+This is also a unit test case for Lagrange(rank=2, degree=2).
+
+
 
 ### Lagrange interpolation: general point set
 

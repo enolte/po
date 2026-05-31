@@ -18,6 +18,7 @@ namespace po_test
     void test1();
     void test2();
     void test3();
+    void test4();
   }
 
   void test_lagrange_basis_rank2_degree2()
@@ -27,6 +28,7 @@ namespace po_test
     test1();
     test2();
     test3();
+    test4();
   }
 
   namespace rank2_degree2_lagrange_basis
@@ -57,6 +59,14 @@ namespace po_test
         {1, 3},
         {0, 4},
         {-1, -1},
+      },
+      {
+        {0, 0},
+        {0.5, 0.5},
+        {1, 1},
+        {1.5, 2},
+        {2, 3},
+        {1, 1.5}
       }
     };
 
@@ -67,6 +77,7 @@ namespace po_test
     void test1() { test(0); }
     void test2() { test(1); }
     void test3() { test(2); }
+    void test4() { test(3); }
 
     void test(const double points[6][2], int k)
     {

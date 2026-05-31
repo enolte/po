@@ -1,7 +1,6 @@
 #include "../../../ostream/exponents_ostream.h"
 #include "../../../polynomial.h"
 #include "../../compare.h"
-#include "../../compare.h"
 #include <cassert>
 
 void test_evaluate_I__p_variadic_rank_4_1_integration()
