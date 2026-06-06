@@ -18,13 +18,13 @@ void test_evaluate_D__DDp_variadic()
 
     const double ex = 72*5.4*5.4;
 
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)(-3, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-3, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)(-2, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-2, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)(-1, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-1, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)( 0, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 0, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)( 1, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 1, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)( 2, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 2, 5.4, 1, 1), ex));
-    PO_ASSERT(po_test::near_rel(D(p, 2, 1, 1)( 3, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 3, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)(-3, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-3, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)(-2, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-2, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)(-1, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)(-1, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)( 0, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 0, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)( 1, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 1, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)( 2, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 2, 5.4, 1, 1), ex));
+    PO_ASSERT(po_test::compare::rel_near(D(p, 2, 1, 1)( 3, 5.4, 1, 1), ex, 0x1p-51), rel(D(p, 2, 1, 1)( 3, 5.4, 1, 1), ex));
 
     PO_LINE;
   }

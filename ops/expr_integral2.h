@@ -8,7 +8,6 @@ namespace po
   template<expression E1>
   struct expr_integral<expr_integral<E1>>
   {
-    using _E1 = expr_integral<E1>;
     using F1 = subexpr_type<expr_integral<E1>>;
 
     const F1 expr1;
@@ -26,7 +25,6 @@ namespace po
   template<expression E1>
   struct expr_integral<const expr_integral<E1>&>
   {
-    using _E1 = expr_integral<E1>;
     using F1 = subexpr_type<expr_integral<E1>>;
 
     const F1 expr1;

@@ -11,9 +11,6 @@ namespace po
   template<expression E1, constant E2>
   struct expr_binary_divide_by_constant
   {
-    using _E1 = E1;
-    using _E2 = E2;
-
     // using F1 = subexpr_type<E1>;
     // using F2 = subexpr_type<E2>;
 

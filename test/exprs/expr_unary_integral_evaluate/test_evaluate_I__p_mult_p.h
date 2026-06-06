@@ -50,7 +50,7 @@ void test_evaluate_I__p_mult_p()
       po::polynomial{{ 2, {1, 1, 1, 1}}} * po::polynomial{{ 7, {1, 0, 2, 5}}}, {2, {1, 3}})
         (3, 2, 1);
 
-    // std::cout << po_test::errors(ac, ex, 0x1p-52);
+    // std::cout << po_test::compare::errors(ac, ex, 0x1p-52);
 
     PO_ASSERT(ac == ex, ac);
     PO_ASSERT(ac == 5040., ac);

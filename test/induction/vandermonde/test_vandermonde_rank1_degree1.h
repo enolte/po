@@ -23,9 +23,9 @@ namespace po_test
     PO_ASSERT(v.nrows == 2, v.nrows);
     PO_ASSERT(v.ncols == 2, v.ncols);
     PO_ASSERT(
-      equal(
+      std::ranges::equal(
         v.data,
-        {                // row multiindices
+        std::initializer_list{ // row multiindices
           1,     1,      // 0
           0,     1,      // 1
         }),

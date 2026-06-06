@@ -6,7 +6,6 @@ namespace po
   template<typename E1, typename E2>
   struct expr_partial_derivative<expr_binary_minus<E1, E2>>
   {
-    using _E1 = expr_binary_minus<E1, E2>;
     using F1 = subexpr_type<expr_binary_minus<E1, E2>>;
 
     const F1 expr1;

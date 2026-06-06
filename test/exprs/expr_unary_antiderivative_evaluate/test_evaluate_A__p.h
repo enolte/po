@@ -40,7 +40,7 @@ void test_evaluate_A__p()
       },
       0)(3.0058, 4.3, -4);
 
-    assert(po_test::near_rel(ac, ex, 0x1p-51));
+    assert(po_test::compare::rel_near(ac, ex, 0x1p-51));
 
     PO_LINE;
   }
@@ -58,7 +58,7 @@ void test_evaluate_A__p()
     const double ex = 3./5 * 2*2*2*2*2   +   4./4 * 2*2*2*2   +   5./3 * 2*2*2   +   6./2 * 2*2;
     const double ac = po::antiderivative(p, 6)(1, 1, 1, 1, 1, 1, 2, 1, 1);
 
-    PO_ASSERT(near_rel(ac, ex, 0x1.5p-53), rel(ac, ex));
+    PO_ASSERT(rel_near(ac, ex, 0x1.5p-53), rel(ac, ex));
 
     PO_LINE;
   }
@@ -81,7 +81,7 @@ void test_evaluate_A__p()
 
     const double ac = po::antiderivative(p, 5)(3.0058, 4.3, -4, 1, 1, xnew);
 
-    assert(po_test::near_rel(ac, ex, 0x1p-51));
+    assert(po_test::compare::rel_near(ac, ex, 0x1p-51));
 
     PO_LINE;
   }
@@ -105,7 +105,7 @@ void test_evaluate_A__p()
       },
       5)(3.0058, 4.3, -4, 1, 1, xnew);
 
-    assert(po_test::near_rel(ac, ex, 0x1p-51));
+    assert(po_test::compare::rel_near(ac, ex, 0x1p-51));
 
     PO_LINE;
   }

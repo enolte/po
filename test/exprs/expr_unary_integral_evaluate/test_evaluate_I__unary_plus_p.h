@@ -28,7 +28,7 @@ void test_evaluate_I__unary_plus_p()
     const double ex = 3547.2;
     const double ac = po::integral(+p, {2, {1, 3}})(3, 2, 1);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), po_test::errors(ac, ex, 0x1p-51));
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1p-51), po_test::compare::errors(ac, ex, 0x1p-51));
 
     PO_LINE;
   }
@@ -46,7 +46,7 @@ void test_evaluate_I__unary_plus_p()
       {2, {1, 3}})
         (3, 2, 1);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1.cp-23), po_test::errors(ac, ex, 0x1.cp-23));
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1.cp-23), po_test::compare::errors(ac, ex, 0x1.cp-23));
 
     PO_LINE;
   }

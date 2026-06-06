@@ -5,7 +5,7 @@
 
 namespace po
 {
-  using rank_type = std::size_t;
+  using rank_type = std::uint64_t;
 
   template<rank_type R>
   struct rank

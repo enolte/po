@@ -106,7 +106,7 @@ void test_evaluate_Dp__mult__p()
 
     PO_ASSERT(
       (D(p, 2) * p)(1, 1.3, -0.01, 1) == dp2(1, 1.3, -0.01, 1) * p(1, 1.3, -0.01, 1),
-      po_test::errors(po::D(p, 2)(1, 1, 1, 1), dp2(1, 1, 1, 1), 0x1p-50));
+      po_test::compare::errors(po::D(p, 2)(1, 1, 1, 1), dp2(1, 1, 1, 1), 0x1p-50));
 
     PO_LINE;
   }
@@ -118,8 +118,8 @@ void test_evaluate_Dp__mult__p()
     const auto x = D(p, 2) * p;
 
     PO_ASSERT(
-      po_test::near_rel(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50),
-      po_test::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
+      po_test::compare::rel_near(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50),
+      po_test::compare::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
 
     PO_LINE;
   }

@@ -3,6 +3,7 @@
 #include "../../compare.h"
 #include <cassert>
 
+
 template<typename ostream, std::size_t n>
 ostream& operator<<(ostream& o, const std::array<po::rank_type, n>& a)
 {
@@ -15,9 +16,32 @@ ostream& operator<<(ostream& o, const std::array<po::rank_type, n>& a)
   return o;
 }
 
-void test_evaluate_extend_p()
+void test_expr_nullary_extend_p()
 {
-  // rank 0 --> rank 3, test 1
+  // degree 0: rank 3 -- rank 5, test 0
+  {
+    // p(x, y, z) = 2.3
+    po::polynomial p = po::make_constant(2.3, 3);
+    auto y1 = p(0, 0, 0, 0, 0);
+    assert(y1 != y1);
+
+    // px(v, w, x, y, z) := p(x, y, v)
+    // px(x, y, z, a, b) := p(z, a, x)
+    auto px = extend(p, 5, 2, 3, 0);
+    static_assert(std::same_as<decltype(px), po::expr_extend<po::polynomial&, std::array<po::rank_type, 3>>>);
+    assert(px.rank == 5);
+    assert(compare::equal(px.places, {2, 3, 0}));
+
+    auto y2 = px(0, 0, 0, 0, 0);
+    assert(y2 == y2);
+    assert(y2 == 2.3);
+
+    auto y3 = px(2, 1, 0.6, 4, -14.87);
+    assert(y3 == y3);
+    assert(y3 == 2.3);
+  }
+
+  // degree 0: rank 0 --> rank 3, test 1
   {
     po::polynomial p = po::make_constant(3, 0);
     auto x = po::extend(p, 3);
@@ -41,6 +65,9 @@ void test_evaluate_extend_p()
     assert(x.rank == 3);
 
     po::scalar_type y = x(1, 2, 3);
+    PO_ASSERT(y == 3, y);
+
+    y = x(2, 1, 3);
     PO_ASSERT(y == 3, y);
 
     PO_LINE;
@@ -81,14 +108,24 @@ void test_evaluate_extend_p()
   {
     po::polynomial p{{3, {   4   }}};
 
+    // Define x(u, v, w) := p(v)
     auto x = po::extend(p, 3, 1);
+    // static_assert(std::same_as<decltype(x), po::expr_extend<po::polynomial&, po::places<1>>);
 
     assert(compare::equal(x.places, {1}));
     assert(x.rank == 3);
 
-    po::scalar_type y = x(0, 7, 0);
-    assert(y == y);
+    double y = x(7, 0, 0);
+    assert(y == 0.);
+    PO_ASSERT(y == p(0), y);
+
+    y = x(0, 7, 0);
     PO_ASSERT(y == p(7), y);
+    PO_ASSERT(y == 3*2401, y);
+
+    y = x(0, 0, 7);
+    assert(y == 0.);
+    PO_ASSERT(y == p(0), y);
 
     PO_LINE;
   }
@@ -170,6 +207,14 @@ void test_evaluate_extend_p()
     po::scalar_type y = x(2, 7, 3);
     assert(y == y);
     PO_ASSERT(y == p(2, 7), y);
+
+    y = x(2, 7, 5.887);
+    assert(y == y);
+    PO_ASSERT(y == p(2, 7), y);
+
+    y = x(2, -3.2, 44.0548);
+    assert(y == y);
+    PO_ASSERT(y == p(2, -3.2), y);
 
     PO_LINE;
   }
@@ -354,6 +399,7 @@ void test_evaluate_extend_p()
     assert(compare::equal(x.places, {1, 2, 3, 6, 7, 8}));
     assert(x.rank == 9);
 
+    //     p(     x, y, z,           u, v, w)
     assert(x(0  , 1, 1, 1, 0  , 0  , 1, 1, 1) == 3);
     assert(x(0  , 1, 1, 1, 0  , 0.1, 1, 1, 1) == 3);
     assert(x(0  , 1, 1, 1, 0.1, 0  , 1, 1, 1) == 3);

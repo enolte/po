@@ -13,6 +13,7 @@ using namespace po_test;
 
 #include "test_expr_subexpressions.h"
 #include "test_expr_evaluate.h"
+#include "test_expr_extend.h"
 #include "test_expr_instantiate.h"
 #include "test_instance_counts.h"
 
@@ -22,6 +23,7 @@ namespace po_test
   {
     test_expr_rank();
 
+    test_expr_extend();
     test_expr_subexpressions();
     test_expr_evaluate();
     test_expr_instantiate();

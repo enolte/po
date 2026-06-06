@@ -8,7 +8,6 @@ namespace po
   template<>
   struct expr_antiderivative<expr_constant>
   {
-    using _E1 = expr_constant;
     using F1 = subexpr_type<expr_constant>;
 
     const F1 expr1;
@@ -30,7 +29,6 @@ namespace po
   template<>
   struct expr_antiderivative<scalar_type>
   {
-    using _E1 = scalar_type;
     using F1 = subexpr_type<scalar_type>;
 
     const F1 expr1;

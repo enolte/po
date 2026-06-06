@@ -10,7 +10,6 @@ namespace po
     template<typename T>
     struct expr_integral_constant
     {
-      using _E1 = T;
       using F1 = subexpr_type<T>;
 
       const F1 expr1;
@@ -37,7 +36,6 @@ namespace po
     template<typename T>
     struct expr_integral_scalar
     {
-      using _E1 = T;
       using F1 = subexpr_type<T>;
 
       const F1 expr1;

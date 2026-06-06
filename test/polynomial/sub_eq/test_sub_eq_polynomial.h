@@ -100,7 +100,7 @@ void test_sub_eq_polynomial()
     assert(p.rank() == q.rank());
 
     assert(p.degree() == q.degree());
-    assert(compare::equal(p.degrees(), q.degrees()));
+    assert(std::ranges::equal(p.degrees(), q.degrees()));
 
     assert(p.rank() == 6);
     PO_ASSERT(p.nterms() == 4, p);
@@ -185,7 +185,7 @@ void test_sub_eq_polynomial()
     assert(p.rank() == q.rank());
 
     PO_ASSERT(p.degree() == 25, p.degree());
-    assert(compare::equal(p.degrees(), q.degrees()));
+    assert(std::ranges::equal(p.degrees(), q.degrees()));
 
     assert(p.rank() == 6);
     PO_ASSERT(p.nterms() == 4, p);

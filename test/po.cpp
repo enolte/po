@@ -22,6 +22,8 @@ with -O3: ~8s
 #include "exprs/all_expr_tests.h"
 #include "induction/all_induction_tests.h"
 
+#include <print>
+
 using namespace po_test;
 
 void test();
@@ -45,13 +47,15 @@ void test()
   all_induction_tests();
   instance_count();
 
+  std::println("Tests complete");
   PO_LINE;
 }
 
 void instance_count()
 {
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 3310, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 3313, po::polynomial::construction_count());
+  // PO_ASSERT(po::polynomial::construction_count() == 3310, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 3303, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2906, po::polynomial::construction_count());

@@ -8,7 +8,6 @@ namespace po
   template<typename E1>
   struct expr_integral<expr_unary_minus<E1>>
   {
-    using _E1 = expr_unary_minus<E1>;
     using F1 = subexpr_type<expr_unary_minus<E1>>;
 
     const F1 expr1;

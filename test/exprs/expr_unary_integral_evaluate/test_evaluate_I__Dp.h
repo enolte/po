@@ -47,7 +47,7 @@ void test_evaluate_I__Dp()
     const double ex = ex_dp1_2_13(3, 2, 1);
     const double ac = po::integral(D(p, 1), {2, {1, 3}})(3, 2, 1);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), ac);
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1p-51), ac);
 
     PO_LINE;
   }
@@ -63,7 +63,7 @@ void test_evaluate_I__Dp()
     const auto dp1 = D(p, 1);
     const double ac = po::integral(dp1, {2, {1, 3}})(3, 2, 1);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), ac);
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1p-51), ac);
 
     PO_LINE;
   }
@@ -131,7 +131,7 @@ void test_evaluate_I__Dp()
     assert(p.rank() == instantiate(po::integral(D(p, 0), {1, {1, 3}})).rank());
     assert(p.rank() == expr_rank(po::integral(D(p, 0), {1, {1, 3}})));
 
-    PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
+    PO_ASSERT(ac == ex, po_test::compare::errors(ac, ex, 0x1p-52));
 
     PO_LINE;
   }
@@ -151,7 +151,7 @@ void test_evaluate_I__Dp()
     assert(p.rank() == instantiate(po::integral(D(p, 0), {6, {1, 3}})).rank());
     assert(p.rank() == expr_rank(po::integral(D(p, 0), {6, {1, 3}})));
 
-    PO_ASSERT(ac == ex, po_test::errors(ac, ex, 0x1p-52));
+    PO_ASSERT(ac == ex, po_test::compare::errors(ac, ex, 0x1p-52));
 
     PO_LINE;
   }

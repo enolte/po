@@ -38,7 +38,7 @@ void test_assign_expr_level_6()
     PO_ASSERT(compare::unordered_equal_terms(p, p2), p2);
     PO_ASSERT(p.rank() == p2.rank(), p2.rank());
     PO_ASSERT(p.degree() == p2.degree(), p2.degree());
-    PO_ASSERT(compare::equal(p.degrees(), p2.degrees()), p2.degrees());
+    PO_ASSERT(std::ranges::equal(p.degrees(), p2.degrees()), p2.degrees());
 
     PO_LINE;
   }

@@ -26,7 +26,7 @@ void test_evaluate_A__Ap()
     const double ex = 1./3 * 1.331 * 4.84 * 3.3;
     const double ac = A(A(p, 0), 0)(1.1, -5, 2.2, 3.3);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1.8p-51), po_test::errors(ac, ex));
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1.8p-51), po_test::compare::errors(ac, ex));
 
     PO_LINE;
   }
@@ -38,7 +38,7 @@ void test_evaluate_A__Ap()
     const double ex = 1.21 * 4.84 * 3.3 * 4.2;
     const double ac = A(A(p, 0), 5)(1.1, -5, 2.2, 3.3, 0, 4.2);
 
-    PO_ASSERT(po_test::near_rel(ac, ex, 0x1p-51), po_test::errors(ac, ex));
+    PO_ASSERT(po_test::compare::rel_near(ac, ex, 0x1p-51), po_test::compare::errors(ac, ex));
 
     PO_LINE;
   }

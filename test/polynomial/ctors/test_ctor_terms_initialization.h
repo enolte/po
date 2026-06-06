@@ -34,7 +34,7 @@ void test_ctor_terms_initialization()
     const po::exponents actual{p.terms[0].exponents};
 
     assert(p.nterms() == 1);
-    assert(compare::equal(actual, expected));
+    assert(std::ranges::equal(actual, expected));
 
     PO_LINE;
   }
@@ -46,7 +46,7 @@ void test_ctor_terms_initialization()
     const po::exponents actual{p.terms[0].exponents};
 
     assert(p.nterms() == 1);
-    assert(compare::equal(actual, expected));
+    assert(std::ranges::equal(actual, expected));
 
     PO_LINE;
   }

@@ -8,7 +8,7 @@ namespace po
   template<typename E1>
   struct expr_unary_minus
   {
-    using _E1 = E1;
+
     using F1 = subexpr_type<E1>;
     F1 expr1;
 

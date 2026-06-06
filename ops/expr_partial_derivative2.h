@@ -8,7 +8,6 @@ namespace po
   template<expression E1>
   struct expr_partial_derivative<expr_partial_derivative<E1>>
   {
-    using _E1 = expr_partial_derivative<E1>;
     using F1 = subexpr_type<expr_partial_derivative<E1>>;
 
     const F1 expr1;

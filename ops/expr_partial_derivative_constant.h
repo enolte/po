@@ -10,7 +10,7 @@ namespace po
     template<typename E1>
     struct expr_partial_derivative_constant
     {
-      using _E1 = E1;
+
       using F1 = subexpr_type<E1>;
 
       const F1 expr1;

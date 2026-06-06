@@ -33,7 +33,7 @@ void test_evaluate_p__mult__Dp()
     assert(po::D(p, 2).place == 2);
     assert(po::D(p, 2)(1, 1, 1, 1) == 8);
     PO_ASSERT(
-      po_test::near_rel(x(1, 1, 1, 1), 5*8, 0x1p-49),
+      po_test::compare::rel_near(x(1, 1, 1, 1), 5*8, 0x1p-49),
       x(1, 1, 1, 1));
 
     PO_LINE;
@@ -46,12 +46,12 @@ void test_evaluate_p__mult__Dp()
     const auto x = p * po::D(p, 2);
 
     PO_ASSERT(
-      po_test::near_rel(x(1, 1, 1, 1), (2 + 3)*(2 + 6), 0x1p-49),
-      po_test::errors(x(1, 1, 1, 1), (2 + 3)*(2 + 6), 0x1p-49));
+      po_test::compare::rel_near(x(1, 1, 1, 1), (2 + 3)*(2 + 6), 0x1p-49),
+      po_test::compare::errors(x(1, 1, 1, 1), (2 + 3)*(2 + 6), 0x1p-49));
 
     PO_ASSERT(
-      po_test::near_rel(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50),
-      po_test::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * po::D(p, 2)(1, 1, 1, 1), 0x1p-50));
+      po_test::compare::rel_near(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50),
+      po_test::compare::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * po::D(p, 2)(1, 1, 1, 1), 0x1p-50));
 
     PO_LINE;
   }
@@ -65,7 +65,7 @@ void test_evaluate_p__mult__Dp()
 
     PO_ASSERT(
       x(1, 1, 1, 1) == p(1, 1, 1, 1) * dp2(1, 1, 1, 1),
-      po_test::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
+      po_test::compare::errors(x(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
 
     PO_LINE;
   }
@@ -78,7 +78,7 @@ void test_evaluate_p__mult__Dp()
 
     PO_ASSERT(
       (p * D(p, 2))(1, 1, 1, 1) == p(1, 1, 1, 1) * dp2(1, 1, 1, 1),
-      po_test::errors((p * D(p, 2))(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
+      po_test::compare::errors((p * D(p, 2))(1, 1, 1, 1), p(1, 1, 1, 1) * dp2(1, 1, 1, 1), 0x1p-50));
 
     PO_LINE;
   }
@@ -91,7 +91,7 @@ void test_evaluate_p__mult__Dp()
 
     PO_ASSERT(
       (p * D(p, 2))(1, 1.3, -0.01, 1) == p(1, 1.3, -0.01, 1) * dp2(1, 1.3, -0.01, 1),
-      po_test::errors((p * D(p, 2))(1, 1.3, -0.01, 1), p(1, 1.3, -0.01, 1) * dp2(1, 1.3, -0.01, 1), 0x1p-50));
+      po_test::compare::errors((p * D(p, 2))(1, 1.3, -0.01, 1), p(1, 1.3, -0.01, 1) * dp2(1, 1.3, -0.01, 1), 0x1p-50));
 
     PO_LINE;
   }

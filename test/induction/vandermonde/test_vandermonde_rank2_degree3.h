@@ -47,9 +47,9 @@ namespace po_test
       PO_ASSERT(v.nrows == 10, v.nrows);
       PO_ASSERT(v.ncols == 10, v.ncols);
       PO_ASSERT(
-        equal(
+        std::ranges::equal(
           v.data,
-          {                                                               // row multiindices
+          std::initializer_list{                                          // row multiindices
             1.,  1.,  1.,   1.,   1.,    1.,    1.,    1.,    1.,    1.,  // 0 0
             0.,  1.,  2.,   3.,   4.,    5.,    6.,    7.,    8.,    9.,  // 1 0
             0.,  1.,  2.,   3.,   4.,    5.,    6.,    7.,    8.,    9.,  // 0 1
@@ -91,9 +91,9 @@ namespace po_test
       PO_ASSERT(v.nrows == 10, v.nrows);
       PO_ASSERT(v.ncols == 10, v.ncols);
       PO_ASSERT(
-        equal(
+        std::ranges::equal(
           v.data,
-          {                                                       // row multiindices
+          std::initializer_list{                                  // row multiindices
             1.,  1.,  1.,  1.,  1.,  1.,   1.,   1.,   1.,   1.,  // 0 0
             0.,  1.,  0.,  1.,  2.,  2.,  -2.,  -2.,   2.,   4.,  // 1 0
             0.,  0.,  1.,  1.,  0.,  2.,   2.,  -2.,  -2.,   4.,  // 0 1

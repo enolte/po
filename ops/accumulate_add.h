@@ -9,14 +9,14 @@ namespace po
 {
   namespace detail
   {
-    template<typename X> concept P1 = po::is_polynomial<typename X::_E1>;
-    template<typename X> concept P2 = po::is_polynomial<typename X::_E2>;
+    template<typename X> concept P1 = po::is_polynomial<typename X::F1>;
+    template<typename X> concept P2 = po::is_polynomial<typename X::F2>;
 
-    template<typename X> concept S1 = po::is_scalar<typename X::_E1>;
-    template<typename X> concept S2 = po::is_scalar<typename X::_E2>;
+    template<typename X> concept S1 = po::is_scalar<typename X::F1>;
+    template<typename X> concept S2 = po::is_scalar<typename X::F2>;
 
-    template<typename X> concept C1 = po::is_constant<typename X::_E1>;
-    template<typename X> concept C2 = po::is_constant<typename X::_E2>;
+    template<typename X> concept C1 = po::is_constant<typename X::F1>;
+    template<typename X> concept C2 = po::is_constant<typename X::F2>;
   }
 
   template<typename Expr>

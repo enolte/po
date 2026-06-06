@@ -14,7 +14,7 @@ namespace po
     template<is_polynomial E1>
     struct expr_integral
     {
-      using _E1 = E1;
+
       using F1 = subexpr_type<E1>;
 
       const F1 expr1;

@@ -102,10 +102,10 @@ void test_evaluate_A__p_minus_p()
     assert(ac == 0.5);
 
     ac = po::antiderivative(p - q, place)(-2.015, 1);
-    assert(near_rel(ac, 0.5*-2.015*-2.015, 0x1p-51));
+    assert(rel_near(ac, 0.5*-2.015*-2.015, 0x1p-51));
 
     ac = po::antiderivative(p - q, place)(-77.450, 1);
-    assert(near_rel(ac, 0.5*-77.450*-77.450, 0x1p-51));
+    assert(rel_near(ac, 0.5*-77.450*-77.450, 0x1p-51));
 
     PO_LINE;
   }
@@ -147,7 +147,7 @@ void test_evaluate_A__p_minus_p()
           +
           -4 * -77.45 * 1 * 2 * 1
         );
-    assert(near_rel(ac, ex, 0x1p-51));
+    assert(rel_near(ac, ex, 0x1p-51));
 
     PO_LINE;
   }
@@ -163,11 +163,11 @@ void test_evaluate_A__p_minus_p()
 
     ac = po::antiderivative(P{{ 3, {1, 1}}} - P{{ 2, {2, 1}}}, place)(-2.015, 1);
     ex = 3./2*-2.015*-2.015 - 2./3*-2.015*-2.015*-2.015;
-    assert(near_rel(ac, ex, 0x1p-51));
+    assert(rel_near(ac, ex, 0x1p-51));
 
     ac = po::antiderivative(P{{ 3, {1, 1}}} - P{{ 2, {2, 1}}}, place)(-77.450, 1);
     ex = 3./2*-77.450*-77.450 - 2./3*-77.450*-77.450*-77.450;
-    assert(near_rel(ac , ex, 0x1p-52));
+    assert(rel_near(ac , ex, 0x1p-52));
 
     PO_LINE;
   }

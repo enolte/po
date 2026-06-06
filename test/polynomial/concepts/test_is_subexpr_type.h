@@ -61,13 +61,13 @@ static_assert(std::same_as<effect_of_subexpr_type<const int  >,  const int >);
 static_assert(std::same_as<effect_of_subexpr_type<const int& >,  const int&>);
 static_assert(std::same_as<effect_of_subexpr_type<const int&&>,  const int >);
 
-static_assert(std::same_as<po::subexpr_type<      int  >,            const int >);
-static_assert(std::same_as<po::subexpr_type<      int& >,            const int&>);
-static_assert(std::same_as<po::subexpr_type<      int&&>,            const int >);
+static_assert(std::same_as<po::subexpr_type<      int  >,        const int >);
+static_assert(std::same_as<po::subexpr_type<      int& >,        const int&>);
+static_assert(std::same_as<po::subexpr_type<      int&&>,        const int >);
 
-static_assert(std::same_as<po::subexpr_type<const int  >,            const int >);
-static_assert(std::same_as<po::subexpr_type<const int& >,            const int&>);
-static_assert(std::same_as<po::subexpr_type<const int&&>,            const int >);
+static_assert(std::same_as<po::subexpr_type<const int  >,        const int >);
+static_assert(std::same_as<po::subexpr_type<const int& >,        const int&>);
+static_assert(std::same_as<po::subexpr_type<const int&&>,        const int >);
 
 // binary expression prototype
 template<typename E1, typename E2>
@@ -75,9 +75,8 @@ struct X
 {
   using _E1 = E1;
   using _E2 = E2;
-
-  using F1 = po::subexpr_type<_E1>;
-  using F2 = po::subexpr_type<_E2>;
+  using F1 = po::subexpr_type<E1>;
+  using F2 = po::subexpr_type<E2>;
 
   F1 expr1;
   F2 expr2;
@@ -86,29 +85,29 @@ struct X
 static_assert(std::is_const_v<X<po::polynomial, po::polynomial>::F1>);
 static_assert(std::is_const_v<X<po::polynomial, po::polynomial&>::F1>);
 
-static_assert(!po::is_subexpr_type<X<int        , int>::_E1>);
-static_assert(!po::is_subexpr_type<X<int&       , int>::_E1>);
-static_assert(!po::is_subexpr_type<X<int&&      , int>::_E1>);
+static_assert(!po::is_subexpr_type<X<int  , int>::_E1>);
+static_assert(!po::is_subexpr_type<X<int& , int>::_E1>);
+static_assert(!po::is_subexpr_type<X<int&&, int>::_E1>);
 
-static_assert( po::is_subexpr_type<X<int        , int>::F1>);
-static_assert( po::is_subexpr_type<X<int&       , int>::F1>);
-static_assert( po::is_subexpr_type<X<int&&      , int>::F1>);
+static_assert( po::is_subexpr_type<X<int  , int>::F1>);
+static_assert( po::is_subexpr_type<X<int& , int>::F1>);
+static_assert( po::is_subexpr_type<X<int&&, int>::F1>);
 
-static_assert(std::same_as<X<      int&&, int&>::_E1,                 int&&>);
-static_assert(std::same_as<X<      int& , int&>::_E1,                 int&>);
-static_assert(std::same_as<X<      int  , int&>::_E1,                 int>);
+static_assert(std::same_as<X<      int&&, int&>::_E1,  int&&>);
+static_assert(std::same_as<X<      int& , int&>::_E1,  int&>);
+static_assert(std::same_as<X<      int  , int&>::_E1,  int>);
 
-static_assert(std::same_as<X<      int&&, int&>::F1,                  const int>);
-static_assert(std::same_as<X<      int& , int&>::F1,                  const int&>);
-static_assert(std::same_as<X<      int  , int&>::F1,                  const int>);
+static_assert(std::same_as<X<      int&&, int&>::F1 ,  const int>);
+static_assert(std::same_as<X<      int& , int&>::F1 ,  const int&>);
+static_assert(std::same_as<X<      int  , int&>::F1 ,  const int>);
 
-static_assert(std::same_as<X<const int&&, int&>::_E1,                 const int&&>);
-static_assert(std::same_as<X<const int& , int&>::_E1,                 const int&>);
-static_assert(std::same_as<X<const int  , int&>::_E1,                 const int>);
+static_assert(std::same_as<X<const int&&, int&>::_E1,  const int&&>);
+static_assert(std::same_as<X<const int& , int&>::_E1,  const int&>);
+static_assert(std::same_as<X<const int  , int&>::_E1,  const int>);
 
-static_assert(std::same_as<X<const int&&, int&>::F1 ,                 const int>);
-static_assert(std::same_as<X<const int& , int&>::F1 ,                 const int&>);
-static_assert(std::same_as<X<const int  , int&>::F1 ,                 const int>);
+static_assert(std::same_as<X<const int&&, int&>::F1 ,  const int>);
+static_assert(std::same_as<X<const int& , int&>::F1 ,  const int&>);
+static_assert(std::same_as<X<const int  , int&>::F1 ,  const int>);
 
 
 

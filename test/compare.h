@@ -18,27 +18,51 @@ namespace po_test
 {
   namespace compare
   {
-    inline bool near_rel(const double& ac, const double& ex, double tol)
+    template<typename T>
+    concept numeric = std::is_arithmetic<std::remove_cvref_t<T>>::value;
+
+    namespace detail
+    {
+      struct empty{};
+    }
+
+    bool equal(auto&& xa, detail::empty&&)
+    {
+      return std::size(xa) == 0;
+    }
+
+    bool equal(auto&& xa, std::initializer_list<numeric auto>&& xb)
+    {
+      return std::ranges::equal(xa, xb);
+    }
+
+    inline bool rel_near(double ac, double ex, double tol)
     {
       return std::fabs(ac - ex) <= std::fabs(ex) * tol;
     }
 
-    inline bool near_abs(const double& ac, const double& ex, double tol)
+    inline bool abs_near(double ac, double ex, double tol)
     {
       return std::fabs(ac - ex) <= tol;
     }
 
-    inline double rel(const double& ac, const double& ex)
+    inline bool abs_near(auto&& xa, std::initializer_list<numeric auto>&& xb, double tolerance = 0x1p-52)
+    {
+      return std::ranges::all_of(std::views::zip(xa, xb),
+        [tolerance](auto&& pair) { return abs_near(std::get<0>(pair), std::get<1>(pair), tolerance); });
+    }
+
+    inline double rel(double ac, double ex)
     {
       return std::fabs(ac - ex) / std::fabs(ex);
     }
 
-    inline double abs(const double& ac, const double& ex)
+    inline double abs(double ac, double ex)
     {
       return std::fabs(ac - ex);
     }
 
-    inline std::string errors(const double& ac, const double& ex, double tol = 0x1p-52, unsigned int precision = 6)
+    inline std::string errors(double ac, double ex, double tol = 0x1p-52, unsigned int precision = 6)
     {
       using namespace compare;
 
@@ -55,139 +79,95 @@ namespace po_test
 
       return ss.str();
     }
-  }
 
-  using compare::near_rel;
-  using compare::errors;
-
-  namespace compare
-  {
-
-    using term = std::tuple<po::scalar_type, std::initializer_list<po::exponent_type>>;
-    using term_list = std::initializer_list<term>;
-
-    bool equal(const po::exponents& xa, const po::exponents& xb)
+    namespace detail
     {
-      return std::ranges::equal(xa, xb);
-    }
+      using term = std::tuple<po::scalar_type, std::initializer_list<po::exponent_type>>;
 
-    bool equal(const std::vector<po::rank_type>& xa, std::initializer_list<po::rank_type>&& xb)
-    {
-      return std::ranges::equal(xa, xb);
-    }
-
-    template<typename T>
-    concept numeric = std::is_arithmetic<std::remove_cvref_t<T>>::value;
-
-    template<numeric T>
-    bool equal(const std::valarray<double>& xa, std::initializer_list<T>&& xb)
-    {
-      return std::ranges::equal(xa, xb);
-    }
-
-    template<numeric T>
-    bool abs_near(const std::valarray<double>& xa, std::initializer_list<T>&& xb, double tolerance = 0x1p-52)
-    {
-      return std::ranges::all_of(std::views::zip(xa, xb),
-        [tolerance](auto&& pair) { return near_abs(std::get<0>(pair), std::get<1>(pair), tolerance); });
-    }
-
-    template<std::size_t n>
-    bool equal(const std::array<po::rank_type, n>& xa, std::initializer_list<po::rank_type>&& xb)
-    {
-      return std::ranges::equal(xa, xb);
-    }
-
-    bool equal(const po::exponents& xa, std::initializer_list<po::exponent_type>&& xb)
-    {
-      return std::ranges::equal(xa, xb);
-    }
-
-    bool equal_terms(const po::monomial& xa, const term& xb)
-    {
-      return xa.coefficient == std::get<0>(xb) && std::ranges::equal(xa.exponents, std::get<1>(xb));
-    }
-
-    bool equal_monomials(const po::monomial& a, const po::monomial& b)
-    {
-      return a.coefficient == b.coefficient && compare::equal(a.exponents, b.exponents);
-    }
-
-
-    constexpr double default_coefficient_rel_tolerance = 0x1p-50;
-
-    using term_predicate = std::function<bool(const po::monomial&, const term&)>;
-
-    const term_predicate near_rel(double coefficient_rel_tolerance)
-    {
-      return
-        [coefficient_rel_tolerance](const po::monomial& a, const term& b)
-          {
-            return
-              near_rel(a.coefficient, std::get<0>(b), coefficient_rel_tolerance) &&
-              compare::equal(a.exponents, std::get<1>(b));
-          };
-    }
-
-    /*
-     * Unordered comparison of monomial terms
-     */
-    template<typename Ra, typename Rb, typename P>
-    bool equal(const Ra& a, const Rb& b, const P& p)
-    {
-      if(a.size() != b.size())
-        return false;
-
-      std::list<typename Ra::const_iterator> ia;
-      std::list<typename Rb::const_iterator> ib;
-      for(auto i : std::ranges::views::iota(0zu, a.size()))
+      bool equal_terms(const po::monomial& xa, const term& xb)
       {
-        ia.push_back(std::cbegin(a) + i);
-        ib.push_back(std::cbegin(b) + i);
+        return xa.coefficient == std::get<0>(xb) && std::ranges::equal(xa.exponents, std::get<1>(xb));
+      }
+      bool equal_monomials(const po::monomial& a, const po::monomial& b)
+      {
+        return a.coefficient == b.coefficient && std::ranges::equal(a.exponents, b.exponents);
       }
 
-      for(auto iia{std::cbegin(ia)}; iia != std::cend(ia);)
+      constexpr double default_coefficient_rel_tolerance = 0x1p-50;
+
+      using term_predicate = std::function<bool(const po::monomial&, const term&)>;
+
+      const term_predicate rel_near(double coefficient_rel_tolerance)
       {
-        bool erased = false;
-        for(auto iib{std::cbegin(ib)}; iib != std::cend(ib);)
+        return
+          [coefficient_rel_tolerance](const po::monomial& a, const term& b)
+            {
+              return
+                compare::rel_near(a.coefficient, std::get<0>(b), coefficient_rel_tolerance) &&
+                std::ranges::equal(a.exponents, std::get<1>(b));
+            };
+      }
+
+      /*
+      * Unordered comparison of monomial terms
+      */
+      template<typename Ra, typename Rb, typename P>
+      bool unordered_equal(const Ra& a, const Rb& b, const P& p)
+      {
+        if(a.size() != b.size())
+          return false;
+
+        std::list<typename Ra::const_iterator> ia;
+        std::list<typename Rb::const_iterator> ib;
+        for(auto i : std::ranges::views::iota(0zu, a.size()))
         {
-          if(p(**iia, **iib))
-          {
-            iib = ib.erase(iib);
-            erased = true;
-            break;
-          }
-          else
-          {
-            ++iib;
-          }
+          ia.push_back(std::cbegin(a) + i);
+          ib.push_back(std::cbegin(b) + i);
         }
 
-        if(erased)
-          iia = ia.erase(iia);
-        else
-          ++iia;
-      }
+        for(auto iia{std::cbegin(ia)}; iia != std::cend(ia);)
+        {
+          bool erased = false;
+          for(auto iib{std::cbegin(ib)}; iib != std::cend(ib);)
+          {
+            if(p(**iia, **iib))
+            {
+              iib = ib.erase(iib);
+              erased = true;
+              break;
+            }
+            else
+            {
+              ++iib;
+            }
+          }
 
-      return ia.size() == 0 && ib.size() == 0;
+          if(erased)
+            iia = ia.erase(iia);
+          else
+            ++iia;
+        }
+
+        return ia.size() == 0 && ib.size() == 0;
+      }
     }
 
     bool unordered_equal_terms(const po::polynomial& p, const po::polynomial& q)
     {
-      return compare::equal(p.terms, q.terms, equal_monomials);
+      return detail::unordered_equal(p.terms, q.terms, detail::equal_monomials);
     }
 
-    bool unordered_equal_terms(const po::polynomial& p, term_list&& b)
+    bool unordered_equal_terms(const po::polynomial& p, std::initializer_list<detail::term>&& b)
     {
-      return compare::equal(p.terms, b, equal_terms);
+      return detail::unordered_equal(p.terms, b, detail::equal_terms);
     }
 
     bool unordered_near_rel_terms(
       const po::polynomial& p,
-      term_list&& b,
-      double coefficient_rel_tolerance = default_coefficient_rel_tolerance)
+      std::initializer_list<detail::term>&& b,
+      double coefficient_rel_tolerance = detail::default_coefficient_rel_tolerance)
     {
-      return compare::equal(p.terms, b, near_rel(coefficient_rel_tolerance));
+      return detail::unordered_equal(p.terms, b, detail::rel_near(coefficient_rel_tolerance));
     }
   }
 }
@@ -199,13 +179,13 @@ bool operator==(const po::polynomial& a, const po::polynomial& b)
   return
     a.rank() == b.rank() &&
     a.degree() == b.degree() &&
-    po_test::compare::equal(a.degrees(), b.degrees()) &&
-    po_test::compare::unordered_equal_terms(a, b);
+    std::ranges::equal(a.degrees(), b.degrees()) &&
+    compare::unordered_equal_terms(a, b);
 }
 
 bool operator==(const po::monomial& a, const po::monomial& b)
 {
-  return po_test::compare::equal_monomials(a, b);
+  return po_test::compare::detail::equal_monomials(a, b);
 }
 
 

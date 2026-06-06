@@ -18,8 +18,8 @@ void test_instantiate_p()
 
     assert(r.rank() == 1);
     assert(r.degree() == 0);
-    assert((compare::equal(r.degrees(), p.degrees())));
-    assert((compare::equal(r.degrees(), po::exponents{0})));
+    assert((std::ranges::equal(r.degrees(), p.degrees())));
+    assert((compare::equal(r.degrees(), {0})));
 
     PO_LINE;
   }
@@ -41,8 +41,8 @@ void test_instantiate_p()
 
     assert(r.rank() == 3);
     assert(r.degree() == 16);
-    assert((compare::equal(r.degrees(), p.degrees())));
-    assert((compare::equal(r.degrees(), po::exponents{10, 5, 3})));
+    assert((std::ranges::equal(r.degrees(), p.degrees())));
+    assert((compare::equal(r.degrees(), {10, 5, 3})));
 
     PO_LINE;
   }
@@ -61,8 +61,8 @@ void test_instantiate_p()
 
     assert(r.rank() == 3);
     assert(r.degree() == 16);
-    assert((compare::equal(r.degrees(), p.degrees())));
-    assert((compare::equal(r.degrees(), po::exponents{10, 5, 3})));
+    assert((std::ranges::equal(r.degrees(), p.degrees())));
+    assert((compare::equal(r.degrees(), {10, 5, 3})));
 
     PO_LINE;
   }

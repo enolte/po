@@ -7,7 +7,6 @@
 #include "expr_unary_derivative_evaluate/test_evaluate_expr_partial_derivative.h"
 #include "expr_unary_integral_evaluate/test_evaluate_expr_integral.h"
 #include "expr_unary_antiderivative_evaluate/test_evaluate_expr_antiderivative.h"
-#include "expr_unary_extend_evaluate/test_evaluate_expr_extend.h"
 
 void test_expr_evaluate()
 {
@@ -20,6 +19,5 @@ void test_expr_evaluate()
   test_evaluate_expr_partial_derivative();
   test_evaluate_expr_integral();
   test_evaluate_expr_antiderivative();
-  test_evaluate_expr_extend();
 }
 

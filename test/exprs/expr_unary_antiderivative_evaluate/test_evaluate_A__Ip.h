@@ -28,7 +28,7 @@ void test_evaluate_A__Ip()
 
     const double ex = 1.1 * 8 * 2.2*2.2 * 3.3;
 
-    assert(po_test::near_rel(ac, ex, 0x1p-52));
+    assert(po_test::compare::rel_near(ac, ex, 0x1p-52));
 
     PO_LINE;
   }

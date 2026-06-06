@@ -18,7 +18,7 @@ void test_add_eq_polynomial()
     p += q;
 
     assert(compare::unordered_equal_terms(p, q));
-    assert(compare::equal(p.degrees(), q.degrees()));
+    assert(std::ranges::equal(p.degrees(), q.degrees()));
     assert(p.constant() == q.constant() && p.constant() == 0.);
     assert(p.rank() == q.rank() && p.rank() == 6);
 
@@ -85,7 +85,7 @@ void test_add_eq_polynomial()
     p += std::move(q);
 
     assert(compare::unordered_equal_terms(p, q));
-    assert(compare::equal(p.degrees(), q.degrees()));
+    assert(std::ranges::equal(p.degrees(), q.degrees()));
     assert(p.constant() == q.constant() && p.constant() == 0.);
     assert(p.rank() == q.rank() && p.rank() == 6);
 

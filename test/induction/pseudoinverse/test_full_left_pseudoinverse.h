@@ -27,7 +27,7 @@ namespace po_test
     // [](std::size_t r, std::size_t c) { return std::sin(r*r+1) * std::cos(c*c+1); },
   };
 
-  void test_full_left_pseudoinverse(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int = -1);
+  void test_full_left_pseudoinverse(po::matrix_functor auto&& m, std::size_t nrows, std::size_t ncols, int);
 
   template<std::size_t nr, std::size_t nc>
   void test_full_left_pseudoinverse()
@@ -48,7 +48,8 @@ namespace po_test
           };
 
           return m[r][c];
-        }, nr, nc
+        }, nr, nc,
+        -2
       );
 
       test_full_left_pseudoinverse
@@ -63,7 +64,8 @@ namespace po_test
           };
 
           return m[r][c];
-        }, nr, nc
+        }, nr, nc,
+        -1
       );
     }
 
@@ -86,7 +88,8 @@ namespace po_test
           };
 
           return m[r][c];
-        }, nr, nc
+        }, nr, nc,
+        -1
       );
     }
 
