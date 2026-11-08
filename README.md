@@ -21,7 +21,6 @@ Mono-repo: *No submodules*.
   * Ring operations
 * [Plan Phase II (Done)](docs/Phase-II.md)
   * Changing rank
-  * Signature extension (polynomials)
 * [Plan Phase III](#plan-phase-iii) ([Progress Index](#progress-index-phase-iii))
   * [Induction](#induction)
   * [Quadrature](#quadrature)
@@ -29,7 +28,6 @@ Mono-repo: *No submodules*.
 * [Plan Phase IV](#plan-phase-iv) ([Progress Index](#progress-index-phase-iv))
   * [Evaluation II](#evaluation-ii)
   * [IO streams adaptation II](#io-streams-adaptation-ii)
-  * [Signature extension (expressions)](#signature-extension-expressions)
   * [Storage](#storage-ii)
   * [Operators II](#operators-ii)
 
@@ -43,24 +41,24 @@ Mono-repo: *No submodules*.
 | III    | in progress |
 | IV     | not started |
 
-(_20:09 Saturday, May 30, 2026_)
+(*7 November 2026*) Removed signature extension from the plan. Doing this in the most desirable way requires an expression's rank to be a compile-time constant. Making that change requires making `po::polynomial` a type template, which changes essentially the entire repo.
 
-Fixed a bug from a previous commit, which prevented correct QR decomposition of rank-deficient knot point matrices. All Lagrange basis induction unit tests pass again now.
-
-For the the basis induction test cases included here, compiling with `-O3` may cause one additional bit of precision loss, compard to compiling with optimizations. This caused some unit tests for pseudoinverse to report as specious failures. This is fixed now with a default tolerance of one double-precision machine epsilon and one additional bit of loss tolerance. All unit tests now correctly pass with or without the optimizer.
-
-Also improved organization of test utils. This is in progress.
+I.e., organically, it's out of scope. The alternative is to add another evaluation signature / `operator()` overload to every expression type. This is not preferable for obvious reasons. The workaround is to declare a lambda for any particular use case in which an expression's rank is to be changed. Thr correct impl for this may spawn a different repo.
 
 Progress continues as time available.
 
 <details>
 <summary><h3>Previous updates</h3></summary>
 
+(*30 May, 2026*) Fixed a bug from a previous commit, which prevented correct QR decomposition of rank-deficient knot point matrices. All Lagrange basis induction unit tests pass again now.
+
+For the the basis induction test cases included here, compiling with `-O3` may cause one additional bit of precision loss, compard to compiling with optimizations. This caused some unit tests for pseudoinverse to report as specious failures. This is fixed now with a default tolerance of one double-precision machine epsilon and one additional bit of loss tolerance. All unit tests now correctly pass with or without the optimizer.
+
+Also improved organization of test utils. This is in progress.
+
 (*04 May 2024*) Lagrange basis induction is in progress. All of the internals are implemented, with basic test coverage for some low-compute cases. More unit tests are coming, and probably some minor improvements to test organization. The docs for Lagrange need to be improved, too. Also, the solver is not conditioned in any way; this will probably have to change, depending upon further testing.
 
-
 (*09 March 2024*) Moved Phase I and II details to separate docs in docs/ folder, because those are done. Added Phase IV, which essentially splits what was Phase III. Looking at doing induction next. The code is already written and tested. Just need to import it here. It's not a great topic for a self-contained mono-repo like this one, but it's interesting to do in the same repo anyway. It's essentially least-squares and subset iteration, in addition to multivariate polynomials.
-
 
 (*23 January 2024*) It's been about 6 months since I've touched this repo, so moving some things to Phase IV, and marking Phase II as Done. Cleaned up the docs a bit, more of that coming next. Maybe need to add some examples, too.
 
@@ -121,13 +119,13 @@ This implies that an rvalue polynomial is copied into every superior subexpressi
 
 ## Operators
 
-For Phase I, arithmetic operators and assignment operators are implemented only for polynomials of the same rank. E.g., if $p(x, y, z) = 3xz - 2y$ and $q(x, y) = 15y^2$, then `p + q` is not defined. With the current implementation (Phase I) `p + q` compiles, but the result is undefined behavior.
+Arithmetic operators and assignment operators are supported only for polynomials of the same rank. E.g., if $p(x, y, z) = 3xz - 2y$ and $q(x, y) = 15y^2$, then `p + q` is not well-defined, but with the current implementation (Phase III) `p + q` compiles, and the result is undefined behavior.
 
-This is the subject of [signature extension](./docs/Phase-II.md#signature-extension-polynomials) for Phase II.
+The workaround is to declare a lambda which wraps `q` and provides the desired signature for any particular use case.
 
 ## Partial evaluation
 
-A partial evaluation compiles and deterministically executes, but the result is undefined for Phase I. This is a problem because (a) there is no guaranteed term storage order, and (b) the result is ambiguous, even with a guaranteed storage order.
+A partial evaluation compiles and deterministically executes, but the result is undefined. This is a problem because (a) there is no guaranteed term storage order, and (b) the result is ambiguous, even with a guaranteed storage order.
 
 ```c++
 po::polynomial p{
@@ -353,8 +351,8 @@ p_{\binom{1}{\frac{3}{2}}}(x, y) = -4x + 4y + 8x^2 - 12xy + 4y^2
 \end{array}
 $$
 
-The maximum abs. numeric evaluation error is exactly $2^{-44} = 64\epsilon_{machine}$.
-The maximum abs. coefficient error is exactly $1.5 \cdot 2^{-49} = 12\epsilon_{machine}$.
+The maximum abs. numeric evaluation error is exactly $2^{-44} = 64\varepsilon_{machine}$.
+The maximum abs. coefficient error is exactly $1.5 \cdot 2^{-49} = 12\varepsilon_{machine}$.
 
 The file [demos/02/demo.cpp](./demos/02/demo.cpp) contains the program source that computes the above. Its output is:
 ```

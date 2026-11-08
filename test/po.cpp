@@ -54,10 +54,7 @@ void test()
 void instance_count()
 {
   // TODO Move to unit test
-  PO_ASSERT(po::polynomial::construction_count() == 3313, po::polynomial::construction_count());
-  // PO_ASSERT(po::polynomial::construction_count() == 3310, po::polynomial::construction_count());
-  // PO_ASSERT(po::polynomial::construction_count() == 3303, po::polynomial::construction_count());
-  // PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
+  PO_ASSERT(po::polynomial::construction_count() == 3287, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2906, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2525, po::polynomial::construction_count());
   // PO_ASSERT(po::polynomial::construction_count() == 2370, po::polynomial::construction_count());

@@ -14,7 +14,6 @@ void evaluate2();
 void evaluate_incomplete();
 void evaluate_partial();
 void evaluate_partial_place_OOR();
-void evaluate_places();
 
 void is_zero();
 void is_constant();
@@ -34,7 +33,6 @@ namespace po_test
     evaluate_partial_place_OOR();
     is_zero();
     is_constant();
-    evaluate_places();
 
     std::vector<po::monomial> t;
     t.push_back({4.3, {3, 3, 4}});
@@ -266,61 +264,6 @@ void evaluate_incomplete()
   assert(y != y);
 
   PO_LINE;
-}
-
-void evaluate_places()
-{
-return;
-  // Nothing to evaluate: no places
-  {
-    const po::monomial m{3.2, {0, 1, 6}};
-    double y;
-
-    y = m(std::array<int, 0>{}, 2, 1);
-    PO_ASSERT(y != y, y);
-
-    PO_LINE;
-  }
-
-  // Wrong number of places
-  {
-    const po::monomial m{3.2, {0, 1, 6}};
-    double y;
-
-    // m(x, y, z) --> m(, x, y)
-    y = m(std::array{1, 2}, 3, 4);
-    PO_ASSERT(y != y , y);
-
-    PO_LINE;
-  }
-
-  // Correct number of places, OOR
-  {
-    const po::monomial m{3.2, {0, 1, 6}};
-    double y;
-
-    // y := m(z, y, x)
-    y = m(std::array{2, 1, 0}, 3, 4, 2);
-    PO_ASSERT(y == 3.2 , y);
-
-    PO_LINE;
-
-    std::exit(0);
-  }
-
-  // // Ignore beyond 1 arg
-  // {
-  //   const po::monomial m{3.2, {0, 1, 6}};
-  //   double y;
-
-  //   y = m(po::nargs{1}, 0.7);
-  //   assert(y == 3.2 * 1);
-
-  //   y = m(po::nargs{1}, 0.7, 2.2, 9.999);
-  //   assert(y == 3.2 * 1);
-
-  //   PO_LINE;
-  // }
 }
 
 void evaluate_partial()

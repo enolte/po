@@ -643,7 +643,6 @@ namespace po
 #include "ops/expr_partial_derivative.h"
 #include "ops/expr_integral.h"
 #include "ops/expr_antiderivative.h"
-#include "ops/expr_extend.h"
 
 #include "ops/instantiate.h"
 

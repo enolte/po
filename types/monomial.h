@@ -48,7 +48,7 @@ namespace po
       ((acc *= i < n ? utils::pow(x, exponents[i++]) : 1.), ... );
       return scalar_type{acc * coefficient};
     }
-
+#if 0
     /*
      * Partial evaluation. Evaluate with the values in x..., which are
      * designated by the given offsets / places.
@@ -61,21 +61,11 @@ namespace po
       requires std::random_access_iterator<decltype(std::cbegin(std::declval<Places>()))>
     scalar_type operator()(const Places& places, X... x) const
     {
-PO_LINE;
-PO_TRACE(sizeof ...(x));
       if(sizeof ...(x) != places.size())
       {
-PO_LINE;
         // Error condition
         return nan;
       }
-
-//       if(places.size() != exponents.size())
-//       {
-// PO_LINE;
-//         // Error condition
-//         return nan;
-//       }
 
       double acc = 1.;
       // std::size_t i = 0; // counts ...x
@@ -83,10 +73,6 @@ PO_LINE;
 
       const auto accumulate = [this, &places, &acc, &j](double x)
       {
-PO_LINE;
-PO_TRACE(j);
-PO_TRACE(places[j]);
-PO_TRACE(acc);
         if(j < places.size())
         {
           acc *= utils::pow(x, exponents[places[j]]);
@@ -99,7 +85,7 @@ PO_TRACE(acc);
 
       return scalar_type{acc * coefficient};
     }
-
+#endif
     /*
      * Determine whether this is a zero term.
      */
